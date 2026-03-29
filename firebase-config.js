@@ -1,11 +1,11 @@
-// Firebase конфигурация
+// Firebase конфигурация (НОВЫЙ ПРОЕКТ)
 const firebaseConfig = {
-    apiKey: "AIzaSyCGXHBLs3Sxx82JH7tz6wChhUbtww3icY",
-    authDomain: "finsecurity-558cc.firebaseapp.com",
-    projectId: "finsecurity-558cc",
-    storageBucket: "finsecurity-558cc.appspot.com",
-    messagingSenderId: "32273200562",
-    appId: "1:32273200562:web:484be393f5607e4877760ab"
+    apiKey: "AIzaSyAzj5ovFUszQ3qCBAsLx5pzJYivL-9Nx0c",
+    authDomain: "finsecurity-new.firebaseapp.com",
+    projectId: "finsecurity-new",
+    storageBucket: "finsecurity-new.firebasestorage.app",
+    messagingSenderId: "770841345635",
+    appId: "1:770841345635:web:26f4d2c6e8232af1ba4256"
 };
 
 // Инициализация Firebase
@@ -18,4 +18,5 @@ const auth = firebase.auth();
 
 console.log('✅ Firebase инициализирован');
 console.log('🔑 API Key:', firebaseConfig.apiKey);
-console.log('🌐 Auth:', typeof auth);
+console.log('🌐 Auth Domain:', firebaseConfig.authDomain);
+console.log('📦 Project ID:', firebaseConfig.projectId);
