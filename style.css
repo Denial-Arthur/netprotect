@@ -561,15 +561,6 @@ body {
     gap: 0.4rem;
 }
 
-.btn-google {
-    background: #4285f4;
-    color: white;
-}
-
-.btn-google:hover {
-    background: #3367d6;
-}
-
 .btn-email {
     background: var(--accent-blue);
     color: white;
