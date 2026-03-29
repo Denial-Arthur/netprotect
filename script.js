@@ -6,44 +6,7 @@ const CONFIG = {
         phone: 'images/phone_scams.jpg.jpg',
         viruses: 'images/viruses.jpg.jpg',
         cards: 'images/card_theft.jpg.jpg'
-    },
-    videos: [
-        {
-            id: 1,
-            title: 'Инвестиционное мошенничество',
-            category: 'Финансовые пирамиды',
-            description: 'Предлагают доход от 70%? Проверьте лицензию на cbr.ru',
-            storagePath: 'videos/investment_scam.mp4'
-        },
-        {
-            id: 2,
-            title: 'Нелегальные кредиторы',
-            category: 'Кредитное мошенничество',
-            description: 'Остерегайтесь нелегальных кредиторов! Проверяйте лицензию!',
-            storagePath: 'videos/illegal_creditors.mp4'
-        },
-        {
-            id: 3,
-            title: 'Мошенничество против пенсионеров',
-            category: 'Социальная защита',
-            description: 'Помогайте пенсионерам принимать правильные финансовые решения',
-            storagePath: 'videos/elderly_scam.mp4'
-        },
-        {
-            id: 4,
-            title: 'Безопасность ПИН-кода',
-            category: 'Банковские карты',
-            description: 'Не храните пин-код вместе с картой',
-            storagePath: 'videos/pin_code.mp4'
-        },
-        {
-            id: 5,
-            title: 'Лёгкая прибыль',
-            category: 'Финансовые пирамиды',
-            description: 'Гарантия сверхдохода — признак мошенничества',
-            storagePath: 'videos/easy_profit.mp4'
-        }
-    ]
+    }
 };
 
 // === ИНИЦИАЛИЗАЦИЯ ===
@@ -63,9 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Загрузка инфографики
     loadInfographics();
-
-    // Загрузка видео (если есть контейнер)
-    loadVideos();
 
     // Обновление статистики
     updateStats();
@@ -151,119 +111,37 @@ function showPage(pageId) {
 function loadInfographics() {
     console.log('🖼️ Загрузка инфографики...');
     
-    for (const [key, path] of Object.entries(CONFIG.infographics)) {
-        var img = document.getElementById(key + '-image');
-        var placeholder = document.getElementById(key + '-placeholder');
-        
-        if (img && placeholder) {
-            // Получаем URL из Firebase Storage
-            if (typeof storage !== 'undefined') {
-                storage.ref(path).getDownloadURL()
-                    .then(function(url) {
-                        img.src = url;
-                        img.onload = function() {
-                            img.classList.add('loaded');
-                            placeholder.style.display = 'none';
-                        };
-                    })
-                    .catch(function(error) {
-                        console.error('Ошибка загрузки ' + key + ':', error);
-                        placeholder.innerHTML = 
-                            '<i class="fas fa-exclamation-circle"></i>' +
-                            '<p>Изображение недоступно</p>';
-                    });
+    for (var key in CONFIG.infographics) {
+        if (CONFIG.infographics.hasOwnProperty(key)) {
+            var path = CONFIG.infographics[key];
+            var img = document.getElementById(key + '-image');
+            
+            if (img) {
+                // Получаем URL из Firebase Storage
+                if (typeof storage !== 'undefined') {
+                    storage.ref(path).getDownloadURL()
+                        .then(function(url) {
+                            img.src = url;
+                            img.onload = function() {
+                                img.classList.add('loaded');
+                            };
+                        })
+                        .catch(function(error) {
+                            console.error('Ошибка загрузки изображения:', error);
+                        });
+                }
             }
         }
     }
 }
 
-// === ЗАГРУЗКА ВИДЕО ===
-function loadVideos() {
-    var homeVideosContainer = document.getElementById('home-videos');
-    var allVideosContainer = document.getElementById('all-videos');
-    
-    if (!homeVideosContainer && !allVideosContainer) {
-        console.log('📹 Контейнеры для видео не найдены (видео отключены)');
-        return;
-    }
-
-    // Показываем индикатор загрузки
-    if (homeVideosContainer) {
-        homeVideosContainer.innerHTML = '<div class="video-loading"><i class="fas fa-spinner"></i><p>Загрузка видео...</p></div>';
-    }
-    if (allVideosContainer) {
-        allVideosContainer.innerHTML = '<div class="video-loading"><i class="fas fa-spinner"></i><p>Загрузка видео...</p></div>';
-    }
-
-    // Загружаем первые 3 видео для главной
-    var homeVideos = CONFIG.videos.slice(0, 3);
-    if (homeVideosContainer) {
-        renderVideos(homeVideos, homeVideosContainer);
-    }
-
-    // Загружаем все видео для страницы видео
-    if (allVideosContainer) {
-        renderVideos(CONFIG.videos, allVideosContainer);
-    }
-
-    // Обновляем статистику
-    var statVideos = document.getElementById('stat-videos');
-    if (statVideos) {
-        statVideos.textContent = CONFIG.videos.length;
-    }
-}
-
-function renderVideos(videos, container) {
-    container.innerHTML = '';
-
-    videos.forEach(function(video) {
-        var videoCard = document.createElement('div');
-        videoCard.className = 'video-card';
-        
-        // Получаем URL видео из Firebase Storage
-        if (typeof storage !== 'undefined') {
-            storage.ref(video.storagePath).getDownloadURL()
-                .then(function(url) {
-                    videoCard.innerHTML = 
-                        '<div class="video-container">' +
-                            '<video controls preload="metadata">' +
-                                '<source src="' + url + '" type="video/mp4">' +
-                                'Ваш браузер не поддерживает видео' +
-                            '</video>' +
-                        '</div>' +
-                        '<div class="video-info">' +
-                            '<span class="video-category">' + video.category + '</span>' +
-                            '<h3 class="video-title">' + video.title + '</h3>' +
-                            '<p class="video-description">' + video.description + '</p>' +
-                        '</div>';
-                })
-                .catch(function(error) {
-                    console.error('Ошибка загрузки видео ' + video.title + ':', error);
-                    videoCard.innerHTML = 
-                        '<div class="video-container" style="display: flex; align-items: center; justify-content: center; color: white; background: #000;">' +
-                            '<i class="fas fa-video-slash" style="font-size: 3rem;"></i>' +
-                        '</div>' +
-                        '<div class="video-info">' +
-                            '<span class="video-category">' + video.category + '</span>' +
-                            '<h3 class="video-title">' + video.title + '</h3>' +
-                            '<p class="video-description">Видео недоступно</p>' +
-                        '</div>';
-                });
-        }
-        
-        container.appendChild(videoCard);
-    });
-}
-
 // === СТАТИСТИКА ===
 function updateStats() {
     var statSections = document.getElementById('stat-sections');
-    var statVideos = document.getElementById('stat-videos');
     var statInfographics = document.getElementById('stat-infographics');
     
     if (statSections) statSections.textContent = '5';
-    if (statVideos) statVideos.textContent = CONFIG.videos.length;
-    if (statInfographics) statInfographics.textContent = Object.keys(CONFIG.infographics).length;
+    if (statInfographics) statInfographics.textContent = '5';
     
     console.log('📊 Статистика обновлена');
 }
@@ -317,6 +195,5 @@ window.formatDate = formatDate;
 window.formatTime = formatTime;
 
 // === ЛОГИРОВАНИЕ ===
-console.log('⚙️ CONFIG загружен:', CONFIG);
-console.log('📊 Разделов:', CONFIG.infographics.length);
-console.log('📹 Видео:', CONFIG.videos.length);
+console.log('⚙️ CONFIG загружен');
+console.log('📊 Разделов:', Object.keys(CONFIG.infographics).length);
