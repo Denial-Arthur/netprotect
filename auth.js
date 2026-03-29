@@ -44,28 +44,6 @@ function updateUserInterface(user) {
     }
 }
 
-// Вход через Google
-function signInWithGoogle() {
-    console.log('🔵 Клик: Вход через Google');
-    
-    if (typeof auth === 'undefined') {
-        alert('Ошибка: Firebase не загружен. Обновите страницу.');
-        return;
-    }
-    
-    var provider = new firebase.auth.GoogleAuthProvider();
-    
-    auth.signInWithPopup(provider)
-        .then(function(result) {
-            console.log('✅ Успешный вход через Google:', result.user);
-            showNotification('Вы успешно вошли!', 'success');
-        })
-        .catch(function(error) {
-            console.error('❌ Ошибка входа через Google:', error);
-            showNotification('Ошибка входа: ' + error.message, 'error');
-        });
-}
-
 // Вход через Email/Password
 function signInWithEmail() {
     console.log('🔵 Клик: Вход через Email');
@@ -289,7 +267,6 @@ function showNotification(message, type) {
 }
 
 // === ГЛОБАЛЬНЫЕ ФУНКЦИИ ===
-window.signInWithGoogle = signInWithGoogle;
 window.signInWithEmail = signInWithEmail;
 window.signUpWithEmail = signUpWithEmail;
 window.signInWithPhone = signInWithPhone;
