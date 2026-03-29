@@ -70,11 +70,7 @@
             <div class="sidebar-section">
                 <div class="sidebar-title">Вход / Регистрация</div>
                 <div class="sidebar-info" id="auth-buttons">
-                    <button onclick="signInWithGoogle()" class="btn-auth btn-google">
-                        <i class="fab fa-google"></i> Войти через Google
-                    </button>
-                    
-                    <div class="auth-divider">или через Email</div>
+                    <div class="auth-divider">Через Email</div>
                     
                     <div id="email-auth-section">
                         <input type="text" id="name-input" placeholder="Ваше имя" class="input-auth">
@@ -547,13 +543,13 @@
         </div>
     </footer>
 
-    <!-- Firebase библиотеки (СНАЧАЛА!) -->
+    <!-- Firebase библиотеки -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
-    <!-- Наши скрипты (ПОТОМ!) -->
+    <!-- Наши скрипты -->
     <script src="firebase-config.js"></script>
     <script src="script.js"></script>
     <script src="auth.js"></script>
