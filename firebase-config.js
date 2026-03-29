@@ -17,3 +17,5 @@ const storage = firebase.storage();
 const auth = firebase.auth();
 
 console.log('✅ Firebase инициализирован');
+console.log('🔑 API Key:', firebaseConfig.apiKey);
+console.log('🌐 Auth:', typeof auth);
