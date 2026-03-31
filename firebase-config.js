@@ -20,3 +20,4 @@ console.log('✅ Firebase инициализирован');
 console.log('🔑 API Key:', firebaseConfig.apiKey);
 console.log('🌐 Auth Domain:', firebaseConfig.authDomain);
 console.log('📦 Project ID:', firebaseConfig.projectId);
+console.log('🔐 Защита активирована');
