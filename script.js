@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateStats();
 
     console.log('✅ script.js загружен');
+    console.log('🎨 Улучшенный дизайн активирован');
 });
 
 // === НАВИГАЦИЯ ===
