@@ -1,5 +1,6 @@
 // === ПРОВЕРКА ЗАГРУЗКИ FIREBASE ===
 console.log('🔍 Проверка Firebase...');
+console.log('🔐 Защита email активирована');
 
 // === АВТОРИЗАЦИЯ ЧЕРЕЗ FIREBASE ===
 
@@ -18,12 +19,15 @@ if (typeof auth !== 'undefined') {
     console.error('❌ auth не определён! Проверьте firebase-config.js');
 }
 
-// Обновление интерфейса
+// Обновление интерфейса (с защитой email)
 function updateUserInterface(user) {
     var authButtons = document.getElementById('auth-buttons');
     var userInfo = document.getElementById('user-info');
+    var emailAuthRequired = document.getElementById('email-auth-required');
+    var emailLinkBlock = document.getElementById('email-link-block');
     
     if (user) {
+        // Пользователь авторизован
         if (authButtons) authButtons.style.display = 'none';
         if (userInfo) {
             userInfo.style.display = 'block';
@@ -35,12 +39,28 @@ function updateUserInterface(user) {
                 '<div class="user-details">' +
                     '<p class="user-name">' + (user.displayName || 'Пользователь') + '</p>' +
                     '<p class="user-email">' + user.email + '</p>' +
-                    '<button onclick="signOut()" class="btn-logout">Выйти</button>' +
+                    '<button onclick="signOut()" class="btn-logout">' +
+                        '<i class="fas fa-sign-out-alt"></i> Выйти' +
+                    '</button>' +
                 '</div>';
         }
+        
+        // Показываем ссылку на email (пользователь авторизован)
+        if (emailAuthRequired) emailAuthRequired.style.display = 'none';
+        if (emailLinkBlock) emailLinkBlock.style.display = 'block';
+        
+        console.log('🔓 Email доступ открыт');
+        
     } else {
+        // Пользователь не авторизован
         if (authButtons) authButtons.style.display = 'block';
         if (userInfo) userInfo.style.display = 'none';
+        
+        // Скрываем ссылку на email (требуется авторизация)
+        if (emailAuthRequired) emailAuthRequired.style.display = 'block';
+        if (emailLinkBlock) emailLinkBlock.style.display = 'none';
+        
+        console.log('🔒 Email доступ закрыт');
     }
 }
 
@@ -266,6 +286,22 @@ function showNotification(message, type) {
     }, 3000);
 }
 
+// === ЗАЩИТА EMAIL (дополнительная проверка при клике) ===
+document.addEventListener('DOMContentLoaded', function() {
+    var emailLink = document.getElementById('protected-email-link');
+    if (emailLink) {
+        emailLink.addEventListener('click', function(e) {
+            if (!auth.currentUser) {
+                e.preventDefault();
+                showNotification('Пожалуйста, войдите в аккаунт чтобы написать нам', 'error');
+                showPage('home');
+                return false;
+            }
+            console.log('✅ Email открыт для:', auth.currentUser.email);
+        });
+    }
+});
+
 // === ГЛОБАЛЬНЫЕ ФУНКЦИИ ===
 window.signInWithEmail = signInWithEmail;
 window.signUpWithEmail = signUpWithEmail;
@@ -275,3 +311,4 @@ window.signOut = signOut;
 window.submitAppeal = submitAppeal;
 
 console.log('✅ auth.js загружен');
+console.log('🔐 Защита email активирована');
