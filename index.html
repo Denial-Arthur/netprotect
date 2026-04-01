@@ -194,6 +194,30 @@
                 <div class="sidebar-info" id="user-info" style="display: none;">
                 </div>
             </div>
+            <!-- Генератор паролей -->
+<div class="sidebar-section">
+    <div class="sidebar-title">
+        <i class="fas fa-key"></i> Генератор паролей
+    </div>
+    <div class="sidebar-info">
+        <div class="password-generator">
+            <div class="password-display" id="generated-password">
+                Нажмите "Сгенерировать"
+            </div>
+            <div class="password-strength" id="password-strength"></div>
+            <button onclick="generatePassword()" class="btn-auth btn-email">
+                <i class="fas fa-sync-alt"></i> Сгенерировать
+            </button>
+            <button onclick="copyPassword()" class="btn-auth btn-register">
+                <i class="fas fa-copy"></i> Копировать
+            </button>
+            <p class="password-tip">
+                <i class="fas fa-info-circle"></i> 
+                Минимум 12 символов с цифрами и спецсимволами
+            </p>
+        </div>
+    </div>
+</div>
         </aside>
 
         <main class="content">
