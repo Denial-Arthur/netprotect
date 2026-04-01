@@ -11,15 +11,8 @@ const CONFIG = {
 
 // === ИНИЦИАЛИЗАЦИЯ ===
 document.addEventListener('DOMContentLoaded', function() {
-    // Установка текущей даты
-    var dateElement = document.getElementById('currentDate');
-    if (dateElement) {
-        dateElement.textContent = new Date().toLocaleDateString('ru-RU', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
+    // Инициализация тёмной темы
+    initTheme();
 
     // Инициализация навигации
     initNavigation();
@@ -31,8 +24,41 @@ document.addEventListener('DOMContentLoaded', function() {
     updateStats();
 
     console.log('✅ script.js загружен');
-    console.log('🎨 Улучшенный дизайн активирован');
+    console.log('🌙 Тёмная тема активирована');
 });
+
+// === ТЁМНАЯ ТЕМА ===
+function initTheme() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle?.querySelector('i');
+    
+    // Проверяем сохранённую тему или системную
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    
+    // Обработчик переключения
+    themeToggle?.addEventListener('click', function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        // Анимация иконки
+        if (themeIcon) {
+            themeIcon.style.transform = 'rotate(180deg)';
+            setTimeout(() => {
+                themeIcon.style.transform = 'rotate(0deg)';
+            }, 300);
+        }
+        
+        console.log('🌙 Тема переключена на:', newTheme);
+    });
+}
 
 // === НАВИГАЦИЯ ===
 function initNavigation() {
@@ -149,34 +175,6 @@ function updateStats() {
 
 // === ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ===
 
-// Форматирование даты
-function formatDate(date) {
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    
-    if (day < 10) day = '0' + day;
-    if (month < 10) month = '0' + month;
-    
-    return day + '.' + month + '.' + year;
-}
-
-// Форматирование времени
-function formatTime(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    
-    if (hours < 10) hours = '0' + hours;
-    if (minutes < 10) minutes = '0' + minutes;
-    
-    return hours + ':' + minutes;
-}
-
-// Проверка устройства
-function isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
 // Плавная прокрутка к элементу
 function scrollToElement(elementId) {
     var element = document.getElementById(elementId);
@@ -188,12 +186,15 @@ function scrollToElement(elementId) {
     }
 }
 
+// Проверка устройства
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 // === ГЛОБАЛЬНЫЕ ФУНКЦИИ ===
 window.showPage = showPage;
 window.scrollToElement = scrollToElement;
 window.isMobile = isMobile;
-window.formatDate = formatDate;
-window.formatTime = formatTime;
 
 // === ЛОГИРОВАНИЕ ===
 console.log('⚙️ CONFIG загружен');
