@@ -8,11 +8,78 @@
     --success-green: #276749;
     --gray-light: #f7fafc;
     --gray-medium: #e2e8f0;
-    --gray-dark: #4a5568;
     --text-dark: #1a202c;
     --text-light: #718096;
     --white: #ffffff;
     --border-color: #cbd5e0;
+}
+
+/* === ТЁМНАЯ ТЕМА === */
+[data-theme="dark"] {
+    --primary-dark: #2d3748;
+    --primary-blue: #4a5568;
+    --accent-blue: #63b3ed;
+    --warning-red: #fc8181;
+    --warning-orange: #f6ad55;
+    --success-green: #68d391;
+    --gray-light: #1a202c;
+    --gray-medium: #2d3748;
+    --text-dark: #e2e8f0;
+    --text-light: #a0aec0;
+    --white: #1a202c;
+    --border-color: #4a5568;
+}
+
+[data-theme="dark"] body {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .sidebar,
+[data-theme="dark"] .content,
+[data-theme="dark"] .card {
+    background: #1e293b;
+    border-color: #4a5568;
+}
+
+[data-theme="dark"] .info-box-info {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 100%);
+}
+
+[data-theme="dark"] .info-box-success {
+    background: linear-gradient(135deg, #1a4d2e 0%, #2d5f3f 100%);
+}
+
+[data-theme="dark"] .info-box-warning,
+[data-theme="dark"] .info-box-danger {
+    background: linear-gradient(135deg, #4d1a1a 0%, #5f2d2d 100%);
+}
+
+[data-theme="dark"] .stat-item,
+[data-theme="dark"] .contact-item {
+    background: rgba(99, 179, 237, 0.1);
+}
+
+[data-theme="dark"] .sidebar-menu a:hover,
+[data-theme="dark"] .sidebar-menu a.active {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 100%);
+}
+
+[data-theme="dark"] .footer {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+[data-theme="dark"] .nav-menu a:hover,
+[data-theme="dark"] .nav-menu a.active {
+    background: #2d3748;
+}
+
+[data-theme="dark"] .data-table th {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+}
+
+[data-theme="dark"] .data-table tr:nth-child(even) {
+    background: #2d3748;
 }
 
 * {
@@ -55,9 +122,34 @@ body {
     word-wrap: break-word;
 }
 
-.header-title i {
-    margin-right: 0.5rem;
+/* === КНОПКА ТЁМНОЙ ТЕМЫ === */
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
     color: #fbbf24;
+    font-size: 1.2rem;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(15deg);
+}
+
+[data-theme="dark"] .theme-toggle {
+    background: rgba(251, 191, 36, 0.2);
+    border-color: rgba(251, 191, 36, 0.4);
+}
+
+[data-theme="dark"] .theme-toggle i::before {
+    content: '\f185';
 }
 
 /* === НАВИГАЦИЯ === */
@@ -83,7 +175,6 @@ body {
     gap: 0;
     flex-wrap: nowrap;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 .nav-menu::-webkit-scrollbar {
@@ -675,11 +766,6 @@ body {
     animation: fadeInUp 0.4s ease;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -1150,6 +1236,11 @@ body {
     justify-content: center;
 }
 
+/* === ПЛАВНЫЙ ПЕРЕХОД ТЕМЫ === */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 /* === АДАПТИВНОСТЬ === */
 
 /* Планшеты (до 1024px) */
@@ -1169,53 +1260,184 @@ body {
 
 /* Мобильные (до 768px) */
 @media (max-width: 768px) {
+    .header-top {
+        padding: 0.5rem 0;
+    }
+    
     .header-title {
         font-size: 0.85rem;
+        text-align: center;
+        line-height: 1.4;
+    }
+    
+    .main-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .nav-menu {
+        padding: 0.5rem 0;
+        gap: 0.25rem;
     }
     
     .nav-menu a {
-        padding: 0.9rem 1rem;
-        font-size: 0.8rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        min-width: auto;
+        white-space: nowrap;
     }
     
     .nav-menu a i {
-        display: none;
+        display: inline-block;
+        margin-right: 0.4rem;
+        font-size: 1rem;
+    }
+    
+    .main-container {
+        padding: 1rem;
+        gap: 1rem;
     }
     
     .content {
         padding: 1.25rem;
+        border-radius: 6px;
     }
     
     .page-title {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        line-height: 1.3;
     }
     
     .page-subtitle {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
     }
     
     .cards-grid {
-        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
     }
     
     .card {
-        padding: 1rem;
+        padding: 1.25rem;
+        border-radius: 6px;
     }
     
-    .infographic-image {
-        max-height: 350px;
+    .card-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
     }
     
-    .data-table {
+    .card-title {
+        font-size: 1rem;
+    }
+    
+    .card-description {
         font-size: 0.85rem;
     }
     
     .info-box {
         padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 6px;
+    }
+    
+    .info-box strong {
+        font-size: 0.95rem;
+    }
+    
+    .btn-auth,
+    .btn-submit {
+        padding: 0.9rem 1rem;
+        font-size: 0.95rem;
+        min-height: 48px;
+    }
+    
+    .input-auth,
+    .input-phone,
+    .input-code {
+        padding: 0.75rem;
+        font-size: 1rem;
+        min-height: 44px;
+    }
+    
+    .sidebar {
+        padding: 1rem;
+    }
+    
+    .sidebar-title {
+        font-size: 0.75rem;
+    }
+    
+    .sidebar-menu a {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .stat-item,
+    .contact-item {
+        padding: 0.6rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .email-block {
+        padding: 0.6rem;
+    }
+    
+    .email-link {
+        padding: 0.9rem;
+        font-size: 0.95rem;
+        min-height: 48px;
+    }
+    
+    .auth-notice {
+        padding: 0.9rem;
+    }
+    
+    .auth-notice i {
+        font-size: 2rem;
+    }
+    
+    .data-table {
+        font-size: 0.85rem;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 0.6rem;
+    }
+    
+    .infographic-image {
+        max-height: 300px;
+        border-radius: 6px;
+    }
+    
+    .footer {
+        padding: 1.5rem 0;
     }
     
     .footer-content {
-        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .footer-section {
+        padding: 0.9rem;
+    }
+    
+    .footer-section h4 {
+        font-size: 0.9rem;
+    }
+    
+    .footer-section p,
+    .footer-section a {
+        font-size: 0.8rem;
     }
     
     .stat-item,
@@ -1231,17 +1453,18 @@ body {
 
 /* Маленькие мобильные (до 480px) */
 @media (max-width: 480px) {
-    body {
-        font-size: 14px;
-    }
-    
     .header-title {
         font-size: 0.8rem;
+        word-break: break-word;
     }
     
     .nav-menu a {
-        padding: 0.8rem 0.9rem;
-        font-size: 0.75rem;
+        padding: 0.7rem 0.9rem;
+        font-size: 0.8rem;
+    }
+    
+    .main-container {
+        padding: 0.75rem;
     }
     
     .content {
@@ -1249,51 +1472,43 @@ body {
     }
     
     .page-title {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
     }
     
     .page-subtitle {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
     
     .article-content h2 {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
     }
     
     .article-content h3 {
         font-size: 1rem;
     }
     
+    .card {
+        padding: 1rem;
+    }
+    
     .card-icon {
         font-size: 1.75rem;
     }
     
-    .card-title {
-        font-size: 0.95rem;
-    }
-    
-    .infographic-image {
-        max-height: 250px;
-    }
-    
     .btn-auth,
     .btn-submit {
-        padding: 0.75rem;
-        font-size: 0.85rem;
+        padding: 0.85rem;
+        font-size: 0.9rem;
     }
     
     .input-auth,
-    .input-phone,
-    .input-code {
-        padding: 0.55rem 0.75rem;
-        font-size: 0.85rem;
+    .input-phone {
+        padding: 0.7rem;
+        font-size: 1rem;
     }
     
-    .notification {
-        top: 10px;
-        right: 10px;
-        left: 10px;
-        padding: 0.9rem;
+    .sidebar-menu a {
+        padding: 0.7rem;
         font-size: 0.85rem;
     }
 }
@@ -1304,15 +1519,73 @@ body {
         font-size: 0.75rem;
     }
     
+    .nav-menu a {
+        padding: 0.65rem 0.8rem;
+        font-size: 0.75rem;
+    }
+    
     .page-title {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
+    }
+    
+    .content {
+        padding: 0.9rem;
     }
     
     .card {
         padding: 0.9rem;
     }
     
-    .infographic-image {
-        max-height: 200px;
+    .btn-auth,
+    .btn-submit {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* === МОБИЛЬНЫЕ УЛУЧШЕНИЯ === */
+
+/* Плавная прокрутка */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Предотвращение горизонтальной прокрутки */
+body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
+/* Улучшение для сенсорных экранов */
+@media (hover: none) {
+    .card:hover {
+        transform: none;
+    }
+    
+    .btn-auth:hover,
+    .btn-submit:hover,
+    .email-link:hover {
+        transform: none;
+    }
+}
+
+/* Улучшение читаемости на мобильных */
+@media (max-width: 768px) {
+    body {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+    
+    p {
+        margin-bottom: 0.9rem;
+    }
+    
+    ul, ol {
+        margin: 0.9rem 0 0.9rem 1.5rem;
+    }
+    
+    li {
+        margin-bottom: 0.5rem;
     }
 }
