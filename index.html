@@ -7,6 +7,7 @@
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
     <header class="header-top">
@@ -29,6 +30,9 @@
                 <li><a href="#" class="nav-link" data-page="phone"><i class="fas fa-phone-alt"></i> Телефон</a></li>
                 <li><a href="#" class="nav-link" data-page="viruses"><i class="fas fa-virus"></i> Вирусы</a></li>
                 <li><a href="#" class="nav-link" data-page="cards"><i class="fas fa-credit-card"></i> Карты</a></li>
+                <li><a href="#" class="nav-link" data-page="news"><i class="fas fa-newspaper"></i> Новости</a></li>
+                <li><a href="#" class="nav-link" data-page="glossary"><i class="fas fa-book"></i> Глоссарий</a></li>
+                <li><a href="#" class="nav-link" data-page="risk"><i class="fas fa-calculator"></i> Риск</a></li>
                 <li><a href="#" class="nav-link" data-page="appeal"><i class="fas fa-file-alt"></i> Обращение</a></li>
             </ul>
         </div>
@@ -59,6 +63,15 @@
                     <li><a href="#" class="sidebar-link" data-page="cards">
                         <i class="fas fa-credit-card"></i> Кража с карты
                     </a></li>
+                    <li><a href="#" class="sidebar-link" data-page="news">
+                        <i class="fas fa-newspaper"></i> Новости
+                    </a></li>
+                    <li><a href="#" class="sidebar-link" data-page="glossary">
+                        <i class="fas fa-book"></i> Глоссарий
+                    </a></li>
+                    <li><a href="#" class="sidebar-link" data-page="risk">
+                        <i class="fas fa-calculator"></i> Калькулятор риска
+                    </a></li>
                     <li><a href="#" class="sidebar-link" data-page="appeal">
                         <i class="fas fa-file-alt"></i> Обратная связь
                     </a></li>
@@ -73,7 +86,7 @@
                     <p><strong>📊 Статистика портала:</strong></p>
                     <div class="stat-item">
                         <i class="fas fa-folder-open"></i> 
-                        <span>Разделов: <strong id="stat-sections">5</strong></span>
+                        <span>Разделов: <strong id="stat-sections">10</strong></span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-image"></i> 
@@ -105,6 +118,96 @@
                             </p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Генератор паролей -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-key"></i> Генератор паролей
+                </div>
+                <div class="sidebar-info">
+                    <div class="password-generator">
+                        <div class="password-display" id="generated-password">
+                            Нажмите "Сгенерировать"
+                        </div>
+                        <div class="password-strength" id="password-strength"></div>
+                        <button onclick="generatePassword()" class="btn-auth btn-email">
+                            <i class="fas fa-sync-alt"></i> Сгенерировать
+                        </button>
+                        <button onclick="copyPassword()" class="btn-auth btn-register">
+                            <i class="fas fa-copy"></i> Копировать
+                        </button>
+                        <p class="password-tip">
+                            <i class="fas fa-info-circle"></i> 
+                            Минимум 12 символов с цифрами и спецсимволами
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Чек-лист безопасности -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-check-circle"></i> Чек-лист безопасности
+                </div>
+                <div class="sidebar-info">
+                    <div class="checklist" id="security-checklist">
+                        <label class="checklist-item">
+                            <input type="checkbox" data-item="antivirus" onchange="updateChecklistProgress()">
+                            <span>Установлен антивирус</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" data-item="2fa" onchange="updateChecklistProgress()">
+                            <span>Включена 2FA</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" data-item="password" onchange="updateChecklistProgress()">
+                            <span>Сложные пароли</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" data-item="backup" onchange="updateChecklistProgress()">
+                            <span>Резервные копии</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox" data-item="updates" onchange="updateChecklistProgress()">
+                            <span>Обновления ПО</span>
+                        </label>
+                    </div>
+                    <div class="checklist-progress">
+                        <progress id="checklist-progress" value="0" max="5"></progress>
+                        <span id="checklist-percent">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Проверка ссылок -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-link"></i> Проверка ссылок
+                </div>
+                <div class="sidebar-info">
+                    <div class="link-checker">
+                        <input type="url" id="link-to-check" placeholder="Вставьте ссылку" class="input-auth">
+                        <button onclick="checkLink()" class="btn-auth btn-email">
+                            <i class="fas fa-search"></i> Проверить
+                        </button>
+                        <div id="link-result" class="link-result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Сканер -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">
+                    <i class="fas fa-qrcode"></i> QR Сканер
+                </div>
+                <div class="sidebar-info">
+                    <div id="qr-reader" style="width: 100%"></div>
+                    <button onclick="startQRScanner()" class="btn-auth btn-email">
+                        <i class="fas fa-camera"></i> Запустить сканер
+                    </button>
+                    <div id="qr-result" class="qr-result"></div>
                 </div>
             </div>
 
@@ -194,30 +297,6 @@
                 <div class="sidebar-info" id="user-info" style="display: none;">
                 </div>
             </div>
-            <!-- Генератор паролей -->
-<div class="sidebar-section">
-    <div class="sidebar-title">
-        <i class="fas fa-key"></i> Генератор паролей
-    </div>
-    <div class="sidebar-info">
-        <div class="password-generator">
-            <div class="password-display" id="generated-password">
-                Нажмите "Сгенерировать"
-            </div>
-            <div class="password-strength" id="password-strength"></div>
-            <button onclick="generatePassword()" class="btn-auth btn-email">
-                <i class="fas fa-sync-alt"></i> Сгенерировать
-            </button>
-            <button onclick="copyPassword()" class="btn-auth btn-register">
-                <i class="fas fa-copy"></i> Копировать
-            </button>
-            <p class="password-tip">
-                <i class="fas fa-info-circle"></i> 
-                Минимум 12 символов с цифрами и спецсимволами
-            </p>
-        </div>
-    </div>
-</div>
         </aside>
 
         <main class="content">
@@ -280,11 +359,111 @@
                         </div>
                     </div>
 
+                    <!-- PDF Памятки -->
+                    <h2><i class="fas fa-file-pdf"></i> PDF Памятки</h2>
+                    <div class="downloads-section">
+                        <a href="downloads/pamphlet-phishing.pdf" class="download-btn" download>
+                            <i class="fas fa-file-pdf"></i> Памятка: Защита от фишинга
+                        </a>
+                        <a href="downloads/pamphlet-phone.pdf" class="download-btn" download>
+                            <i class="fas fa-file-pdf"></i> Памятка: Телефонные мошенники
+                        </a>
+                        <a href="downloads/pamphlet-cards.pdf" class="download-btn" download>
+                            <i class="fas fa-file-pdf"></i> Памятка: Безопасность карт
+                        </a>
+                    </div>
+
                     <div class="info-box info-box-warning mt-2">
                         <strong><i class="fas fa-exclamation-triangle"></i> Важная информация</strong>
                         <p>При обнаружении признаков финансового мошенничества немедленно обратитесь в правоохранительные 
                         органы и в ваш банк для блокировки операций. Чем быстрее вы отреагируете, тем выше вероятность 
                         возврата денежных средств.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- НОВОСТИ (СЛАЙДЕР) -->
+            <section id="news" class="article-section">
+                <div class="page-header">
+                    <div class="breadcrumb"><a href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Главная</a> / Новости</div>
+                    <h1 class="page-title"><i class="fas fa-newspaper"></i> Лента новостей</h1>
+                    <p class="page-subtitle">Последние случаи мошенничества и предупреждения</p>
+                </div>
+
+                <div class="article-content">
+                    <div class="news-slider">
+                        <div class="news-container" id="news-container">
+                            <!-- Новости загружаются из JS -->
+                        </div>
+                        <button class="news-btn prev" onclick="slideNews(-1)"><i class="fas fa-chevron-left"></i></button>
+                        <button class="news-btn next" onclick="slideNews(1)"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="news-dots" id="news-dots"></div>
+                </div>
+            </section>
+
+            <!-- ГЛОССАРИЙ -->
+            <section id="glossary" class="article-section">
+                <div class="page-header">
+                    <div class="breadcrumb"><a href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Главная</a> / Глоссарий</div>
+                    <h1 class="page-title"><i class="fas fa-book"></i> Глоссарий терминов</h1>
+                    <p class="page-subtitle">Словарь финансовых и кибербезопасности терминов</p>
+                </div>
+
+                <div class="article-content">
+                    <div class="search-box">
+                        <input type="text" id="glossary-search" placeholder="Поиск термина..." onkeyup="searchGlossary()">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    
+                    <div class="glossary-grid" id="glossary-list">
+                        <!-- Термины загружаются из JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- КАЛЬКУЛЯТОР РИСКА -->
+            <section id="risk" class="article-section">
+                <div class="page-header">
+                    <div class="breadcrumb"><a href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Главная</a> / Калькулятор риска</div>
+                    <h1 class="page-title"><i class="fas fa-calculator"></i> Калькулятор риска</h1>
+                    <p class="page-subtitle">Узнайте насколько вы уязвимы для мошенников</p>
+                </div>
+
+                <div class="article-content">
+                    <form id="risk-form" onsubmit="calculateRisk(event)">
+                        <div class="risk-question">
+                            <p>1. Используете ли вы двухфакторную аутентификацию?</p>
+                            <label><input type="radio" name="q1" value="0" required> Да</label>
+                            <label><input type="radio" name="q1" value="10"> Нет</label>
+                        </div>
+                        <div class="risk-question">
+                            <p>2. Меняете ли вы пароли каждые 3 месяца?</p>
+                            <label><input type="radio" name="q2" value="0" required> Да</label>
+                            <label><input type="radio" name="q2" value="10"> Нет</label>
+                        </div>
+                        <div class="risk-question">
+                            <p>3. Установлен ли антивирус на всех устройствах?</p>
+                            <label><input type="radio" name="q3" value="0" required> Да</label>
+                            <label><input type="radio" name="q3" value="15"> Нет</label>
+                        </div>
+                        <div class="risk-question">
+                            <p>4. Проверяете ли вы ссылки перед кликом?</p>
+                            <label><input type="radio" name="q4" value="0" required> Всегда</label>
+                            <label><input type="radio" name="q4" value="10"> Иногда</label>
+                            <label><input type="radio" name="q4" value="20"> Никогда</label>
+                        </div>
+                        <div class="risk-question">
+                            <p>5. Делитесь ли вы персональными данными в соцсетях?</p>
+                            <label><input type="radio" name="q5" value="0" required> Нет</label>
+                            <label><input type="radio" name="q5" value="15"> Да</label>
+                        </div>
+                        <button type="submit" class="btn-submit">Рассчитать риск</button>
+                    </form>
+                    
+                    <div id="risk-result" class="risk-result" style="display: none;">
+                        <div class="risk-score" id="risk-score"></div>
+                        <div class="risk-recommendations" id="risk-recommendations"></div>
                     </div>
                 </div>
             </section>
