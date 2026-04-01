@@ -6,19 +6,7 @@ const CONFIG = {
         phone: 'images/phone_scams.jpg.jpg',
         viruses: 'images/viruses.jpg.jpg',
         cards: 'images/card_theft.jpg.jpg'
-    },
-    glossaryTerms: [
-        { term: "Фишинг", definition: "Мошенничество с целью получения доступа к личным данным через поддельные сайты" },
-        { term: "CVV/CVC", definition: "Трёхзначный код безопасности на обратной стороне банковской карты" },
-        { term: "2FA", definition: "Двухфакторная аутентификация — дополнительный уровень защиты аккаунта" },
-        { term: "Малварь", definition: "Вредоносное программное обеспечение (вирусы, трояны, шпионские программы)" },
-        { term: "Социальная инженерия", definition: "Метод манипуляции людьми для получения конфиденциальной информации" },
-        { term: "Скимминг", definition: "Способ кражи данных банковской карты с помощью специальных устройств" },
-        { term: "Троян", definition: "Вредоносная программа, маскирующаяся под легитимное ПО" },
-        { term: "Ботнет", definition: "Сеть заражённых компьютеров, управляемая злоумышленником" },
-        { term: "Спам", definition: "Массовая рассылка нежелательных сообщений" },
-        { term: "Брандмауэр", definition: "Система защиты сети от несанкционированного доступа" }
-    ]
+    }
 };
 
 // === ИНИЦИАЛИЗАЦИЯ ===
@@ -34,9 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Обновление статистики
     updateStats();
-
-    // Загрузка глоссария
-    loadGlossary();
 
     console.log('✅ script.js загружен');
     console.log('🌙 Тёмная тема активирована');
@@ -183,7 +168,7 @@ function updateStats() {
     var statSections = document.getElementById('stat-sections');
     var statInfographics = document.getElementById('stat-infographics');
     
-    if (statSections) statSections.textContent = '7';
+    if (statSections) statSections.textContent = '5';
     if (statInfographics) statInfographics.textContent = '5';
     
     console.log('📊 Статистика обновлена');
@@ -252,29 +237,6 @@ function checkLink() {
             showNotification('Внимание! Ссылка может быть опасной', 'error');
         }
     }, 1500);
-}
-
-// === ГЛОССАРИЙ ===
-function loadGlossary() {
-    const list = document.getElementById('glossary-list');
-    if (!list) return;
-    
-    list.innerHTML = CONFIG.glossaryTerms.map(item => `
-        <div class="glossary-item">
-            <h3>${item.term}</h3>
-            <p>${item.definition}</p>
-        </div>
-    `).join('');
-}
-
-function searchGlossary() {
-    const query = document.getElementById('glossary-search').value.toLowerCase();
-    const items = document.querySelectorAll('.glossary-item');
-    
-    items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(query) ? 'block' : 'none';
-    });
 }
 
 // === КАЛЬКУЛЯТОР РИСКА ===
@@ -366,10 +328,8 @@ window.isMobile = isMobile;
 window.generatePassword = generatePassword;
 window.copyPassword = copyPassword;
 window.checkLink = checkLink;
-window.searchGlossary = searchGlossary;
 window.calculateRisk = calculateRisk;
 
 // === ЛОГИРОВАНИЕ ===
 console.log('⚙️ CONFIG загружен');
 console.log('📊 Разделов:', Object.keys(CONFIG.infographics).length);
-console.log('📚 Терминов в глоссарии:', CONFIG.glossaryTerms.length);
