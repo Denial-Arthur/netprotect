@@ -7,7 +7,6 @@
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
     <header class="header-top">
@@ -15,7 +14,7 @@
             <div class="header-title">
                 ФИНАНСОВАЯ БЕЗОПАСНОСТЬ | Официальный информационный портал
             </div>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Переключить темы">
                 <i class="fas fa-moon"></i>
             </button>
         </div>
@@ -30,7 +29,6 @@
                 <li><a href="#" class="nav-link" data-page="phone"><i class="fas fa-phone-alt"></i> Телефон</a></li>
                 <li><a href="#" class="nav-link" data-page="viruses"><i class="fas fa-virus"></i> Вирусы</a></li>
                 <li><a href="#" class="nav-link" data-page="cards"><i class="fas fa-credit-card"></i> Карты</a></li>
-                <li><a href="#" class="nav-link" data-page="news"><i class="fas fa-newspaper"></i> Новости</a></li>
                 <li><a href="#" class="nav-link" data-page="glossary"><i class="fas fa-book"></i> Глоссарий</a></li>
                 <li><a href="#" class="nav-link" data-page="risk"><i class="fas fa-calculator"></i> Риск</a></li>
                 <li><a href="#" class="nav-link" data-page="appeal"><i class="fas fa-file-alt"></i> Обращение</a></li>
@@ -63,9 +61,6 @@
                     <li><a href="#" class="sidebar-link" data-page="cards">
                         <i class="fas fa-credit-card"></i> Кража с карты
                     </a></li>
-                    <li><a href="#" class="sidebar-link" data-page="news">
-                        <i class="fas fa-newspaper"></i> Новости
-                    </a></li>
                     <li><a href="#" class="sidebar-link" data-page="glossary">
                         <i class="fas fa-book"></i> Глоссарий
                     </a></li>
@@ -86,7 +81,7 @@
                     <p><strong>📊 Статистика портала:</strong></p>
                     <div class="stat-item">
                         <i class="fas fa-folder-open"></i> 
-                        <span>Разделов: <strong id="stat-sections">10</strong></span>
+                        <span>Разделов: <strong id="stat-sections">9</strong></span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-image"></i> 
@@ -146,41 +141,6 @@
                 </div>
             </div>
 
-            <!-- Чек-лист безопасности -->
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <i class="fas fa-check-circle"></i> Чек-лист безопасности
-                </div>
-                <div class="sidebar-info">
-                    <div class="checklist" id="security-checklist">
-                        <label class="checklist-item">
-                            <input type="checkbox" data-item="antivirus" onchange="updateChecklistProgress()">
-                            <span>Установлен антивирус</span>
-                        </label>
-                        <label class="checklist-item">
-                            <input type="checkbox" data-item="2fa" onchange="updateChecklistProgress()">
-                            <span>Включена 2FA</span>
-                        </label>
-                        <label class="checklist-item">
-                            <input type="checkbox" data-item="password" onchange="updateChecklistProgress()">
-                            <span>Сложные пароли</span>
-                        </label>
-                        <label class="checklist-item">
-                            <input type="checkbox" data-item="backup" onchange="updateChecklistProgress()">
-                            <span>Резервные копии</span>
-                        </label>
-                        <label class="checklist-item">
-                            <input type="checkbox" data-item="updates" onchange="updateChecklistProgress()">
-                            <span>Обновления ПО</span>
-                        </label>
-                    </div>
-                    <div class="checklist-progress">
-                        <progress id="checklist-progress" value="0" max="5"></progress>
-                        <span id="checklist-percent">0%</span>
-                    </div>
-                </div>
-            </div>
-
             <!-- Проверка ссылок -->
             <div class="sidebar-section">
                 <div class="sidebar-title">
@@ -194,20 +154,6 @@
                         </button>
                         <div id="link-result" class="link-result"></div>
                     </div>
-                </div>
-            </div>
-
-            <!-- QR Сканер -->
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <i class="fas fa-qrcode"></i> QR Сканер
-                </div>
-                <div class="sidebar-info">
-                    <div id="qr-reader" style="width: 100%"></div>
-                    <button onclick="startQRScanner()" class="btn-auth btn-email">
-                        <i class="fas fa-camera"></i> Запустить сканер
-                    </button>
-                    <div id="qr-result" class="qr-result"></div>
                 </div>
             </div>
 
@@ -359,46 +305,12 @@
                         </div>
                     </div>
 
-                    <!-- PDF Памятки -->
-                    <h2><i class="fas fa-file-pdf"></i> PDF Памятки</h2>
-                    <div class="downloads-section">
-                        <a href="downloads/pamphlet-phishing.pdf" class="download-btn" download>
-                            <i class="fas fa-file-pdf"></i> Памятка: Защита от фишинга
-                        </a>
-                        <a href="downloads/pamphlet-phone.pdf" class="download-btn" download>
-                            <i class="fas fa-file-pdf"></i> Памятка: Телефонные мошенники
-                        </a>
-                        <a href="downloads/pamphlet-cards.pdf" class="download-btn" download>
-                            <i class="fas fa-file-pdf"></i> Памятка: Безопасность карт
-                        </a>
-                    </div>
-
                     <div class="info-box info-box-warning mt-2">
                         <strong><i class="fas fa-exclamation-triangle"></i> Важная информация</strong>
                         <p>При обнаружении признаков финансового мошенничества немедленно обратитесь в правоохранительные 
                         органы и в ваш банк для блокировки операций. Чем быстрее вы отреагируете, тем выше вероятность 
                         возврата денежных средств.</p>
                     </div>
-                </div>
-            </section>
-
-            <!-- НОВОСТИ (СЛАЙДЕР) -->
-            <section id="news" class="article-section">
-                <div class="page-header">
-                    <div class="breadcrumb"><a href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Главная</a> / Новости</div>
-                    <h1 class="page-title"><i class="fas fa-newspaper"></i> Лента новостей</h1>
-                    <p class="page-subtitle">Последние случаи мошенничества и предупреждения</p>
-                </div>
-
-                <div class="article-content">
-                    <div class="news-slider">
-                        <div class="news-container" id="news-container">
-                            <!-- Новости загружаются из JS -->
-                        </div>
-                        <button class="news-btn prev" onclick="slideNews(-1)"><i class="fas fa-chevron-left"></i></button>
-                        <button class="news-btn next" onclick="slideNews(1)"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <div class="news-dots" id="news-dots"></div>
                 </div>
             </section>
 
