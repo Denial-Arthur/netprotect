@@ -309,6 +309,7 @@ window.signInWithPhone = signInWithPhone;
 window.verifyPhoneCode = verifyPhoneCode;
 window.signOut = signOut;
 window.submitAppeal = submitAppeal;
+window.showNotification = showNotification;
 
 console.log('✅ auth.js загружен');
 console.log('🔐 Защита email активирована');
