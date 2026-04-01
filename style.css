@@ -32,9 +32,10 @@
 
 [data-theme="dark"] body {
     background: #0f172a;
-    color: #e2e8f0;
+    color: #e2e8f0 !important;
 }
 
+/* === ИСПРАВЛЕНИЕ ТЕКСТА В ТЁМНОЙ ТЕМЕ === */
 [data-theme="dark"] .sidebar,
 [data-theme="dark"] .content,
 [data-theme="dark"] .card {
@@ -87,22 +88,71 @@
     border-color: #4a5568;
 }
 
-[data-theme="dark"] .checklist-item {
-    background: rgba(99, 179, 237, 0.05);
-}
-
 [data-theme="dark"] .glossary-item {
     background: #2d3748;
     border-color: #4a5568;
 }
 
-[data-theme="dark"] .news-card {
-    background: #1e293b;
-    border-color: #4a5568;
-}
-
 [data-theme="dark"] .risk-question {
     background: rgba(99, 179, 237, 0.05);
+}
+
+/* === ИСПРАВЛЕНИЕ ЦВЕТОВ ТЕКСТА В ТЁМНОЙ ТЕМЕ === */
+[data-theme="dark"] .article-content h2,
+[data-theme="dark"] .article-content h3,
+[data-theme="dark"] .article-content p,
+[data-theme="dark"] .article-content li,
+[data-theme="dark"] .page-title,
+[data-theme="dark"] .page-subtitle,
+[data-theme="dark"] .breadcrumb,
+[data-theme="dark"] .card-title,
+[data-theme="dark"] .card-description,
+[data-theme="dark"] .info-box strong,
+[data-theme="dark"] .info-box p,
+[data-theme="dark"] .info-box li,
+[data-theme="dark"] .form-group label,
+[data-theme="dark"] .footer-section h4,
+[data-theme="dark"] .footer-section p,
+[data-theme="dark"] .sidebar-title,
+[data-theme="dark"] .sidebar-menu a,
+[data-theme="dark"] .sidebar-info,
+[data-theme="dark"] .sidebar-info p,
+[data-theme="dark"] .sidebar-info strong,
+[data-theme="dark"] .stat-item span,
+[data-theme="dark"] .contact-item strong,
+[data-theme="dark"] .contact-item p,
+[data-theme="dark"] .user-name,
+[data-theme="dark"] .user-email,
+[data-theme="dark"] .password-display,
+[data-theme="dark"] .glossary-item h3,
+[data-theme="dark"] .glossary-item p,
+[data-theme="dark"] .risk-question p,
+[data-theme="dark"] .risk-question label {
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .article-content ul li i {
+    color: #fc8181;
+}
+
+[data-theme="dark"] .breadcrumb a {
+    color: #63b3ed;
+}
+
+[data-theme="dark"] .footer-section a {
+    color: #63b3ed;
+}
+
+[data-theme="dark"] .footer-section a:hover {
+    color: white;
+}
+
+[data-theme="dark"] .sidebar-menu a i {
+    color: #63b3ed;
+}
+
+[data-theme="dark"] .sidebar-title i {
+    color: #63b3ed;
 }
 
 * {
@@ -778,60 +828,6 @@ body {
     color: var(--accent-blue);
 }
 
-/* === ЧЕК-ЛИСТ БЕЗОПАСНОСТИ === */
-.checklist {
-    margin-bottom: 0.75rem;
-}
-
-.checklist-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    margin-bottom: 0.4rem;
-    background: rgba(49, 130, 206, 0.05);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.checklist-item:hover {
-    background: rgba(49, 130, 206, 0.1);
-}
-
-.checklist-item input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--accent-blue);
-}
-
-.checklist-item span {
-    font-size: 0.85rem;
-    color: var(--text-dark);
-}
-
-.checklist-progress {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.checklist-progress progress {
-    flex: 1;
-    height: 8px;
-    border-radius: 4px;
-    accent-color: var(--accent-blue);
-}
-
-.checklist-progress span {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--accent-blue);
-    min-width: 35px;
-}
-
 /* === ПРОВЕРКА ССЫЛОК === */
 .link-checker {
     padding: 0.5rem;
@@ -866,23 +862,6 @@ body {
     background: #bee3f8;
     color: #2c5282;
     border: 1px solid #63b3ed;
-}
-
-/* === QR СКАНЕР === */
-#qr-reader {
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.qr-result {
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    text-align: center;
-    background: var(--gray-light);
-    word-break: break-all;
 }
 
 /* === ОСНОВНОЙ КОНТЕНТ === */
@@ -1158,128 +1137,6 @@ body {
 .badge-high {
     background: linear-gradient(135deg, #feebc8 0%, #fbd38d 100%);
     color: var(--warning-orange);
-}
-
-/* === PDF ПАМЯТКИ === */
-.downloads-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin: 1.5rem 0;
-}
-
-.download-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, #fc8181 0%, #c53030 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: all 0.3s;
-    box-shadow: 0 2px 4px rgba(197, 48, 48, 0.2);
-}
-
-.download-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(197, 48, 48, 0.3);
-}
-
-.download-btn i {
-    font-size: 1.2rem;
-}
-
-/* === ЛЕНТА НОВОСТЕЙ (СЛАЙДЕР) === */
-.news-slider {
-    position: relative;
-    overflow: hidden;
-    border-radius: 8px;
-    margin: 1.5rem 0;
-}
-
-.news-container {
-    display: flex;
-    transition: transform 0.5s ease;
-}
-
-.news-card {
-    min-width: 100%;
-    padding: 1.5rem;
-    background: var(--white);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-}
-
-.news-card h3 {
-    color: var(--primary-dark);
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-}
-
-.news-card p {
-    color: var(--text-light);
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-
-.news-card .news-date {
-    font-size: 0.75rem;
-    color: var(--text-light);
-    margin-top: 0.75rem;
-}
-
-.news-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(49, 130, 206, 0.8);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.news-btn:hover {
-    background: var(--accent-blue);
-}
-
-.news-btn.prev {
-    left: 10px;
-}
-
-.news-btn.next {
-    right: 10px;
-}
-
-.news-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-.news-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--border-color);
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.news-dot.active {
-    background: var(--accent-blue);
-    width: 30px;
-    border-radius: 5px;
 }
 
 /* === ГЛОССАРИЙ === */
@@ -1894,17 +1751,8 @@ body {
         margin: 0 0 0.5rem 0;
     }
     
-    .downloads-section {
-        grid-template-columns: 1fr;
-    }
-    
     .glossary-grid {
         grid-template-columns: 1fr;
-    }
-    
-    .news-btn {
-        width: 35px;
-        height: 35px;
     }
 }
 
