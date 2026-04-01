@@ -6,7 +6,7 @@
     <title>ФинБезопасность | Официальный портал финансовой безопасности</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header class="header-top">
@@ -14,7 +14,7 @@
             <div class="header-title">
                 ФИНАНСОВАЯ БЕЗОПАСНОСТЬ | Официальный информационный портал
             </div>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Переключить темы">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">
                 <i class="fas fa-moon"></i>
             </button>
         </div>
@@ -29,7 +29,6 @@
                 <li><a href="#" class="nav-link" data-page="phone"><i class="fas fa-phone-alt"></i> Телефон</a></li>
                 <li><a href="#" class="nav-link" data-page="viruses"><i class="fas fa-virus"></i> Вирусы</a></li>
                 <li><a href="#" class="nav-link" data-page="cards"><i class="fas fa-credit-card"></i> Карты</a></li>
-                <li><a href="#" class="nav-link" data-page="glossary"><i class="fas fa-book"></i> Глоссарий</a></li>
                 <li><a href="#" class="nav-link" data-page="risk"><i class="fas fa-calculator"></i> Риск</a></li>
                 <li><a href="#" class="nav-link" data-page="appeal"><i class="fas fa-file-alt"></i> Обращение</a></li>
             </ul>
@@ -61,9 +60,6 @@
                     <li><a href="#" class="sidebar-link" data-page="cards">
                         <i class="fas fa-credit-card"></i> Кража с карты
                     </a></li>
-                    <li><a href="#" class="sidebar-link" data-page="glossary">
-                        <i class="fas fa-book"></i> Глоссарий
-                    </a></li>
                     <li><a href="#" class="sidebar-link" data-page="risk">
                         <i class="fas fa-calculator"></i> Калькулятор риска
                     </a></li>
@@ -81,7 +77,7 @@
                     <p><strong>📊 Статистика портала:</strong></p>
                     <div class="stat-item">
                         <i class="fas fa-folder-open"></i> 
-                        <span>Разделов: <strong id="stat-sections">9</strong></span>
+                        <span>Разделов: <strong id="stat-sections">7</strong></span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-image"></i> 
@@ -310,26 +306,6 @@
                         <p>При обнаружении признаков финансового мошенничества немедленно обратитесь в правоохранительные 
                         органы и в ваш банк для блокировки операций. Чем быстрее вы отреагируете, тем выше вероятность 
                         возврата денежных средств.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ГЛОССАРИЙ -->
-            <section id="glossary" class="article-section">
-                <div class="page-header">
-                    <div class="breadcrumb"><a href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Главная</a> / Глоссарий</div>
-                    <h1 class="page-title"><i class="fas fa-book"></i> Глоссарий терминов</h1>
-                    <p class="page-subtitle">Словарь финансовых и кибербезопасности терминов</p>
-                </div>
-
-                <div class="article-content">
-                    <div class="search-box">
-                        <input type="text" id="glossary-search" placeholder="Поиск термина..." onkeyup="searchGlossary()">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    
-                    <div class="glossary-grid" id="glossary-list">
-                        <!-- Термины загружаются из JS -->
                     </div>
                 </div>
             </section>
