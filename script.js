@@ -18,28 +18,6 @@ const CONFIG = {
         { term: "Ботнет", definition: "Сеть заражённых компьютеров, управляемая злоумышленником" },
         { term: "Спам", definition: "Массовая рассылка нежелательных сообщений" },
         { term: "Брандмауэр", definition: "Система защиты сети от несанкционированного доступа" }
-    ],
-    newsItems: [
-        {
-            title: "Новая схема мошенничества с QR-кодами",
-            text: "Мошенники размещают поддельные QR-коды в общественных местах. При сканировании пользователь переходит на фишинговый сайт.",
-            date: "2026-01-15"
-        },
-        {
-            title: "Предупреждение: звонки от лже-сотрудников банка",
-            text: "Зафиксирована волна звонков от мошенников, представляющихся сотрудниками службы безопасности крупных банков.",
-            date: "2026-01-12"
-        },
-        {
-            title: "Новый вирус рассылается через мессенджеры",
-            text: "Обнаружен новый троян, который распространяется через популярные мессенджеры под видом полезных приложений.",
-            date: "2026-01-10"
-        },
-        {
-            title: "Как защитить себя от фишинга в 2026 году",
-            text: "Эксперты рекомендуют использовать двухфакторную аутентификацию и проверять ссылки перед переходом.",
-            date: "2026-01-08"
-        }
     ]
 };
 
@@ -59,12 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Загрузка глоссария
     loadGlossary();
-
-    // Загрузка новостей
-    loadNews();
-
-    // Загрузка чек-листа из localStorage
-    loadChecklist();
 
     console.log('✅ script.js загружен');
     console.log('🌙 Тёмная тема активирована');
@@ -211,7 +183,7 @@ function updateStats() {
     var statSections = document.getElementById('stat-sections');
     var statInfographics = document.getElementById('stat-infographics');
     
-    if (statSections) statSections.textContent = '10';
+    if (statSections) statSections.textContent = '7';
     if (statInfographics) statInfographics.textContent = '5';
     
     console.log('📊 Статистика обновлена');
@@ -253,39 +225,6 @@ function checkPasswordStrength(password) {
         `<strong style="color: ${strengthColor}">Надёжность: ${strengthText}</strong>`;
 }
 
-// === ЧЕК-ЛИСТ БЕЗОПАСНОСТИ ===
-function updateChecklistProgress() {
-    const checkboxes = document.querySelectorAll('#security-checklist input[type="checkbox"]');
-    const checked = document.querySelectorAll('#security-checklist input[type="checkbox"]:checked');
-    const progress = document.getElementById('checklist-progress');
-    const percent = document.getElementById('checklist-percent');
-    
-    if (progress && percent) {
-        progress.value = checked.length;
-        progress.max = checkboxes.length;
-        percent.textContent = Math.round((checked.length / checkboxes.length) * 100) + '%';
-    }
-    
-    // Сохраняем в localStorage
-    const checklistData = {};
-    checkboxes.forEach(cb => {
-        checklistData[cb.dataset.item] = cb.checked;
-    });
-    localStorage.setItem('checklist', JSON.stringify(checklistData));
-}
-
-function loadChecklist() {
-    const saved = localStorage.getItem('checklist');
-    if (saved) {
-        const data = JSON.parse(saved);
-        for (let key in data) {
-            const cb = document.querySelector(`#security-checklist input[data-item="${key}"]`);
-            if (cb) cb.checked = data[key];
-        }
-        updateChecklistProgress();
-    }
-}
-
 // === ПРОВЕРКА ССЫЛОК ===
 function checkLink() {
     const url = document.getElementById('link-to-check').value;
@@ -315,38 +254,6 @@ function checkLink() {
     }, 1500);
 }
 
-// === QR СКАНЕР ===
-let qrScanner = null;
-
-function startQRScanner() {
-    const result = document.getElementById('qr-result');
-    
-    if (!qrScanner) {
-        qrScanner = new Html5Qrcode("qr-reader");
-        
-        qrScanner.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
-            },
-            (decodedText) => {
-                result.innerHTML = '<i class="fas fa-qrcode"></i> ' + decodedText;
-                result.style.background = '#c6f6d5';
-                showNotification('QR код распознан!', 'success');
-                qrScanner.stop();
-            },
-            (error) => {
-                // Игнорируем ошибки сканирования
-            }
-        ).catch(err => {
-            result.innerHTML = '<i class="fas fa-exclamation-circle"></i> Ошибка доступа к камере';
-            result.style.background = '#fed7d7';
-            showNotification('Не удалось получить доступ к камере', 'error');
-        });
-    }
-}
-
 // === ГЛОССАРИЙ ===
 function loadGlossary() {
     const list = document.getElementById('glossary-list');
@@ -368,50 +275,6 @@ function searchGlossary() {
         const text = item.textContent.toLowerCase();
         item.style.display = text.includes(query) ? 'block' : 'none';
     });
-}
-
-// === ЛЕНТА НОВОСТЕЙ ===
-let currentSlide = 0;
-
-function loadNews() {
-    const container = document.getElementById('news-container');
-    const dots = document.getElementById('news-dots');
-    
-    if (!container || !dots) return;
-    
-    container.innerHTML = CONFIG.newsItems.map(item => `
-        <div class="news-card">
-            <h3>${item.title}</h3>
-            <p>${item.text}</p>
-            <div class="news-date"><i class="fas fa-calendar"></i> ${item.date}</div>
-        </div>
-    `).join('');
-    
-    dots.innerHTML = CONFIG.newsItems.map((_, i) => 
-        `<div class="news-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
-    ).join('');
-}
-
-function slideNews(direction) {
-    const container = document.getElementById('news-container');
-    const dots = document.querySelectorAll('.news-dot');
-    
-    if (!container) return;
-    
-    currentSlide += direction;
-    if (currentSlide < 0) currentSlide = CONFIG.newsItems.length - 1;
-    if (currentSlide >= CONFIG.newsItems.length) currentSlide = 0;
-    
-    container.style.transform = `translateX(-${currentSlide * 100}%)`;
-    
-    dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
-    });
-}
-
-function goToSlide(index) {
-    currentSlide = index;
-    slideNews(0);
 }
 
 // === КАЛЬКУЛЯТОР РИСКА ===
@@ -502,16 +365,11 @@ window.scrollToElement = scrollToElement;
 window.isMobile = isMobile;
 window.generatePassword = generatePassword;
 window.copyPassword = copyPassword;
-window.updateChecklistProgress = updateChecklistProgress;
 window.checkLink = checkLink;
-window.startQRScanner = startQRScanner;
 window.searchGlossary = searchGlossary;
-window.slideNews = slideNews;
-window.goToSlide = goToSlide;
 window.calculateRisk = calculateRisk;
 
 // === ЛОГИРОВАНИЕ ===
 console.log('⚙️ CONFIG загружен');
 console.log('📊 Разделов:', Object.keys(CONFIG.infographics).length);
 console.log('📚 Терминов в глоссарии:', CONFIG.glossaryTerms.length);
-console.log('📰 Новостей:', CONFIG.newsItems.length);
