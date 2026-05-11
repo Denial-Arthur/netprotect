@@ -245,4 +245,9 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
     /* Всплывающие уведомления */
     .alert-container { bottom: 20px; left: 20px; right: 20px; }
     .alert-msg { font-size: 12px; }
+    /* === УМНАЯ ФОРМА (ТЕЛЕФОНЫ И ССЫЛКИ) === */
+.phone-input-wrapper { display: flex; gap: 10px; }
+.country-select { width: 150px !important; flex-shrink: 0; background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; padding: 16px 10px; font-family: var(--font-mono); outline: none; }
+.country-select:focus { border-color: var(--neon-accent); }
+.input-hint { color: var(--text-muted); font-size: 12px; margin-top: 8px; display: block; font-family: var(--font-mono); }
 }
