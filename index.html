@@ -115,7 +115,7 @@
             </div>
             <div class="card quiz-card" style="max-width: 700px; margin: 0 auto; text-align: center;">
                 <div class="quiz-icon" style="font-size: 50px; color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-comment-sms"></i></div>
-                <h3 style="font-size: 1.3rem; margin-bottom: 25px;">Вам пришло СМС: <br><span style="color: var(--danger);">«Ваша карта заблокирована. Для разблокировки перейдите по ссылке: http://sbierbank-security.ru»</span></h3>
+                <h3 style="font-size: 1.3rem; margin-bottom: 25px; line-height: 1.4;">Вам пришло СМС: <br><span style="color: var(--danger);">«Ваша карта заблокирована. Для разблокировки перейдите по ссылке: http://sbierbank-security.ru»</span></h3>
                 <p class="text-sm" style="margin-bottom: 20px;">Ваши действия?</p>
                 <div class="quiz-options" style="display: grid; gap: 15px;">
                     <button class="btn btn-outline w-100" onclick="checkQuiz(false)">Перейти по ссылке и ввести данные для разблокировки</button>
@@ -135,10 +135,21 @@
                     <ul class="features-list">
                         <li><i class="fa-solid fa-check"></i> Анонимно и безопасно</li>
                         <li><i class="fa-solid fa-check"></i> Модерация 24/7</li>
+                        <li><i class="fa-solid fa-check"></i> Передача данных в профильные ведомства</li>
                     </ul>
                 </div>
                 <div class="card report-form-card">
                     <form id="report-form" onsubmit="submitReport(event)">
+                        <div class="form-group">
+                            <label>Тип угрозы</label>
+                            <select required>
+                                <option value="" disabled selected>Выберите из списка...</option>
+                                <option>Подозрительный звонок / СМС</option>
+                                <option>Фишинговый сайт</option>
+                                <option>Поддельный интернет-магазин</option>
+                                <option>Другое</option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label>Номер телефона или ссылка</label>
                             <input type="text" required placeholder="+7 (999) 000-00-00">
