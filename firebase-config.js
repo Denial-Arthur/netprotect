@@ -1,11 +1,11 @@
-// Firebase конфигурация (НОВЫЙ ПРОЕКТ)
+// Firebase конфигурация (НОВЫЙ ПРОЕКТ netprotect-final)
 const firebaseConfig = {
-    apiKey: "AIzaSyAzj5ovFUszQ3qCBAsLx5pzJYivL-9Nx0c",
-    authDomain: "finsecurity-new.firebaseapp.com",
-    projectId: "finsecurity-new",
-    storageBucket: "finsecurity-new.firebasestorage.app",
-    messagingSenderId: "770841345635",
-    appId: "1:770841345635:web:26f4d2c6e8232af1ba4256"
+    apiKey: "AIzaSyCmk5NdffI5vp5dOyQM3kDGAkEt7byeBGA",
+    authDomain: "netprotect-final.firebaseapp.com",
+    projectId: "netprotect-final",
+    storageBucket: "netprotect-final.firebasestorage.app",
+    messagingSenderId: "1058990579218",
+    appId: "1:1058990579218:web:007b5d39dd101fbeeb82cb"
 };
 
 // Инициализация Firebase
@@ -16,12 +16,5 @@ const db = firebase.firestore();
 const storage = firebase.storage();
 const auth = firebase.auth();
 
-console.log('✅ Firebase инициализирован');
+console.log('✅ Firebase инициализирован (НОВЫЕ КЛЮЧИ!)');
 console.log('🔑 API Key:', firebaseConfig.apiKey);
-console.log('🌐 Auth Domain:', firebaseConfig.authDomain);
-console.log('📦 Project ID:', firebaseConfig.projectId);
-console.log('🔐 Защита активирована');
-console.log('🌙 Тёмная тема готова');
-console.log('🔐 Генератор паролей готов');
-console.log('🔍 Проверка ссылок готова');
-console.log('📊 Калькулятор риска готов');
