@@ -1,13 +1,18 @@
+// 1. Твои уникальные настройки Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyCmk5NdffI5vp5dOyQM3kDGAkEt7byeBGA",
-    authDomain: "netprotect-final.firebaseapp.com",
-    projectId: "netprotect-final",
-    storageBucket: "netprotect-final.firebasestorage.app",
-    messagingSenderId: "1058990579218",
-    appId: "1:1058990579218:web:007b5d39dd101fbeeb82cb"
+  apiKey: "AIzaSyD2FuRBxIFxNm9jDUoTolfNFIWLU8nVwAg",
+  authDomain: "netprotect-web.firebaseapp.com",
+  projectId: "netprotect-web",
+  storageBucket: "netprotect-web.firebasestorage.app",
+  messagingSenderId: "865774775037",
+  appId: "1:865774775037:web:58d342e779b55079726c94"
 };
 
+// 2. Инициализация самого Firebase
 firebase.initializeApp(firebaseConfig);
+
+// 3. Подключение базы данных Firestore
 const db = firebase.firestore();
 
-console.log('✅ Firebase подключен. База данных готова к приему жалоб.');
+// (Задел на будущее: подключение авторизации)
+// const auth = firebase.auth();
