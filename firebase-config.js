@@ -16,3 +16,5 @@ window.db = firebase.firestore();
 
 // (Задел на будущее: подключение авторизации)
 // window.auth = firebase.auth();
+window.auth = firebase.auth();
+window.googleProvider = new firebase.auth.GoogleAuthProvider();
