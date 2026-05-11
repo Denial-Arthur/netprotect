@@ -259,21 +259,90 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => alertBox.remove(), 4000);
     }
 
-    window.sendToFirebase = (e) => {
-        e.preventDefault();
-        const type = document.getElementById('inc-type').value;
-        const source = document.getElementById('inc-source').value;
-        const desc = document.getElementById('inc-desc').value;
+   // === ДИНАМИЧЕСКАЯ ФОРМА И FIREBASE ===
+    const incType = document.getElementById('inc-type');
+    const groupPhone = document.getElementById('group-phone');
+    const groupSite = document.getElementById('group-site');
+    const incPhone = document.getElementById('inc-phone');
+    const incUrl = document.getElementById('inc-url');
+    const incidentForm = document.getElementById('incident-form');
 
-        if(typeof db !== 'undefined') {
-            db.collection('reports').add({ type: type, source: source, description: desc, timestamp: new Date() })
-            .then(() => { showAlert('Инцидент зафиксирован в базе данных.'); e.target.reset(); })
-            .catch((err) => showAlert('Ошибка сети: ' + err.message));
-        } else {
-            showAlert('Локальный режим: Данные сохранены.');
-            e.target.reset();
-        }
-    };
+    // 1. Показываем нужные поля в зависимости от выбора категории
+    if(incType) {
+        incType.addEventListener('change', (e) => {
+            const val = e.target.value;
+            
+            // Прячем всё
+            groupPhone.style.display = 'none';
+            groupSite.style.display = 'none';
+            incPhone.required = false;
+            incUrl.required = false;
+
+            // Показываем нужное
+            if (val === 'call') {
+                groupPhone.style.display = 'block';
+                incPhone.required = true;
+            } else if (val === 'site') {
+                groupSite.style.display = 'block';
+                incUrl.required = true;
+            }
+        });
+    }
+
+    // 2. ЖЕСТКАЯ ЗАЩИТА ТЕЛЕФОНА (блокируем ввод любых букв)
+    if(incPhone) {
+        incPhone.addEventListener('input', function() {
+            // Регулярное выражение: всё, что не цифра - удаляется мгновенно
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+
+    // 3. Бронебойная отправка формы
+    if(incidentForm) {
+        incidentForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Останавливаем перезагрузку страницы
+            
+            const type = incType.value;
+            const desc = document.getElementById('inc-desc').value;
+            let source = '';
+
+            // Собираем источник угрозы (Телефон или Ссылка)
+            if (type === 'call') {
+                const code = document.getElementById('inc-country-code').value;
+                source = `${code} ${incPhone.value}`;
+            } else if (type === 'site') {
+                source = incUrl.value;
+            } else {
+                source = 'Иной источник';
+            }
+
+            // Отправляем в Firebase (проверяем, что db существует)
+            if (typeof window.db !== 'undefined') {
+                window.db.collection('reports').add({
+                    type: type,
+                    source: source,
+                    description: desc,
+                    timestamp: new Date()
+                })
+                .then(() => {
+                    showAlert('Успешно! Инцидент зафиксирован в базе NetProtect.');
+                    incidentForm.reset();
+                    groupPhone.style.display = 'none';
+                    groupSite.style.display = 'none';
+                })
+                .catch((err) => {
+                    console.error("Ошибка Firebase:", err);
+                    showAlert('Ошибка БД: проверьте консоль.');
+                });
+            } else {
+                console.log("Данные для отправки (БД отключена):", {type, source, desc});
+                showAlert('ЛОКАЛЬНЫЙ РЕЖИМ: Данные выведены в консоль (Firebase не подключен).');
+                incidentForm.reset();
+                groupPhone.style.display = 'none';
+                groupSite.style.display = 'none';
+            }
+        });
+    }
 
   // === ГЕНЕРАЦИЯ PDF (Оптимизировано для мобильных) ===
     window.exportPDF = () => {
