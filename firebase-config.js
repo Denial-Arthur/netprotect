@@ -11,8 +11,8 @@ const firebaseConfig = {
 // 2. Инициализация самого Firebase
 firebase.initializeApp(firebaseConfig);
 
-// 3. Подключение базы данных Firestore
-const db = firebase.firestore();
+// 3. Подключение базы данных Firestore (Делаем глобальной!)
+window.db = firebase.firestore();
 
 // (Задел на будущее: подключение авторизации)
-// const auth = firebase.auth();
+// window.auth = firebase.auth();
