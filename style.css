@@ -250,4 +250,18 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
 .country-select { width: 150px !important; flex-shrink: 0; background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; padding: 16px 10px; font-family: var(--font-mono); outline: none; }
 .country-select:focus { border-color: var(--neon-accent); }
 .input-hint { color: var(--text-muted); font-size: 12px; margin-top: 8px; display: block; font-family: var(--font-mono); }
+    /* === АВТОРИЗАЦИЯ === */
+.auth-card { max-width: 400px !important; }
+.auth-divider { display: flex; align-items: center; text-align: center; margin: 24px 0; color: var(--text-muted); font-size: 12px; font-family: var(--font-mono); }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
+.auth-divider span { padding: 0 10px; }
+.google-btn { display: flex; justify-content: center; background: var(--bg-base); font-family: var(--font-ui); }
+.google-btn:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.05); }
+.auth-toggle-text { margin-top: 20px; text-align: center; font-size: 14px; color: var(--text-muted); }
+.auth-toggle-text a { color: var(--neon-accent); text-decoration: none; font-weight: 600; transition: var(--transition); }
+.auth-toggle-text a:hover { text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+
+/* Состояние, когда пользователь вошел */
+.user-logged-in #auth-btn { border-color: #ef4444; color: #ef4444; }
+.user-logged-in #auth-btn:hover { background: rgba(239, 68, 68, 0.1); box-shadow: none; }
 }
