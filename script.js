@@ -373,4 +373,93 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(err);
         });
     };
+    // === ЛОГИКА АВТОРИЗАЦИИ ===
+    const authBtn = document.getElementById('auth-btn');
+    const authModal = document.getElementById('auth-modal');
+    const authForm = document.getElementById('auth-form');
+    const authTitle = document.getElementById('auth-title');
+    const authSubmitBtn = document.getElementById('auth-submit-btn');
+    const toggleAuthMode = document.getElementById('toggle-auth-mode');
+    const googleAuthBtn = document.getElementById('google-auth-btn');
+
+    let isLoginMode = true;
+
+    // Открыть/Закрыть модалку
+    if(authBtn) {
+        authBtn.addEventListener('click', () => {
+            if (window.auth.currentUser) {
+                // Если уже вошли - кнопка работает как "Выход"
+                window.auth.signOut().then(() => showAlert('Вы успешно вышли из системы.'));
+            } else {
+                authModal.classList.add('active');
+            }
+        });
+    }
+
+    window.closeAuthModal = (e) => {
+        if (!e || e.target.id === 'auth-modal' || e.target.closest('.btn-close')) {
+            authModal.classList.remove('active');
+        }
+    };
+
+    // Переключение Вход / Регистрация
+    if(toggleAuthMode) {
+        toggleAuthMode.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            authTitle.innerText = isLoginMode ? 'Вход в систему' : 'Регистрация';
+            authSubmitBtn.innerText = isLoginMode ? 'Войти' : 'Создать аккаунт';
+            toggleAuthMode.innerText = isLoginMode ? 'Создать' : 'Войти в аккаунт';
+        });
+    }
+
+    // Вход и Регистрация по Email/Паролю
+    if(authForm) {
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+
+            if (isLoginMode) {
+                window.auth.signInWithEmailAndPassword(email, pass)
+                    .then(() => {
+                        showAlert('Успешная авторизация!');
+                        closeAuthModal();
+                    })
+                    .catch(err => showAlert('Ошибка входа: ' + err.message));
+            } else {
+                window.auth.createUserWithEmailAndPassword(email, pass)
+                    .then(() => {
+                        showAlert('Учетная запись создана!');
+                        closeAuthModal();
+                    })
+                    .catch(err => showAlert('Ошибка регистрации: ' + err.message));
+            }
+        });
+    }
+
+    // Вход через Google
+    if(googleAuthBtn) {
+        googleAuthBtn.addEventListener('click', () => {
+            window.auth.signInWithPopup(window.googleProvider)
+                .then((result) => {
+                    showAlert(`Привет, ${result.user.displayName}!`);
+                    closeAuthModal();
+                })
+                .catch(err => showAlert('Ошибка Google авторизации: ' + err.message));
+        });
+    }
+
+    // Отслеживание состояния пользователя (вошел/вышел)
+    if(typeof window.auth !== 'undefined') {
+        window.auth.onAuthStateChanged(user => {
+            if (user) {
+                document.body.classList.add('user-logged-in');
+                authBtn.innerText = 'Выйти';
+            } else {
+                document.body.classList.remove('user-logged-in');
+                authBtn.innerText = 'Войти';
+            }
+        });
+    }
 });
