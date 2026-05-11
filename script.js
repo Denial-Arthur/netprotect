@@ -1,175 +1,296 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === ТЕМЫ И РЕЖИМЫ ===
-    const htmlEl = document.documentElement;
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-        const isDark = htmlEl.getAttribute('data-theme') === 'dark';
-        htmlEl.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    });
 
-    // === ГРАФИК ===
-    const ctx = document.getElementById('crimeChart');
-    if (ctx) {
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Фишинг', 'Звонки', 'Вирусы', 'Карты', 'Онлайн'],
-                datasets: [{ data: [35, 30, 15, 10, 10], backgroundColor: ['#0d9488', '#e11d48', '#db2777', '#0f766e', '#ca8a04'], borderWidth: 0 }]
-            },
-            options: { plugins: { legend: { position: 'bottom' } } }
+    // === МОБИЛЬНОЕ МЕНЮ (БУРГЕР) ===
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            if(navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
         });
-    }
 
-    // === ПОИСК ===
-    const searchInput = document.getElementById('threat-search');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            document.querySelectorAll('.threat-card').forEach(card => {
-                card.style.display = card.innerText.toLowerCase().includes(query) ? 'block' : 'none';
+        // Закрываем меню при клике на любую ссылку
+        document.querySelectorAll('.nav-link, .mobile-report-btn').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileToggle.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
             });
         });
     }
 
-    // === СЧЕТЧИКИ ===
-    const counters = document.querySelectorAll('.stat-number');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const target = +entry.target.getAttribute('data-target');
-                let count = 0;
-                const updateCount = () => {
-                    if (count < target) { count += target / 50; entry.target.innerText = Math.ceil(count); setTimeout(updateCount, 30); }
-                    else { entry.target.innerText = target + (target >= 150 ? '+' : ''); }
-                };
-                updateCount(); observer.unobserve(entry.target); 
-            }
-        });
-    }, { threshold: 0.5 }); 
-    counters.forEach(counter => observer.observe(counter));
+    // === ИНСТРУМЕНТ 1: АНАЛИЗАТОР ПАРОЛЕЙ ===
+    const passInput = document.getElementById('pass-input');
+    const passMeter = document.getElementById('pass-meter');
+    const passTime = document.getElementById('pass-time');
 
-    loadQuizQuestion();
-});
+    function analyzePassword(pass) {
+        const len = pass.length;
+        if(len === 0) {
+            passMeter.style.width = '0%';
+            passMeter.style.background = '#ef4444';
+            passTime.innerText = 'Время взлома: ---';
+            return;
+        }
 
-// === КВИЗ НА 10 ВОПРОСОВ ===
-const quizQuestions = [
-    { q: "Вам пришло СМС: «Ваша карта заблокирована. Перейдите по ссылке для проверки...»", a1: "Перейти по ссылке", a2: "Позвонить в банк напрямую", correct: 1, exp: "Банки никогда не присылают ссылки для разблокировки аккаунтов в СМС." },
-    { q: "Звонок от 'следователя': 'Ваш родственник попал в ДТП, нужны деньги'.", a1: "Срочно перевести деньги", a2: "Сбросить и позвонить родственнику", correct: 1, exp: "Это схема психологического давления." },
-    { q: "Друг ВКонтакте просит срочно перевести 5000 рублей до завтра.", a1: "Перевести сразу", a2: "Позвонить ему лично", correct: 1, exp: "Профиль друга мог быть взломан." },
-    { q: "Реклама в соцсети обещает 500% прибыли за месяц от инвестиций.", a1: "Вложить небольшую сумму", a2: "Проигнорировать", correct: 1, exp: "Гарантия сверхприбыли — признак пирамиды." },
-    { q: "На почту пришло письмо от 'Госуслуг' о выплате 100 000 рублей.", a1: "Ввести данные карты", a2: "Зайти на сайт вручную", correct: 1, exp: "Фишеры маскируются под госпорталы." },
-    { q: "Сотрудник банка просит код из СМС, чтобы 'отменить подозрительный перевод'.", a1: "Продиктовать код", a2: "Сбросить звонок", correct: 1, exp: "Код из СМС — это подпись. Банк его не запрашивает." },
-    { q: "Вы нашли флешку на улице возле офиса.", a1: "Вставить в ноутбук", a2: "Передать в охрану", correct: 1, exp: "Флешки могут содержать трояны." },
-    { q: "При скачивании файла приложение просит доступ ко всем вашим СМС.", a1: "Разрешить", a2: "Запретить", correct: 1, exp: "Так воруют банковские коды." },
-    { q: "Вам звонит 'сотрудник банка' через Telegram.", a1: "Слушать и выполнять", a2: "Положить трубку", correct: 1, exp: "Официальные банки не звонят через мессенджеры." },
-    { q: "Сайт предлагает бесплатные бонусы в игре за ввод данных карты.", a1: "Ввести данные", a2: "Закрыть сайт", correct: 1, exp: "Это фишинг для кражи карты." }
-];
+        let timeStr = ''; let color = ''; let width = '';
 
-let currentQuestion = 0, score = 0;
+        if (len < 6) { timeStr = 'Мгновенно'; color = '#ef4444'; width = '10%'; }
+        else if (len < 8) { timeStr = '3 минуты'; color = '#f59e0b'; width = '40%'; }
+        else if (len < 10) { timeStr = '2 дня'; color = '#f59e0b'; width = '60%'; }
+        else if (len < 12) { timeStr = '14 лет'; color = '#10b981'; width = '85%'; }
+        else { timeStr = '400+ лет'; color = '#10b981'; width = '100%'; }
 
-function loadQuizQuestion() {
-    const q = quizQuestions[currentQuestion];
-    document.getElementById('quiz-progress').innerText = `Вопрос ${currentQuestion + 1} из 10`;
-    document.getElementById('quiz-question').innerText = q.q;
-    document.getElementById('btn-ans-0').innerText = q.a1;
-    document.getElementById('btn-ans-1').innerText = q.a2;
-}
+        if (/[!@#$%^&*()]/.test(pass) && len >= 10) {
+             timeStr = '10 000+ лет'; width = '100%'; color = '#10b981';
+        }
 
-function answerQuiz(idx) {
-    const q = quizQuestions[currentQuestion];
-    const isCorrect = (idx === q.correct);
-    if(isCorrect) score++;
-
-    document.getElementById('quiz-options').style.display = 'none';
-    const exp = document.getElementById('quiz-explanation');
-    exp.classList.remove('hidden');
-    exp.className = isCorrect ? "result-box res-safe" : "result-box res-danger";
-    exp.innerHTML = `<strong>${isCorrect ? 'Верно!' : 'Ошибка.'}</strong> ${q.exp}`;
-    
-    document.getElementById('quiz-controls').classList.remove('hidden');
-    document.getElementById('quiz-next-btn').classList.remove('hidden');
-}
-
-function nextQuizQuestion() {
-    currentQuestion++;
-    document.getElementById('quiz-explanation').classList.add('hidden');
-    document.getElementById('quiz-options').style.display = 'grid';
-    document.getElementById('quiz-controls').classList.add('hidden');
-    
-    if (currentQuestion < quizQuestions.length) loadQuizQuestion();
-    else finishQuiz();
-}
-
-function finishQuiz() {
-    document.getElementById('quiz-progress').innerText = "Тест завершен";
-    document.getElementById('quiz-question').innerText = `Ваш результат защиты: ${score} из 10.`;
-    document.getElementById('quiz-options').style.display = 'none';
-    document.getElementById('quiz-next-btn').classList.add('hidden');
-    document.getElementById('quiz-restart-btn').classList.remove('hidden');
-}
-
-function restartQuiz() {
-    currentQuestion = 0; score = 0;
-    document.getElementById('quiz-restart-btn').classList.add('hidden');
-    document.getElementById('quiz-options').style.display = 'grid';
-    loadQuizQuestion();
-}
-
-// === МОДАЛКИ (Исправлено по претензиям 4 и 5) ===
-const modalData = {
-    // Угрозы
-    phishing: { title: "Протокол: Фишинг", theme: "theme-phishing", type: "text", content: "<p>Не вводите данные на сайтах без SSL-сертификата (замочка) и сомнительных доменных имен.</p>" },
-    phone: { title: "Вишинг", theme: "theme-phone", type: "text", content: "<p>Просто повесьте трубку и позвоните в банк самостоятельно.</p>" },
-    
-    // Статьи (Добавлены ссылки на оригиналы)
-    article1: { 
-        title: "Идеальный пароль", theme: "theme-article", type: "text", 
-        content: "<h3>Почему 123456 не работает?</h3><p>Хакеры используют словари и автоматические брутфорс-атаки.</p><br><h3>Формула надежности:</h3><ul><li>Минимум 12 символов</li><li>Используйте спецсимволы (#, $, &)</li></ul>",
-        source: "https://habr.com/ru/articles/520110/" 
-    },
-    article2: { 
-        title: "Безопасность соцсетей", theme: "theme-article", type: "text", 
-        content: "<h3>Минимизация цифрового следа</h3><p>Закройте свой профиль от посторонних. Не делитесь геолокацией...</p>",
-        source: "https://cbr.ru" 
-    },
-    article3: { title: "Дети и интернет", theme: "theme-article", type: "text", content: "<h3>Цифровая гигиена</h3><p>Как защитить ребенка от кибербуллинга и мошенничества.</p>", source: "https://66.mvd.ru" }
-};
-
-function openModal(id) {
-    const data = modalData[id];
-    if(!data) return;
-    
-    document.getElementById('modal-content').className = 'modal-container ' + data.theme;
-    document.getElementById('modal-title').innerText = data.title;
-    document.getElementById('modal-icon').innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
-    document.getElementById('modal-text').innerHTML = data.content;
-    document.getElementById('modal-text').style.display = 'block';
-    
-    if(data.source) {
-        document.getElementById('modal-link-container').innerHTML = `<a href="${data.source}" target="_blank" class="btn btn-outline">Читать оригинал</a>`;
-    } else {
-        document.getElementById('modal-link-container').innerHTML = '';
+        passMeter.style.width = width;
+        passMeter.style.background = color;
+        passTime.innerText = `Время взлома: ${timeStr}`;
     }
-    
-    document.getElementById('threat-modal').classList.add('active');
-    document.body.style.overflow = 'hidden'; 
-}
 
-function closeModal() { 
-    document.getElementById('threat-modal').classList.remove('active'); 
-    document.body.style.overflow = 'auto'; 
-}
+    passInput.addEventListener('input', (e) => analyzePassword(e.target.value));
 
-// === FIREBASE И PDF ===
-function submitReportToFirebase(e) {
-    e.preventDefault();
-    db.collection('reports').add({
-        type: document.getElementById('report-type').value,
-        id: document.getElementById('report-link').value,
-        at: new Date()
-    }).then(() => { alert('Отправлено в NetProtect!'); e.target.reset(); });
-}
+    window.generatePass = () => {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
+        let pass = '';
+        for (let i = 0; i < 16; i++) { pass += chars.charAt(Math.floor(Math.random() * chars.length)); }
+        passInput.value = pass;
+        analyzePassword(pass);
+    };
 
-function downloadPDF() {
-    const el = document.getElementById('pdf-content'); el.style.display = 'block';
-    html2pdf().from(el).set({ filename: 'NetProtect_Protocol.pdf', html2canvas: { scale: 2 }, jsPDF: { format: 'letter', orientation: 'portrait' } }).save().then(() => el.style.display = 'none');
-}
+    // === ИНСТРУМЕНТ 2: SHA-256 ХЭШ ===
+    const hashInput = document.getElementById('hash-input');
+    const hashOutput = document.getElementById('hash-output');
+
+    async function generateHash(text) {
+        if(text === '') { 
+            hashOutput.innerText = 'Здесь появится криптографический хэш...'; 
+            hashOutput.classList.add('text-muted');
+            hashOutput.style.color = '';
+            return; 
+        }
+        const encoder = new TextEncoder();
+        const data = encoder.encode(text);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        
+        hashOutput.innerText = hashHex;
+        hashOutput.classList.remove('text-muted');
+        hashOutput.style.color = 'var(--neon-accent)';
+    }
+
+    hashInput.addEventListener('input', (e) => generateHash(e.target.value));
+
+
+    // === АУДИТ УЯЗВИМОСТИ ===
+    const checks = document.querySelectorAll('.audit-check');
+    const scoreDisplay = document.getElementById('audit-score');
+    const progressBar = document.getElementById('audit-progress');
+    const statusBadge = document.getElementById('audit-status');
+    const statusText = document.getElementById('audit-text');
+
+    function calculateAudit() {
+        const checkedCount = Array.from(checks).filter(cb => cb.checked).length;
+        const total = checks.length;
+        const percent = Math.round((checkedCount / total) * 100);
+
+        scoreDisplay.innerText = percent + '%';
+        progressBar.style.width = percent + '%';
+
+        if (percent <= 40) {
+            progressBar.style.background = '#ef4444';
+            statusBadge.innerText = 'КРИТИЧЕСКАЯ УЯЗВИМОСТЬ';
+            statusBadge.style.color = '#ef4444';
+            statusBadge.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+            statusBadge.style.background = 'rgba(239, 68, 68, 0.1)';
+            statusText.innerText = 'Ваши данные могут быть скомпрометированы при первой целенаправленной атаке.';
+        } else if (percent <= 80) {
+            progressBar.style.background = '#f59e0b';
+            statusBadge.innerText = 'БАЗОВЫЙ УРОВЕНЬ ЗАЩИТЫ';
+            statusBadge.style.color = '#f59e0b';
+            statusBadge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+            statusBadge.style.background = 'rgba(245, 158, 11, 0.1)';
+            statusText.innerText = 'Вы защищены от автоматических угроз, но социальная инженерия может сработать.';
+        } else {
+            progressBar.style.background = '#10b981';
+            statusBadge.innerText = 'ВЫСОКИЙ УРОВЕНЬ ЗАЩИТЫ';
+            statusBadge.style.color = '#10b981';
+            statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+            statusBadge.style.background = 'rgba(16, 185, 129, 0.1)';
+            statusText.innerText = 'Система защиты настроена корректно. Риск компрометации минимален.';
+        }
+    }
+
+    checks.forEach(check => check.addEventListener('change', calculateAudit));
+    calculateAudit();
+
+
+    // === СИМУЛЯТОР АТАК (КВИЗ) ===
+    const simData = [
+        { q: "СМС от банка: «Карта заблокирована. Подтвердите данные по ссылке...»", opts: ["Перейти по ссылке", "Позвонить в банк напрямую"], correct: 1, exp: "Банки никогда не присылают ссылки для разблокировки в СМС." },
+        { q: "Звонок от следователя: 'Ваш родственник попал в ДТП, нужны деньги'.", opts: ["Перевести деньги", "Сбросить и позвонить родственнику"], correct: 1, exp: "Это схема психологического давления." },
+        { q: "Друг ВКонтакте просит срочно перевести 5000 рублей до завтра.", opts: ["Перевести", "Позвонить ему лично"], correct: 1, exp: "Профиль друга скорее всего был взломан брутфорсом." },
+        { q: "Реклама в соцсети обещает 500% прибыли за месяц от инвестиций.", opts: ["Вложить немного", "Проигнорировать"], correct: 1, exp: "Гарантия сверхприбыли — главный признак финансовой пирамиды (скама)." },
+        { q: "На почту пришло письмо от 'Госуслуг' о выплате 100 000 рублей.", opts: ["Ввести карту", "Зайти на сайт вручную"], correct: 1, exp: "Фишеры делают точные копии писем от госпорталов." },
+        { q: "Сотрудник банка просит код из СМС, чтобы 'отменить подозрительный перевод'.", opts: ["Продиктовать код", "Сбросить звонок"], correct: 1, exp: "Код из СМС — это ваша цифровая подпись. Банк его не просит." },
+        { q: "Вы нашли флешку на улице возле офиса.", opts: ["Вставить в ПК", "Оставить на месте"], correct: 1, exp: "Флешки-приманки заражают сети троянами." },
+        { q: "При скачивании файла приложение просит доступ к СМС.", opts: ["Разрешить", "Запретить"], correct: 1, exp: "Так приложения воруют коды для перевода денег." },
+        { q: "Вам звонит 'сотрудник банка' через WhatsApp.", opts: ["Ответить", "Положить трубку"], correct: 1, exp: "Официальные банки не звонят через мессенджеры." },
+        { q: "Сайт предлагает бесплатные бонусы в игре за ввод данных карты.", opts: ["Ввести", "Закрыть сайт"], correct: 1, exp: "Бесплатный сыр только в мышеловке. Это кража данных карты." }
+    ];
+
+    let simIndex = 0;
+    let simScore = 0;
+
+    const simCounter = document.getElementById('sim-counter');
+    const simQuestion = document.getElementById('sim-question');
+    const opt0 = document.getElementById('opt-0');
+    const opt1 = document.getElementById('opt-1');
+    const simOptions = document.getElementById('sim-options');
+    const simFeedback = document.getElementById('sim-feedback');
+    const simActions = document.getElementById('sim-actions');
+    const btnNext = document.getElementById('btn-next');
+    const btnRestart = document.getElementById('btn-restart');
+
+    function renderScenario() {
+        const s = simData[simIndex];
+        simCounter.innerText = `Сценарий ${simIndex + 1} / 10`;
+        simQuestion.innerText = s.q;
+        opt0.innerText = s.opts[0];
+        opt1.innerText = s.opts[1];
+        
+        simOptions.classList.remove('hidden');
+        simFeedback.classList.add('hidden');
+        simActions.classList.add('hidden');
+    }
+
+    window.processAnswer = (idx) => {
+        const s = simData[simIndex];
+        const isCorrect = (idx === s.correct);
+        if (isCorrect) simScore++;
+
+        simOptions.classList.add('hidden');
+        simFeedback.classList.remove('hidden');
+        
+        simFeedback.className = `sim-feedback ${isCorrect ? 'feed-correct' : 'feed-wrong'}`;
+        simFeedback.innerHTML = `<strong>${isCorrect ? 'Верное решение.' : 'Критическая ошибка.'}</strong><br>${s.exp}`;
+        
+        simActions.classList.remove('hidden');
+    }
+
+    window.nextScenario = () => {
+        simIndex++;
+        if (simIndex < simData.length) {
+            renderScenario();
+        } else {
+            simCounter.innerText = "Анализ завершен";
+            simQuestion.innerText = `Эффективность защиты: ${simScore} из 10.`;
+            simFeedback.classList.add('hidden');
+            btnNext.classList.add('hidden');
+            btnRestart.classList.remove('hidden');
+        }
+    }
+
+    window.resetSimulator = () => {
+        simIndex = 0;
+        simScore = 0;
+        btnRestart.classList.add('hidden');
+        btnNext.classList.remove('hidden');
+        renderScenario();
+    }
+
+    renderScenario();
+
+
+    // === БАЗА УГРОЗ (Модальные окна с фото) ===
+    const threatDB = {
+        phishing: { title: "Схема: Фишинг", img: "images/phishing.jpg.jpg", text: "<p><strong>Механика:</strong> Злоумышленники создают точные копии сайтов банков, почтовых сервисов или магазинов. Жертва вводит логин и пароль, думая, что это официальный ресурс.</p><p><strong>Противодействие:</strong> Внимательно проверяйте доменное имя в адресной строке.</p>" },
+        phone: { title: "Схема: Телефонный скам", img: "images/phone_scams.jpg.jpg", text: "<p><strong>Механика:</strong> Звонок от имени службы безопасности банка или МВД. Мошенники создают искусственную панику, требуя срочно перевести деньги.</p><p><strong>Противодействие:</strong> Если вас торопят принять финансовое решение — это атака. Немедленно прервите соединение.</p>" },
+        viruses: { title: "Схема: Вредоносное ПО", img: "images/viruses.jpg.jpg", text: "<p><strong>Механика:</strong> Загрузка полезного на первый взгляд приложения, внутри которого скрыт троян для перехвата СМС-кодов авторизации.</p><p><strong>Противодействие:</strong> Запретите установку файлов .APK из сторонних источников.</p>" },
+        cards: { title: "Схема: Компрометация карт", img: "images/card_theft.jpg.jpg", text: "<p><strong>Механика:</strong> Установка невидимых накладок (скиммеров) на банкоматы для считывания магнитной полосы и записи ПИН-кода.</p><p><strong>Противодействие:</strong> Прикрывайте клавиатуру рукой при вводе ПИН-кода.</p>" },
+        online: { title: "Схема: Сетевые аферы", img: "images/online_scams.jpg.jpg", text: "<p><strong>Механика:</strong> На торговой площадке продавец предлагает перейти в сторонний мессенджер для оформления 'безопасной доставки', скидывая фишинговую ссылку.</p><p><strong>Противодействие:</strong> Никогда не уходите из официального чата площадки.</p>" }
+    };
+
+    window.openDetails = (id) => {
+        const t = threatDB[id];
+        if(!t) return;
+        document.getElementById('modal-title-text').innerText = t.title;
+        document.getElementById('modal-body-text').innerHTML = `<img src="${t.img}" class="modal-img" alt="${t.title}"><br>${t.text}`;
+        document.getElementById('modal-window').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeDetails = (e) => {
+        if (!e || e.target.id === 'modal-window' || e.target.closest('.btn-close')) {
+            document.getElementById('modal-window').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    };
+
+    // ПОИСК ПО РЕЕСТРУ УГРОЗ
+    const searchInput = document.getElementById('search-input');
+    if(searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.threat-card').forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        });
+    }
+
+    // === FIREBASE И УВЕДОМЛЕНИЯ ===
+    function showAlert(msg) {
+        const container = document.getElementById('alert-container');
+        const alertBox = document.createElement('div');
+        alertBox.className = 'alert-msg';
+        alertBox.innerText = `> ${msg}`;
+        container.appendChild(alertBox);
+        setTimeout(() => alertBox.remove(), 4000);
+    }
+
+    window.sendToFirebase = (e) => {
+        e.preventDefault();
+        const type = document.getElementById('inc-type').value;
+        const source = document.getElementById('inc-source').value;
+        const desc = document.getElementById('inc-desc').value;
+
+        if(typeof db !== 'undefined') {
+            db.collection('reports').add({ type: type, source: source, description: desc, timestamp: new Date() })
+            .then(() => { showAlert('Инцидент зафиксирован в базе данных.'); e.target.reset(); })
+            .catch((err) => showAlert('Ошибка сети: ' + err.message));
+        } else {
+            showAlert('Локальный режим: Данные сохранены.');
+            e.target.reset();
+        }
+    };
+
+    // === ГЕНЕРАЦИЯ PDF ===
+    window.exportPDF = () => {
+        showAlert('Формирование протокола PDF...');
+        const el = document.getElementById('print-protocol');
+        el.style.display = 'block';
+        
+        const opt = {
+            margin: 0.5,
+            filename: 'Protocol_NetProtect.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        
+        html2pdf().set(opt).from(el).save().then(() => {
+            el.style.display = 'none';
+        });
+    };
+});
