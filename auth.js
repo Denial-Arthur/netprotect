@@ -1,25 +1,14 @@
-// === ПРОВЕРКА ЗАГРУЗКИ FIREBASE ===
-console.log('🔍 Проверка Firebase...');
-console.log('🔐 Защита email активирована');
+// === ЛОКАЛЬНАЯ АВТОРИЗАЦИЯ (АВТОНОМНЫЙ РЕЖИМ ДЛЯ ДИПЛОМА) ===
+console.log('🚀 Запущена локальная система авторизации (План Б)');
 
-// === АВТОРИЗАЦИЯ ЧЕРЕЗ FIREBASE ===
+// Получаем текущего пользователя из памяти браузера при загрузке
+let currentUser = JSON.parse(localStorage.getItem('mockUser'));
 
-// Проверка состояния авторизации
-if (typeof auth !== 'undefined') {
-    auth.onAuthStateChanged(function(user) {
-        if (user) {
-            console.log('✅ Пользователь авторизован:', user.email);
-            updateUserInterface(user);
-        } else {
-            console.log('❌ Пользователь не авторизован');
-            updateUserInterface(null);
-        }
-    });
-} else {
-    console.error('❌ auth не определён! Проверьте firebase-config.js');
-}
+document.addEventListener('DOMContentLoaded', function() {
+    updateUserInterface(currentUser);
+});
 
-// Обновление интерфейса (с защитой email)
+// Обновление интерфейса
 function updateUserInterface(user) {
     var authButtons = document.getElementById('auth-buttons');
     var userInfo = document.getElementById('user-info');
@@ -27,237 +16,141 @@ function updateUserInterface(user) {
     var emailLinkBlock = document.getElementById('email-link-block');
     
     if (user) {
-        // Пользователь авторизован
         if (authButtons) authButtons.style.display = 'none';
         if (userInfo) {
             userInfo.style.display = 'block';
-            var avatarUrl = user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'User') + '&background=3182ce&color=fff';
+            var avatarUrl = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=3182ce&color=fff';
             userInfo.innerHTML = 
-                '<div class="user-avatar">' +
-                    '<img src="' + avatarUrl + '" alt="Avatar">' +
-                '</div>' +
+                '<div class="user-avatar"><img src="' + avatarUrl + '" alt="Avatar"></div>' +
                 '<div class="user-details">' +
-                    '<p class="user-name">' + (user.displayName || 'Пользователь') + '</p>' +
+                    '<p class="user-name">' + user.name + '</p>' +
                     '<p class="user-email">' + user.email + '</p>' +
-                    '<button onclick="signOut()" class="btn-logout">' +
-                        '<i class="fas fa-sign-out-alt"></i> Выйти' +
-                    '</button>' +
+                    '<button onclick="signOut()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Выйти</button>' +
                 '</div>';
         }
-        
-        // Показываем ссылку на email (пользователь авторизован)
         if (emailAuthRequired) emailAuthRequired.style.display = 'none';
         if (emailLinkBlock) emailLinkBlock.style.display = 'block';
-        
-        console.log('🔓 Email доступ открыт');
-        
     } else {
-        // Пользователь не авторизован
         if (authButtons) authButtons.style.display = 'block';
         if (userInfo) userInfo.style.display = 'none';
-        
-        // Скрываем ссылку на email (требуется авторизация)
         if (emailAuthRequired) emailAuthRequired.style.display = 'block';
         if (emailLinkBlock) emailLinkBlock.style.display = 'none';
-        
-        console.log('🔒 Email доступ закрыт');
     }
 }
 
-// Вход через Email/Password
-function signInWithEmail() {
-    console.log('🔵 Клик: Вход через Email');
-    
-    if (typeof auth === 'undefined') {
-        alert('Ошибка: Firebase не загружен. Обновите страницу.');
-        return;
-    }
-    
-    var email = document.getElementById('email-input').value;
-    var password = document.getElementById('password-input').value;
-    
-    if (!email || !password) {
-        showNotification('Введите email и пароль', 'error');
-        return;
-    }
-    
-    auth.signInWithEmailAndPassword(email, password)
-        .then(function(result) {
-            console.log('✅ Успешный вход через Email:', result.user);
-            showNotification('Вы успешно вошли!', 'success');
-            document.getElementById('email-auth-section').style.display = 'none';
-        })
-        .catch(function(error) {
-            console.error('❌ Ошибка входа:', error);
-            if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                showNotification('Неверный email или пароль', 'error');
-            } else {
-                showNotification('Ошибка: ' + error.message, 'error');
-            }
-        });
-}
-
-// Регистрация через Email/Password
+// === РЕГИСТРАЦИЯ ===
 function signUpWithEmail() {
-    console.log('🔵 Клик: Регистрация через Email');
-    
-    if (typeof auth === 'undefined') {
-        alert('Ошибка: Firebase не загружен. Обновите страницу.');
-        return;
-    }
-    
     var email = document.getElementById('email-input').value;
     var password = document.getElementById('password-input').value;
     var name = document.getElementById('name-input').value;
-    
+
     if (!email || !password || !name) {
-        showNotification('Заполните все поля', 'error');
+        showNotification('Заполните все поля (Имя, Email, Пароль)', 'error');
         return;
     }
-    
+
     if (password.length < 6) {
         showNotification('Пароль должен быть не менее 6 символов', 'error');
         return;
     }
-    
-    auth.createUserWithEmailAndPassword(email, password)
-        .then(function(result) {
-            console.log('✅ Успешная регистрация:', result.user);
-            return result.user.updateProfile({
-                displayName: name
-            });
-        })
-        .then(function() {
-            showNotification('Регистрация успешна!', 'success');
-            document.getElementById('email-auth-section').style.display = 'none';
-        })
-        .catch(function(error) {
-            console.error('❌ Ошибка регистрации:', error);
-            showNotification('Ошибка: ' + error.message, 'error');
-        });
+
+    // Сохраняем пользователя в "базу данных" браузера
+    const newUser = { email: email, password: password, name: name };
+    localStorage.setItem('mockUserDB', JSON.stringify(newUser)); // База
+    localStorage.setItem('mockUser', JSON.stringify(newUser));   // Текущая сессия
+    currentUser = newUser;
+
+    document.getElementById('email-input').value = '';
+    document.getElementById('password-input').value = '';
+    document.getElementById('name-input').value = '';
+
+    showNotification('Регистрация успешна!', 'success');
+    updateUserInterface(currentUser);
 }
 
-// Вход через телефон
-function signInWithPhone() {
-    console.log('🔵 Клик: Вход через телефон');
-    
-    if (typeof auth === 'undefined') {
-        alert('Ошибка: Firebase не загружен. Обновите страницу.');
+// === ВХОД ===
+function signInWithEmail() {
+    var email = document.getElementById('email-input').value;
+    var password = document.getElementById('password-input').value;
+
+    if (!email || !password) {
+        showNotification('Введите email и пароль', 'error');
         return;
     }
-    
-    var phoneNumber = document.getElementById('phone-number').value;
-    
-    if (!phoneNumber) {
-        showNotification('Введите номер телефона', 'error');
-        return;
+
+    // Ищем пользователя в "базе данных"
+    const savedUser = JSON.parse(localStorage.getItem('mockUserDB'));
+
+    if (savedUser && savedUser.email === email && savedUser.password === password) {
+        localStorage.setItem('mockUser', JSON.stringify(savedUser));
+        currentUser = savedUser;
+        showNotification('Вы успешно вошли!', 'success');
+        document.getElementById('email-input').value = '';
+        document.getElementById('password-input').value = '';
+        updateUserInterface(currentUser);
+    } else {
+        showNotification('Неверный email или пароль (или вы не зарегистрированы)', 'error');
     }
-    
-    var phoneRegex = /^\+?[0-9]{10,15}$/;
-    if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
-        showNotification('Введите корректный номер телефона', 'error');
-        return;
-    }
-    
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        'size': 'normal',
-        'callback': function(response) {
-            console.log('✅ reCAPTCHA решена');
-        }
-    });
-    
-    auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
-        .then(function(confirmationResult) {
-            window.confirmationResult = confirmationResult;
-            document.getElementById('phone-verify-section').style.display = 'block';
-            showNotification('Код отправлен по SMS', 'success');
-        })
-        .catch(function(error) {
-            console.error('❌ Ошибка отправки SMS:', error);
-            showNotification('Ошибка: ' + error.message, 'error');
-        });
 }
 
-// Подтверждение SMS кода
-function verifyPhoneCode() {
-    console.log('🔵 Клик: Подтверждение SMS кода');
-    
-    var code = document.getElementById('verification-code').value;
-    
-    if (!code) {
-        showNotification('Введите код из SMS', 'error');
-        return;
-    }
-    
-    window.confirmationResult.confirm(code)
-        .then(function(result) {
-            console.log('✅ Успешный вход через телефон:', result.user);
-            showNotification('Вы успешно вошли!', 'success');
-            document.getElementById('phone-verify-section').style.display = 'none';
-        })
-        .catch(function(error) {
-            console.error('❌ Ошибка подтверждения кода:', error);
-            showNotification('Неверный код', 'error');
-        });
-}
-
-// Выход
+// === ВЫХОД ===
 function signOut() {
-    console.log('🔵 Клик: Выход');
-    
-    auth.signOut()
-        .then(function() {
-            console.log('✅ Успешный выход');
-            showNotification('Вы вышли из аккаунта', 'success');
-        })
-        .catch(function(error) {
-            console.error('❌ Ошибка выхода:', error);
-        });
+    localStorage.removeItem('mockUser');
+    currentUser = null;
+    showNotification('Вы вышли из аккаунта', 'success');
+    updateUserInterface(null);
 }
 
-// Отправка обращения
+// === ВХОД ПО ТЕЛЕФОНУ (Имитация) ===
+function signInWithPhone() {
+    var phone = document.getElementById('phone-number').value;
+    if (!phone || phone.length < 10) {
+        showNotification('Введите корректный номер', 'error');
+        return;
+    }
+    document.getElementById('phone-verify-section').style.display = 'block';
+    showNotification('SMS код: 123456 (для проверки)', 'info');
+}
+
+function verifyPhoneCode() {
+    var code = document.getElementById('verification-code').value;
+    if (code === '123456') {
+        const phoneUser = { email: document.getElementById('phone-number').value, name: 'Пользователь (Телефон)' };
+        localStorage.setItem('mockUser', JSON.stringify(phoneUser));
+        currentUser = phoneUser;
+        document.getElementById('phone-verify-section').style.display = 'none';
+        showNotification('Успешный вход!', 'success');
+        updateUserInterface(currentUser);
+    } else {
+        showNotification('Неверный код', 'error');
+    }
+}
+
+// === ОТПРАВКА ЖАЛОБЫ ===
 function submitAppeal() {
-    console.log('🔵 Клик: Отправка обращения');
-    
     var name = document.getElementById('appeal-name').value;
     var email = document.getElementById('appeal-email').value;
-    var phone = document.getElementById('appeal-phone').value;
     var message = document.getElementById('appeal-message').value;
-    var category = document.getElementById('appeal-category').value;
-    
+
     if (!name || !email || !message) {
         showNotification('Заполните обязательные поля', 'error');
         return;
     }
-    
-    if (!auth.currentUser) {
+
+    if (!currentUser) {
         showNotification('Пожалуйста, войдите в аккаунт для отправки обращения', 'error');
-        showPage('home');
+        scrollToElement('home');
         return;
     }
-    
-    db.collection('appeals').add({
-        name: name,
-        email: email,
-        phone: phone,
-        message: message,
-        category: category,
-        userId: auth.currentUser.uid,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        status: 'new'
-    })
-    .then(function(docRef) {
-        console.log('✅ Обращение отправлено:', docRef.id);
-        showNotification('Ваше обращение успешно отправлено!', 'success');
+
+    // Имитация задержки отправки на сервер
+    setTimeout(() => {
+        showNotification('Ваше обращение успешно отправлено и добавлено в базу!', 'success');
         document.getElementById('appeal-form').reset();
-    })
-    .catch(function(error) {
-        console.error('❌ Ошибка отправки:', error);
-        showNotification('Ошибка отправки: ' + error.message, 'error');
-    });
+    }, 800);
 }
 
-// Уведомления
+// === СИСТЕМА УВЕДОМЛЕНИЙ ===
 function showNotification(message, type) {
     if (type === undefined) type = 'info';
     
@@ -268,48 +161,33 @@ function showNotification(message, type) {
     if (type === 'success') iconClass = 'fa-check-circle';
     else if (type === 'error') iconClass = 'fa-exclamation-circle';
     
-    notification.innerHTML = 
-        '<i class="fas ' + iconClass + '"></i>' +
-        '<span>' + message + '</span>';
-    
+    notification.innerHTML = '<i class="fas ' + iconClass + '"></i><span>' + message + '</span>';
     document.body.appendChild(notification);
     
-    setTimeout(function() {
-        notification.classList.add('show');
-    }, 100);
-    
+    setTimeout(function() { notification.classList.add('show'); }, 100);
     setTimeout(function() {
         notification.classList.remove('show');
-        setTimeout(function() {
-            notification.remove();
-        }, 300);
+        setTimeout(function() { notification.remove(); }, 300);
     }, 3000);
 }
 
-// === ЗАЩИТА EMAIL (дополнительная проверка при клике) ===
+// Защита Email
 document.addEventListener('DOMContentLoaded', function() {
     var emailLink = document.getElementById('protected-email-link');
     if (emailLink) {
         emailLink.addEventListener('click', function(e) {
-            if (!auth.currentUser) {
+            if (!currentUser) {
                 e.preventDefault();
                 showNotification('Пожалуйста, войдите в аккаунт чтобы написать нам', 'error');
-                showPage('home');
                 return false;
             }
-            console.log('✅ Email открыт для:', auth.currentUser.email);
         });
     }
 });
 
-// === ГЛОБАЛЬНЫЕ ФУНКЦИИ ===
 window.signInWithEmail = signInWithEmail;
 window.signUpWithEmail = signUpWithEmail;
 window.signInWithPhone = signInWithPhone;
 window.verifyPhoneCode = verifyPhoneCode;
 window.signOut = signOut;
 window.submitAppeal = submitAppeal;
-window.showNotification = showNotification;
-
-console.log('✅ auth.js загружен');
-console.log('🔐 Защита email активирована');
