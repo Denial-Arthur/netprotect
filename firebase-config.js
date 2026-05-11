@@ -1,4 +1,4 @@
-// 1. Твои уникальные настройки Firebase
+// 1. Данные твоего приложения (строго из твоего скриншота)
 const firebaseConfig = {
   apiKey: "AIzaSyD2FuRBxIFxNm9jDUoTolfNFIWLU8nVwAg",
   authDomain: "netprotect-web.firebaseapp.com",
@@ -8,13 +8,9 @@ const firebaseConfig = {
   appId: "1:865774775037:web:58d342e779b55079726c94"
 };
 
-// 2. Инициализация самого Firebase
+// 2. Инициализация через глобальный объект window
 firebase.initializeApp(firebaseConfig);
 
-// 3. Подключение базы данных Firestore (Делаем глобальной!)
 window.db = firebase.firestore();
-
-// (Задел на будущее: подключение авторизации)
-// window.auth = firebase.auth();
 window.auth = firebase.auth();
 window.googleProvider = new firebase.auth.GoogleAuthProvider();
