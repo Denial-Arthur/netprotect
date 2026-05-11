@@ -275,7 +275,7 @@
             </div>
             
             <div class="report-form-container">
-                <form id="incident-form" onsubmit="sendToFirebase(event)">
+                <form id="incident-form">
                     <div class="input-group">
                         <label>Категория угрозы</label>
                         <select id="inc-type" required>
@@ -285,10 +285,27 @@
                             <option value="other">Иное</option>
                         </select>
                     </div>
-                    <div class="input-group">
-                        <label>Источник (Телефон или URL)</label>
-                        <input type="text" id="inc-source" required placeholder="Например: +7(900)...">
+
+                    <div class="input-group" id="group-phone" style="display: none;">
+                        <label>Номер телефона злоумышленника</label>
+                        <div class="phone-input-wrapper">
+                            <select id="inc-country-code" class="country-select">
+                                <option value="+7">🇷🇺 Россия (+7)</option>
+                                <option value="+375">🇧🇾 Беларусь (+375)</option>
+                                <option value="+77">🇰🇿 Казахстан (+77)</option>
+                                <option value="+371">🇱🇻 Латвия (+371)</option>
+                                <option value="+995">🇬🇪 Грузия (+995)</option>
+                            </select>
+                            <input type="tel" id="inc-phone" placeholder="900 123 45 67">
+                        </div>
+                        <small class="input-hint">Ввод букв и символов заблокирован системой</small>
                     </div>
+
+                    <div class="input-group" id="group-site" style="display: none;">
+                        <label>Ссылка на подозрительный сайт</label>
+                        <input type="url" id="inc-url" placeholder="https://...">
+                    </div>
+
                     <div class="input-group">
                         <label>Описание инцидента</label>
                         <textarea id="inc-desc" rows="3" required placeholder="Детали происшествия..."></textarea>
