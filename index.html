@@ -18,7 +18,7 @@
             <ul class="nav-links">
                 <li><a href="#threats">Угрозы</a></li>
                 <li><a href="#tools">Инструменты</a></li>
-                <li><a href="#report" class="btn btn-primary btn-sm">Сообщить о мошеннике</a></li>
+                <li><a href="#report" class="btn btn-primary btn-sm text-white">Сообщить о мошеннике</a></li>
             </ul>
         </div>
     </nav>
@@ -48,28 +48,34 @@
             </div>
             <div class="grid cards-grid">
                 
-                <div class="card threat-card">
-                    <div class="card-icon" style="color: #3b82f6; background: #eff6ff;"><i class="fa-solid fa-fish"></i></div>
+                <div class="card threat-card" onclick="openModal('phishing')">
+                    <div class="card-icon" style="color: #0d9488; background: #ecfdf5;"><i class="fa-solid fa-fish"></i></div>
                     <h3>Фишинг</h3>
                     <p>Поддельные сайты банков и магазинов, созданные для кражи ваших паролей и данных карт.</p>
                 </div>
 
-                <div class="card threat-card">
-                    <div class="card-icon" style="color: #ef4444; background: #fef2f2;"><i class="fa-solid fa-phone-slash"></i></div>
+                <div class="card threat-card" onclick="openModal('phone')">
+                    <div class="card-icon" style="color: #e11d48; background: #fef2f2;"><i class="fa-solid fa-phone-slash"></i></div>
                     <h3>Телефонные звонки</h3>
                     <p>Звонки от лже-сотрудников МВД и ЦБ. Психологическое давление и социальная инженерия.</p>
                 </div>
 
-                <div class="card threat-card">
-                    <div class="card-icon" style="color: #8b5cf6; background: #f5f3ff;"><i class="fa-solid fa-bug"></i></div>
+                <div class="card threat-card" onclick="openModal('viruses')">
+                    <div class="card-icon" style="color: #db2777; background: #fdf2f8;"><i class="fa-solid fa-bug"></i></div>
                     <h3>Вредоносное ПО</h3>
                     <p>Программы удаленного доступа, которые мошенники просят установить под видом антивируса.</p>
                 </div>
 
-                <div class="card threat-card">
-                    <div class="card-icon" style="color: #10b981; background: #ecfdf5;"><i class="fa-solid fa-credit-card"></i></div>
+                <div class="card threat-card" onclick="openModal('cards')">
+                    <div class="card-icon" style="color: #0f766e; background: #f0fdfa;"><i class="fa-solid fa-credit-card"></i></div>
                     <h3>Кража с карты</h3>
                     <p>Экстренные инструкции и порядок действий, если деньги уже были списаны.</p>
+                </div>
+
+                <div class="card threat-card" onclick="openModal('online')">
+                    <div class="card-icon" style="color: #ca8a04; background: #fefce8;"><i class="fa-solid fa-laptop-code"></i></div>
+                    <h3>Онлайн-аферы</h3>
+                    <p>Фальшивые интернет-магазины, опросы за деньги и обещания золотых гор.</p>
                 </div>
 
             </div>
@@ -165,6 +171,19 @@
     </footer>
 
     <div id="toast-container"></div>
+
+    <div id="threat-modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-container" id="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <div class="modal-icon" id="modal-icon"><i class="fa-solid fa-shield"></i></div>
+                <h2 id="modal-title">Название угрозы</h2>
+            </div>
+            <div class="modal-body">
+                <img id="modal-image" src="" alt="Инфографика по безопасности">
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
