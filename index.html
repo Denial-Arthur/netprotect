@@ -383,6 +383,36 @@
         
         <p style="margin-top: 40px; font-size: 12px; color: #666; text-align: center;">Сгенерировано системой NetProtect. 2026 год.</p>
     </div>
+    
+    <div id="auth-modal" class="modal-wrapper" onclick="closeAuthModal(event)">
+        <div class="modal-content auth-card">
+            <button class="btn-close" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <h2 id="auth-title">Вход в систему</h2>
+            </div>
+            <div class="modal-body">
+                <form id="auth-form">
+                    <div class="input-group">
+                        <label>Электронная почта</label>
+                        <input type="email" id="auth-email" required placeholder="example@mail.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Пароль</label>
+                        <input type="password" id="auth-pass" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" id="auth-submit-btn" class="btn-solid w-100">Войти</button>
+                    
+                    <div class="auth-divider"><span>ИЛИ</span></div>
+                    
+                    <button type="button" id="google-auth-btn" class="btn-outline w-100 google-btn">
+                        <i class="fa-brands fa-google"></i> Войти через Google
+                    </button>
+                    
+                    <p class="auth-toggle-text">Нет аккаунта? <a href="#" id="toggle-auth-mode">Создать</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
