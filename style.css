@@ -34,6 +34,7 @@ body {
 .hidden { display: none !important; }
 .w-100 { width: 100%; }
 .text-sm { font-size: 0.9rem; color: var(--gray-dark); margin-bottom: 1rem; display: block; }
+.text-white { color: #ffffff !important; } /* Класс для принудительного белого текста */
 
 /* === НАВИГАЦИЯ === */
 .navbar {
@@ -48,9 +49,6 @@ body {
 .nav-links { display: flex; list-style: none; gap: 30px; align-items: center; }
 .nav-links a { text-decoration: none; color: var(--gray-dark); font-weight: 500; transition: var(--transition); }
 .nav-links a:hover { color: var(--primary); }
-.nav-links a.btn-primary {
-    color: var(--white) !important;
-}
 
 /* === КНОПКИ === */
 .btn {
@@ -86,6 +84,7 @@ body {
 /* === КАРТОЧКИ === */
 .card { background: var(--white); border-radius: var(--radius); padding: 32px; border: 1px solid var(--gray-border); box-shadow: var(--shadow-sm); transition: var(--transition); }
 .cards-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.threat-card { cursor: pointer; }
 .threat-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-md); border-color: transparent; }
 .card-icon { width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 24px; }
 .threat-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
@@ -134,6 +133,60 @@ body {
 .toast.error i { color: var(--danger); }
 @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
 
+/* === МОДАЛЬНОЕ ОКНО (ДЛЯ ИНФОГРАФИК) === */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 2000;
+    display: flex; justify-content: center; align-items: center;
+    padding: 20px;
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s ease;
+}
+.modal-overlay.active { opacity: 1; visibility: visible; }
+
+.modal-container {
+    background: var(--white);
+    width: 100%; max-width: 650px;
+    max-height: 90vh;
+    border-radius: 20px;
+    position: relative;
+    transform: scale(0.95) translateY(20px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.modal-overlay.active .modal-container { transform: scale(1) translateY(0); }
+
+.modal-close {
+    position: absolute; top: 15px; right: 15px;
+    width: 36px; height: 36px;
+    border-radius: 50%; border: none;
+    background: rgba(0,0,0,0.1);
+    color: var(--white);
+    font-size: 1.2rem;
+    cursor: pointer; z-index: 10;
+    transition: 0.2s;
+}
+.modal-close:hover { background: rgba(0,0,0,0.2); transform: rotate(90deg); }
+
+.modal-header { padding: 25px 30px; display: flex; align-items: center; gap: 15px; color: white; }
+.modal-header h2 { font-size: 1.5rem; font-weight: 800; margin: 0; }
+.modal-icon { font-size: 28px; }
+
+.modal-body { padding: 0; overflow-y: auto; background: #f8fafc; }
+.modal-body img { width: 100%; height: auto; display: block; }
+
+/* ЦВЕТОВЫЕ ТЕМЫ ДЛЯ МОДАЛОК */
+.theme-phishing .modal-header { background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); }
+.theme-phone .modal-header { background: linear-gradient(135deg, #9f1239 0%, #e11d48 100%); }
+.theme-viruses .modal-header { background: linear-gradient(135deg, #be185d 0%, #db2777 100%); }
+.theme-cards .modal-header { background: linear-gradient(135deg, #064e3b 0%, #059669 100%); }
+.theme-online .modal-header { background: linear-gradient(135deg, #a16207 0%, #eab308 100%); }
+
+/* Адаптив */
 @media (max-width: 900px) {
     .hero-content, .tools-grid, .report-wrapper { grid-template-columns: 1fr; }
     .hero h1 { font-size: 2.5rem; }
