@@ -275,22 +275,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // === ГЕНЕРАЦИЯ PDF ===
+  // === ГЕНЕРАЦИЯ PDF (Оптимизировано для мобильных) ===
     window.exportPDF = () => {
-        showAlert('Формирование протокола PDF...');
+        showAlert('Формирование протокола PDF. Пожалуйста, подождите...');
         const el = document.getElementById('print-protocol');
+        
+        // Временно показываем элемент, но прячем за пределами экрана, чтобы не ломать верстку
         el.style.display = 'block';
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
         
         const opt = {
             margin: 0.5,
             filename: 'Protocol_NetProtect.pdf',
-            image: { type: 'jpeg', quality: 1 },
-            html2canvas: { scale: 2 },
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { scale: 1.5, useCORS: true }, // 1.5 оптимально для телефонов
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
         
         html2pdf().set(opt).from(el).save().then(() => {
             el.style.display = 'none';
+            el.style.position = 'static';
+            showAlert('PDF успешно сохранен!');
+        }).catch(err => {
+            el.style.display = 'none';
+            el.style.position = 'static';
+            showAlert('Ошибка скачивания. Попробуйте с компьютера.');
+            console.error(err);
         });
     };
 });
