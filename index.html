@@ -6,6 +6,8 @@
     <title>NetProtect | Информационная безопасность</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,8 +19,9 @@
             </a>
             <ul class="nav-links">
                 <li><a href="#threats">Угрозы</a></li>
-                <li><a href="#tools">Инструменты</a></li>
+                <li><a href="#articles">Статьи</a></li>
                 <li><a href="#quiz">Тренажер</a></li>
+                <li><button id="a11y-toggle" class="btn-icon btn-theme" title="Версия для слабовидящих"><i class="fa-solid fa-eye"></i></button></li>
                 <li><button id="theme-toggle" class="btn-icon btn-theme" title="Тёмная тема"><i class="fa-solid fa-moon"></i></button></li>
                 <li><a href="#report" class="btn btn-primary btn-sm text-white">Сообщить о мошеннике</a></li>
             </ul>
@@ -26,29 +29,50 @@
     </nav>
 
     <header class="hero">
-        <div class="container hero-content">
+        <div class="container hero-content-centered">
             <div class="hero-text">
                 <div class="badge">Официальный портал</div>
                 <h1>Ваш цифровой щит <br>в мире финансов</h1>
-                <p>Изучайте актуальные схемы кибермошенничества, используйте инструменты защиты и проверяйте свою уязвимость в один клик.</p>
-                <div class="hero-buttons">
-                    <a href="#tools" class="btn btn-primary text-white">Проверить безопасность <i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="#threats" class="btn btn-outline">База знаний</a>
+                <p>Изучайте актуальные схемы кибермошенничества, читайте статьи экспертов, тренируйте навыки защиты и скачивайте персональные памятки.</p>
+                <div class="hero-buttons justify-center">
+                    <a href="#quiz" class="btn btn-primary text-white">Пройти тренажер <i class="fa-solid fa-arrow-right"></i></a>
+                    <button onclick="downloadPDF()" class="btn btn-outline"><i class="fa-solid fa-file-pdf"></i> Скачать памятку</button>
                 </div>
-            </div>
-            <div class="hero-image">
-                <i class="fa-solid fa-user-shield"></i>
             </div>
         </div>
     </header>
 
-    <section id="threats" class="section bg-light">
+    <section id="analytics" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Аналитика и методология</h2>
+                <p>Статистика финансовых киберпреступлений за текущий год</p>
+            </div>
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div class="chart-container card"><canvas id="crimeChart"></canvas></div>
+                <div class="methodology-text">
+                    <h3><i class="fa-solid fa-microscope text-primary"></i> Основа исследования</h3>
+                    <p class="text-sm">Данный портал разработан на базе анализа более 500 реальных кейсов кибермошенничества. Алгоритмы защиты выстроены в соответствии с рекомендациями профильных ведомств.</p>
+                    <ul class="features-list">
+                        <li><i class="fa-solid fa-check"></i> Использование OSINT для сбора фишинговых баз</li>
+                        <li><i class="fa-solid fa-check"></i> Математическая модель расчета профиля риска</li>
+                        <li><i class="fa-solid fa-check"></i> Регулярное обновление паттернов социальной инженерии</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="threats" class="section">
         <div class="container">
             <div class="section-header">
                 <h2>Каталог угроз</h2>
-                <p>Самые распространенные векторы атак злоумышленников</p>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="threat-search" placeholder="Быстрый поиск по базе...">
+                </div>
             </div>
-            <div class="grid cards-grid">
+            <div class="grid cards-grid" id="threats-grid">
                 <div class="card threat-card" onclick="openModal('phishing')">
                     <div class="card-icon" style="color: #0d9488; background: rgba(13, 148, 136, 0.1);"><i class="fa-solid fa-fish"></i></div>
                     <h3>Фишинг</h3>
@@ -78,11 +102,36 @@
         </div>
     </section>
 
+    <section id="articles" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Статьи и материалы</h2>
+                <p>Полезная информация для повышения вашей цифровой грамотности</p>
+            </div>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="card threat-card" onclick="openModal('article1')">
+                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=600&q=80" alt="Пароли" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                    <h3>Как придумать идеальный пароль?</h3>
+                    <p>Разбираем частые ошибки пользователей и учимся создавать пароли, которые невозможно взломать за 100 лет.</p>
+                </div>
+                <div class="card threat-card" onclick="openModal('article2')">
+                    <img src="https://images.unsplash.com/photo-1614064641913-6b70a3205777?auto=format&fit=crop&w=600&q=80" alt="Соцсети" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                    <h3>Безопасность в соцсетях</h3>
+                    <p>Почему нельзя выкладывать фото билетов на самолет и как мошенники используют информацию из вашего ВКонтакте.</p>
+                </div>
+                <div class="card threat-card" onclick="openModal('article3')">
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=600&q=80" alt="Дети" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+                    <h3>Дети и интернет-мошенники</h3>
+                    <p>Как защитить ребенка от покупки фейковых "гемов" в играх и объяснить базовые правила безопасности.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="tools" class="section">
         <div class="container">
             <div class="section-header">
-                <h2>Инструменты защиты</h2>
-                <p>Используйте наши сервисы для повышения вашей цифровой безопасности</p>
+                <h2>Практикум и инструменты</h2>
             </div>
             <div class="grid tools-grid">
                 <div class="card tool-card">
@@ -110,18 +159,28 @@
     <section id="quiz" class="section bg-light">
         <div class="container">
             <div class="section-header">
-                <h2>Интерактивный тренажер</h2>
-                <p>Проверьте, сможете ли вы распознать уловки мошенников в реальной жизни</p>
+                <h2>Интерактивный тренажер (10 ситуаций)</h2>
+                <p>Проверьте свою реакцию на действия мошенников в реальных жизненных ситуациях</p>
             </div>
-            <div class="card quiz-card" style="max-width: 700px; margin: 0 auto; text-align: center;">
-                <div class="quiz-icon" style="font-size: 50px; color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-comment-sms"></i></div>
-                <h3 style="font-size: 1.3rem; margin-bottom: 25px; line-height: 1.4;">Вам пришло СМС: <br><span style="color: var(--danger);">«Ваша карта заблокирована. Для разблокировки перейдите по ссылке: http://sbierbank-security.ru»</span></h3>
-                <p class="text-sm" style="margin-bottom: 20px;">Ваши действия?</p>
-                <div class="quiz-options" style="display: grid; gap: 15px;">
-                    <button class="btn btn-outline w-100" onclick="checkQuiz(false)">Перейти по ссылке и ввести данные для разблокировки</button>
-                    <button class="btn btn-outline w-100" onclick="checkQuiz(true)">Проигнорировать СМС и позвонить в банк по номеру на карте</button>
+            <div class="card quiz-card" style="max-width: 800px; margin: 0 auto;">
+                
+                <div id="quiz-progress" style="font-weight: 700; color: var(--gray-dark); margin-bottom: 20px; text-align: center;">Вопрос 1 из 10</div>
+                
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div class="quiz-icon" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;" id="quiz-icon">
+                        <i class="fa-solid fa-comment-sms"></i>
+                    </div>
+                    <h3 id="quiz-question" style="font-size: 1.25rem; line-height: 1.5;">Вам пришло СМС...</h3>
                 </div>
-                <div id="quiz-result" class="result-box hidden" style="margin-top: 25px;"></div>
+
+                <div class="quiz-options" id="quiz-options" style="display: flex; flex-direction: column; gap: 15px;">
+                    <button class="btn btn-outline w-100" style="text-align: left; justify-content: flex-start; padding: 15px;" onclick="answerQuiz(0)" id="btn-ans-0">Ответ 1</button>
+                    <button class="btn btn-outline w-100" style="text-align: left; justify-content: flex-start; padding: 15px;" onclick="answerQuiz(1)" id="btn-ans-1">Ответ 2</button>
+                </div>
+
+                <div id="quiz-explanation" class="result-box hidden" style="margin-top: 25px; text-align: left;"></div>
+                
+                <button id="quiz-next-btn" class="btn btn-primary w-100 text-white hidden" style="margin-top: 20px;" onclick="nextQuizQuestion()">Следующий вопрос</button>
             </div>
         </div>
     </section>
@@ -130,34 +189,45 @@
         <div class="container">
             <div class="report-wrapper">
                 <div class="report-text">
-                    <h2>Столкнулись с мошенниками?</h2>
-                    <p>Помогите нам пополнить базу данных. Отправьте подозрительный номер телефона или ссылку на сайт злоумышленников.</p>
-                    <ul class="features-list">
-                        <li><i class="fa-solid fa-check"></i> Анонимно и безопасно</li>
-                        <li><i class="fa-solid fa-check"></i> Модерация 24/7</li>
-                        <li><i class="fa-solid fa-check"></i> Передача данных в профильные ведомства</li>
-                    </ul>
+                    <h2 style="font-size: 2rem; margin-bottom: 20px;">Частые вопросы</h2>
+                    <div class="faq-list mb-40">
+                        <div class="faq-item">
+                            <button class="faq-header">Что делать при переходе по фишинговой ссылке? <i class="fa-solid fa-chevron-down"></i></button>
+                            <div class="faq-content"><p>Очистите историю браузера. Запустите проверку антивирусом. Если вы ввели данные карты, немедленно заблокируйте её через приложение банка.</p></div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-header">Почему звонят с номера полиции? <i class="fa-solid fa-chevron-down"></i></button>
+                            <div class="faq-content"><p>Мошенники используют подмену номеров (SIP-телефония). Настоящая полиция никогда не просит переводить деньги. Просто положите трубку.</p></div>
+                        </div>
+                    </div>
+
+                    <h2 style="font-size: 2rem; margin-bottom: 10px;">Сообщить об угрозе</h2>
+                    <p class="text-sm">Помогите нам пополнить базу данных. Данные отправляются напрямую в защищенную базу Firebase.</p>
                 </div>
+                
                 <div class="card report-form-card">
-                    <form id="report-form" onsubmit="submitReport(event)">
-                        <div class="form-group">
-                            <label>Тип угрозы</label>
-                            <select required>
+                    <form id="report-form" onsubmit="submitReportToFirebase(event)">
+                        
+                        <div class="form-group-fixed">
+                            <label for="report-type">Тип угрозы</label>
+                            <select id="report-type" required>
                                 <option value="" disabled selected>Выберите из списка...</option>
-                                <option>Подозрительный звонок / СМС</option>
-                                <option>Фишинговый сайт</option>
-                                <option>Поддельный интернет-магазин</option>
-                                <option>Другое</option>
+                                <option value="sms_call">Подозрительный звонок / СМС</option>
+                                <option value="phishing">Фишинговый сайт</option>
+                                <option value="other">Другое</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Номер телефона или ссылка</label>
-                            <input type="text" required placeholder="+7 (999) 000-00-00">
+                        
+                        <div class="form-group-fixed">
+                            <label for="report-link">Номер телефона или ссылка</label>
+                            <input type="text" id="report-link" required placeholder="+7 (999) 000-00-00 или https://...">
                         </div>
-                        <div class="form-group">
-                            <label>Краткое описание</label>
-                            <textarea rows="4" required placeholder="Опишите ситуацию..."></textarea>
+                        
+                        <div class="form-group-fixed">
+                            <label for="report-desc">Краткое описание ситуации</label>
+                            <textarea id="report-desc" rows="4" required placeholder="Опишите, как действовали злоумышленники..."></textarea>
                         </div>
+                        
                         <button type="submit" class="btn btn-primary w-100 text-white">Отправить в базу NetProtect</button>
                     </form>
                 </div>
@@ -165,30 +235,7 @@
         </div>
     </section>
 
-    <section id="faq" class="section bg-light">
-        <div class="container" style="max-width: 800px;">
-            <div class="section-header">
-                <h2>Частые вопросы</h2>
-                <p>Ответы на главные вопросы по безопасности</p>
-            </div>
-            <div class="faq-list">
-                <div class="faq-item">
-                    <button class="faq-header">Что делать, если я случайно перешел по фишинговой ссылке? <i class="fa-solid fa-chevron-down"></i></button>
-                    <div class="faq-content"><p>Если вы просто перешли по ссылке, но ничего не вводили — закройте сайт и очистите историю браузера. Запустите проверку антивирусом. Если вы ввели данные карты, немедленно заблокируйте её через приложение банка или горячую линию.</p></div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-header">Могут ли мошенники украсть деньги, зная только номер карты? <i class="fa-solid fa-chevron-down"></i></button>
-                    <div class="faq-content"><p>Только по номеру карты (16 цифр) украсть деньги нельзя. Для списания мошенникам нужен срок действия карты, CVV-код на обороте и код из СМС подтверждения.</p></div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-header">Почему звонят с официального номера полиции? <i class="fa-solid fa-chevron-down"></i></button>
-                    <div class="faq-content"><p>Мошенники используют технологию подмены номеров (SIP-телефония). На вашем экране может высветиться реальный номер ведомства. Настоящая полиция никогда не просит переводить деньги на "безопасные счета". Просто положите трубку.</p></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" style="padding: 60px 0; border-top: 1px solid var(--gray-border);">
+    <section class="section" style="padding: 60px 0; border-top: 1px solid var(--gray-border); background: var(--gray-light);">
         <div class="container">
             <div class="grid" style="grid-template-columns: repeat(3, 1fr); text-align: center; gap: 20px;">
                 <div class="stat-card">
@@ -210,7 +257,7 @@
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-logo"><i class="fa-solid fa-shield-halved"></i> NetProtect</div>
-            <p class="footer-copy">© 2026 Информационный портал финансовой безопасности. <br>Проект разработан для ВКР.</p>
+            <p class="footer-copy">© 2026 Информационный портал финансовой безопасности.</p>
         </div>
     </footer>
 
@@ -220,12 +267,30 @@
             <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-header">
                 <div class="modal-icon" id="modal-icon"><i class="fa-solid fa-shield"></i></div>
-                <h2 id="modal-title">Название угрозы</h2>
+                <h2 id="modal-title">Название</h2>
             </div>
-            <div class="modal-body"><img id="modal-image" src="" alt="Инфографика по безопасности"></div>
+            <div class="modal-body" id="modal-body">
+                <img id="modal-image" src="" alt="Иллюстрация" style="display:none; width: 100%;">
+                <div id="modal-text" style="display:none; padding: 30px;"></div>
+            </div>
         </div>
     </div>
 
+    <div id="pdf-content" style="display: none; padding: 40px; font-family: sans-serif; color: #000; background: #fff;">
+        <h1 style="color: #4f46e5; text-align: center; margin-bottom: 20px;">Памятка NetProtect</h1>
+        <h2>Золотые правила безопасности:</h2>
+        <ul>
+            <li style="margin-bottom: 10px;"><b>Никому не сообщайте</b> пароли, пин-коды и CVV.</li>
+            <li style="margin-bottom: 10px;"><b>Не переходите</b> по ссылкам от незнакомцев.</li>
+            <li style="margin-bottom: 10px;"><b>Сотрудники ЦБ и полиции</b> никогда не звонят через мессенджеры.</li>
+            <li style="margin-bottom: 10px;"><b>В любой непонятной ситуации</b> сбрасывайте звонок и перезванивайте в банк.</li>
+        </ul>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
     <script src="script.js"></script>
 </body>
 </html>
