@@ -1,4 +1,72 @@
-// --- ПЛАВНАЯ НАВИГАЦИЯ ---
+// === БАЗА ДАННЫХ ДЛЯ КАРТОЧЕК УГРОЗ ===
+const threatData = {
+    phishing: {
+        title: "Защита от Фишинга",
+        icon: "fa-fish",
+        theme: "theme-phishing",
+        image: "images/phishing.jpg.jpg"
+    },
+    phone: {
+        title: "Телефонные мошенники",
+        icon: "fa-phone-slash",
+        theme: "theme-phone",
+        image: "images/phone_scams.jpg.jpg"
+    },
+    viruses: {
+        title: "Вирусы и вредоносное ПО",
+        icon: "fa-bug",
+        theme: "theme-viruses",
+        image: "images/viruses.jpg.jpg"
+    },
+    cards: {
+        title: "Кража с банковской карты",
+        icon: "fa-credit-card",
+        theme: "theme-cards",
+        image: "images/card_theft.jpg.jpg"
+    },
+    online: {
+        title: "Онлайн-мошенничество",
+        icon: "fa-laptop-code",
+        theme: "theme-online",
+        image: "images/online_scams.jpg.jpg"
+    }
+};
+
+// === ЛОГИКА ВСПЛЫВАЮЩИХ ОКОН (МОДАЛОК) ===
+function openModal(threatId) {
+    const data = threatData[threatId];
+    if (!data) return;
+
+    const overlay = document.getElementById('threat-modal');
+    const container = document.getElementById('modal-content');
+    
+    // Очищаем старые цветовые темы
+    container.className = 'modal-container';
+    
+    // Заполняем окно правильными данными и цветом
+    container.classList.add(data.theme);
+    document.getElementById('modal-title').innerText = data.title;
+    document.getElementById('modal-icon').innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
+    
+    // Подгружаем картинку
+    document.getElementById('modal-image').src = data.image;
+
+    // Показываем окно
+    overlay.classList.add('active');
+    
+    // Блокируем скролл основной страницы, чтобы пользователь скроллил только картинку
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(event) {
+    // Закрываем, если кликнули на крестик ИЛИ на темный фон вокруг картинки
+    if (!event || event.target.id === 'threat-modal' || event.target.closest('.modal-close')) {
+        document.getElementById('threat-modal').classList.remove('active');
+        document.body.style.overflow = 'auto'; // Возвращаем скролл сайту
+    }
+}
+
+// === ПЛАВНАЯ НАВИГАЦИЯ ДЛЯ МЕНЮ ===
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -7,7 +75,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// --- СИСТЕМА УВЕДОМЛЕНИЙ ---
+// === СИСТЕМА УВЕДОМЛЕНИЙ (TOASTS) ===
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -26,7 +94,7 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// --- ГЕНЕРАТОР ПАРОЛЕЙ ---
+// === ИНСТРУМЕНТЫ: ГЕНЕРАТОР ПАРОЛЕЙ ===
 function generatePassword() {
     const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
     let password = "";
@@ -47,7 +115,7 @@ function copyPassword() {
     });
 }
 
-// --- АНАЛИЗАТОР ССЫЛОК ---
+// === ИНСТРУМЕНТЫ: АНАЛИЗАТОР ССЫЛОК ===
 function checkUrl() {
     const input = document.getElementById('url-input').value.trim();
     const resultBox = document.getElementById('url-result');
@@ -79,11 +147,10 @@ function checkUrl() {
     }, 1200);
 }
 
-// --- ОТПРАВКА ЖАЛОБЫ (АВТОНОМНО) ---
+// === ОТПРАВКА ЖАЛОБЫ ===
 function submitReport(e) {
-    e.preventDefault(); // Останавливаем перезагрузку страницы
+    e.preventDefault(); 
     
-    // Имитация отправки данных (LocalStorage)
     setTimeout(() => {
         document.getElementById('report-form').reset();
         showToast('Обращение успешно зарегистрировано в базе NetProtect!', 'success');
