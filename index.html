@@ -3,86 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetProtect | Портал финансовой безопасности</title>
-    <link rel="stylesheet" href="style.css">
+    <title>NetProtect | Информационная безопасность</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="header-top">
-        <div class="header-top-content">
-            <div class="header-title">ФИНАНСОВАЯ БЕЗОПАСНОСТЬ | Информационный портал</div>
-            <button class="theme-toggle" id="theme-toggle" title="Переключить тему">
-                <i class="fas fa-moon"></i>
-            </button>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-shield-halved"></i> Net<span>Protect</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#threats">Угрозы</a></li>
+                <li><a href="#tools">Инструменты</a></li>
+                <li><a href="#report" class="btn btn-primary btn-sm">Сообщить о мошеннике</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="badge">Официальный портал</div>
+                <h1>Ваш цифровой щит <br>в мире финансов</h1>
+                <p>Изучайте актуальные схемы кибермошенничества, используйте инструменты защиты и проверяйте свою уязвимость в один клик.</p>
+                <div class="hero-buttons">
+                    <a href="#tools" class="btn btn-primary">Проверить безопасность <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#threats" class="btn btn-outline">База знаний</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
         </div>
     </header>
 
-    <div class="main-container">
-        <aside class="sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-title"><i class="fas fa-compass"></i> Навигация</div>
-                <ul class="sidebar-menu">
-                    <li><a href="#" class="sidebar-link active" onclick="showPage('home')"><i class="fas fa-home"></i> Главная</a></li>
-                    <li><a href="#" class="sidebar-link" onclick="showPage('risk')"><i class="fas fa-calculator"></i> Калькулятор риска</a></li>
-                    <li><a href="#" class="sidebar-link" onclick="showPage('appeal')"><i class="fas fa-file-alt"></i> Обратная связь</a></li>
-                </ul>
+    <section id="threats" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Каталог угроз</h2>
+                <p>Самые распространенные векторы атак злоумышленников</p>
             </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-title">
-                    <i class="fas fa-user-shield"></i> Личный кабинет
-                </div>
+            <div class="grid cards-grid">
                 
-                <div class="sidebar-info" id="auth-buttons">
-                    <div class="auth-tabs">
-                        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Вход</button>
-                        <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Регистрация</button>
-                    </div>
-
-                    <div id="auth-form-container">
-                        <div class="input-group" id="name-group" style="display: none;">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="name-input" placeholder="Ваше имя" class="input-auth">
-                        </div>
-                        <div class="input-group">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" id="email-input" placeholder="Email" class="input-auth">
-                        </div>
-                        <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="password-input" placeholder="Пароль" class="input-auth">
-                        </div>
-                        
-                        <button id="auth-action-btn" onclick="executeAuth()" class="btn-auth btn-email mt-2">
-                            <i class="fas fa-sign-in-alt"></i> Войти
-                        </button>
-                    </div>
+                <div class="card threat-card">
+                    <div class="card-icon" style="color: #3b82f6; background: #eff6ff;"><i class="fa-solid fa-fish"></i></div>
+                    <h3>Фишинг</h3>
+                    <p>Поддельные сайты банков и магазинов, созданные для кражи ваших паролей и данных карт.</p>
                 </div>
 
-                <div class="sidebar-info" id="user-info" style="display: none;">
-                    </div>
-            </div>
-        </aside>
+                <div class="card threat-card">
+                    <div class="card-icon" style="color: #ef4444; background: #fef2f2;"><i class="fa-solid fa-phone-slash"></i></div>
+                    <h3>Телефонные звонки</h3>
+                    <p>Звонки от лже-сотрудников МВД и ЦБ. Психологическое давление и социальная инженерия.</p>
+                </div>
 
-        <main class="content">
-            <section id="home" class="article-section active">
-                <h1 class="page-title">Добро пожаловать в NetProtect</h1>
-                <p>Ваша безопасность — наш приоритет.</p>
-                </section>
-        </main>
-    </div>
+                <div class="card threat-card">
+                    <div class="card-icon" style="color: #8b5cf6; background: #f5f3ff;"><i class="fa-solid fa-bug"></i></div>
+                    <h3>Вредоносное ПО</h3>
+                    <p>Программы удаленного доступа, которые мошенники просят установить под видом антивируса.</p>
+                </div>
+
+                <div class="card threat-card">
+                    <div class="card-icon" style="color: #10b981; background: #ecfdf5;"><i class="fa-solid fa-credit-card"></i></div>
+                    <h3>Кража с карты</h3>
+                    <p>Экстренные инструкции и порядок действий, если деньги уже были списаны.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="tools" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Инструменты защиты</h2>
+                <p>Используйте наши сервисы для повышения вашей цифровой безопасности</p>
+            </div>
+            
+            <div class="grid tools-grid">
+                <div class="card tool-card">
+                    <div class="tool-header">
+                        <i class="fa-solid fa-key"></i>
+                        <h3>Генератор паролей</h3>
+                    </div>
+                    <p class="text-sm">Создайте криптографически стойкий пароль.</p>
+                    <div class="password-box">
+                        <input type="text" id="pass-output" readonly placeholder="••••••••••••••••">
+                        <button onclick="copyPassword()" class="btn-icon" title="Копировать"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <button onclick="generatePassword()" class="btn btn-primary w-100">Сгенерировать</button>
+                </div>
+
+                <div class="card tool-card">
+                    <div class="tool-header">
+                        <i class="fa-solid fa-link"></i>
+                        <h3>Анализатор ссылок</h3>
+                    </div>
+                    <p class="text-sm">Проверьте сайт на наличие фишинговых угроз.</p>
+                    <div class="input-group">
+                        <input type="url" id="url-input" placeholder="https://example.com">
+                    </div>
+                    <button onclick="checkUrl()" class="btn btn-primary w-100">Анализировать URL</button>
+                    <div id="url-result" class="result-box hidden"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="report" class="section bg-light">
+        <div class="container">
+            <div class="report-wrapper">
+                <div class="report-text">
+                    <h2>Столкнулись с мошенниками?</h2>
+                    <p>Помогите нам пополнить базу данных. Отправьте подозрительный номер телефона или ссылку на сайт злоумышленников, чтобы мы могли предупредить других пользователей.</p>
+                    <ul class="features-list">
+                        <li><i class="fa-solid fa-check"></i> Анонимно и безопасно</li>
+                        <li><i class="fa-solid fa-check"></i> Модерация 24/7</li>
+                        <li><i class="fa-solid fa-check"></i> Передача данных в профильные ведомства</li>
+                    </ul>
+                </div>
+                <div class="card report-form-card">
+                    <form id="report-form" onsubmit="submitReport(event)">
+                        <div class="form-group">
+                            <label>Тип угрозы</label>
+                            <select required>
+                                <option value="" disabled selected>Выберите из списка...</option>
+                                <option>Подозрительный звонок / СМС</option>
+                                <option>Фишинговый сайт</option>
+                                <option>Поддельный интернет-магазин</option>
+                                <option>Другое</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Номер телефона или ссылка</label>
+                            <input type="text" required placeholder="+7 (999) 000-00-00">
+                        </div>
+                        <div class="form-group">
+                            <label>Краткое описание</label>
+                            <textarea rows="4" required placeholder="Опишите, как действовали злоумышленники..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Отправить в базу NetProtect</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <footer class="footer">
-        <div class="footer-bottom">
-            <p>© 2026 NetProtect | Информационный портал финансовой безопасности</p>
-            <p>Материалы предназначены для ознакомления и не заменяют консультацию специалистов</p>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <i class="fa-solid fa-shield-halved"></i> NetProtect
+            </div>
+            <p class="footer-copy">© 2026 Информационный портал финансовой безопасности. <br>Проект разработан для защиты ВКР.</p>
+            <div class="footer-contacts">
+                <p><i class="fa-solid fa-phone"></i> Горячая линия ЦБ РФ: 8-800-300-30-00</p>
+            </div>
         </div>
     </footer>
 
     <div id="toast-container"></div>
 
-    <script src="firebase-config.js"></script>
     <script src="script.js"></script>
-    <script src="auth.js"></script>
 </body>
 </html>
