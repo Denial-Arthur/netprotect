@@ -10,6 +10,40 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(alertBox);
         setTimeout(() => alertBox.remove(), 4000);
     }
+    
+    // === SPA НАВИГАЦИЯ (ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ) ===
+    window.goToDashboard = () => {
+        const mainView = document.getElementById('main-view');
+        const dashView = document.getElementById('dashboard-view');
+        if(mainView) mainView.classList.add('hidden');
+        if(dashView) dashView.classList.remove('hidden');
+        
+        const userProf = document.getElementById('user-profile');
+        if(userProf) userProf.classList.remove('active');
+        window.scrollTo(0, 0);
+
+        // Загружаем данные пользователя в карточку
+        if(typeof window.auth !== 'undefined') {
+            const user = window.auth.currentUser;
+            if(user) {
+                const dashName = document.getElementById('dash-name');
+                const dashEmail = document.getElementById('dash-email');
+                const dashAvatar = document.getElementById('dash-avatar');
+                const userAvatar = document.getElementById('user-avatar');
+                
+                if(dashName) dashName.innerText = user.displayName || user.email.split('@')[0];
+                if(dashEmail) dashEmail.innerText = user.email;
+                if(dashAvatar && userAvatar) dashAvatar.src = userAvatar.src;
+            }
+        }
+    };
+
+    window.goToMain = () => {
+        const mainView = document.getElementById('main-view');
+        const dashView = document.getElementById('dashboard-view');
+        if(dashView) dashView.classList.add('hidden');
+        if(mainView) mainView.classList.remove('hidden');
+    };
 
     // === МОБИЛЬНОЕ МЕНЮ (БУРГЕР) ===
     const mobileToggle = document.getElementById('mobile-toggle');
@@ -105,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(incidentForm) incidentForm.classList.add('hidden');
                 
                 document.body.classList.remove('user-logged-in');
+                if(typeof goToMain === 'function') goToMain();
             }
         });
     }
@@ -220,11 +255,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if(passInput) passInput.addEventListener('input', (e) => analyzePassword(e.target.value));
 
+   const passLengthSlider = document.getElementById('pass-length');
+    const passLengthVal = document.getElementById('pass-length-val');
+
+    if(passLengthSlider) {
+        passLengthSlider.addEventListener('input', (e) => {
+            if(passLengthVal) passLengthVal.innerText = e.target.value;
+            generatePass();
+        });
+    }
+
     window.generatePass = () => {
-        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+';
+        const length = passLengthSlider ? parseInt(passLengthSlider.value) : 16;
+        const useNum = document.getElementById('pass-num') ? document.getElementById('pass-num').checked : true;
+        const useSym = document.getElementById('pass-sym') ? document.getElementById('pass-sym').checked : true;
+
+        let chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        if (useNum) chars += '0123456789';
+        if (useSym) chars += '!@#$%^&*()_+~|}{[]:;?><,./-=';
+
         let pass = '';
-        for (let i = 0; i < 16; i++) { pass += chars.charAt(Math.floor(Math.random() * chars.length)); }
-        if(passInput) { passInput.value = pass; analyzePassword(pass); }
+        for (let i = 0; i < length; i++) { 
+            pass += chars.charAt(Math.floor(Math.random() * chars.length)); 
+        }
+        
+        if(typeof passInput !== 'undefined' && passInput) { 
+            passInput.value = pass; 
+            if(typeof analyzePassword === 'function') analyzePassword(pass); 
+        }
     };
 
     // === ИНСТРУМЕНТ 2: SHA-256 ХЭШ ===
