@@ -3,18 +3,13 @@
     --bg-base: #09090b;
     --bg-panel: #18181b;
     --bg-elevated: #27272a;
-    
     --text-main: #f4f4f5;
     --text-muted: #a1a1aa;
-    
     --neon-accent: #10b981; 
     --neon-hover: #059669;
-    
     --border-color: #3f3f46;
-    
     --font-ui: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
-    
     --radius: 12px; 
     --transition: 0.3s ease;
 }
@@ -31,14 +26,28 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
 .text-muted { color: var(--text-muted); }
 .text-danger { color: #ef4444 !important; }
 .text-danger:hover { background: rgba(239, 68, 68, 0.1) !important; }
+.text-main { color: var(--text-main); font-weight: bold; }
 
 /* === НАВИГАЦИЯ === */
 .top-nav { background: rgba(9, 9, 11, 0.85); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(12px); }
 .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; max-width: 1140px; margin: 0 auto; padding: 0 24px; position: relative; }
-.brand-logo { font-size: 24px; font-weight: 900; color: var(--text-main); text-decoration: none; letter-spacing: 0.5px; }
+
+/* ИСПРАВЛЕННЫЙ ЛОГОТИП */
+.brand-logo { 
+    font-size: 24px; 
+    font-weight: 900; 
+    color: var(--text-main); 
+    text-decoration: none; 
+    letter-spacing: 0.5px; 
+    cursor: pointer; 
+    margin-right: auto; /* Жестко отталкивает меню вправо */
+    padding-right: 30px; /* Гарантированный зазор */
+    flex-shrink: 0; /* Не дает логотипу сжиматься */
+}
+
 .brand-logo span { color: var(--neon-accent); }
 .nav-menu { display: flex; align-items: center; gap: 32px; }
-.nav-link { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: var(--transition); }
+.nav-link { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: var(--transition); cursor: pointer; }
 .nav-link:hover { color: var(--neon-accent); }
 
 /* МОБИЛЬНОЕ МЕНЮ (Кнопка) */
@@ -161,7 +170,7 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
 .feed-wrong { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; }
 .sim-actions { display: flex; justify-content: center; gap: 16px; }
 
-/* === ФОРМА ИНЦИДЕНТА (С ЗАМКОМ И ВЫБОРОМ НОМЕРА) === */
+/* === ФОРМА ИНЦИДЕНТА === */
 .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 .report-info h2 { font-size: 2.5rem; margin-bottom: 20px; font-weight: 800; letter-spacing: -1px; }
 .report-info p { color: var(--text-muted); font-size: 16px; margin-bottom: 30px; }
@@ -260,27 +269,23 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
 .cyber-range::-webkit-slider-thumb:hover { box-shadow: 0 0 10px var(--neon-accent); transform: scale(1.2); }
 .checkbox-group { display: flex; gap: 20px; }
 .checkbox-group .custom-checkbox { padding: 0; background: transparent; border: none; font-size: 14px; }
-.text-main { color: var(--text-main); font-weight: bold; }
 
 /* =========================================
    АДАПТИВНОСТЬ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА 
    ========================================= */
 @media (max-width: 900px) {
-    /* Навигация и Бургер */
     .mobile-toggle { display: block; }
     .nav-menu { position: absolute; top: 80px; left: 0; right: 0; background: rgba(9, 9, 11, 0.98); flex-direction: column; padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: none; gap: 15px; align-items: flex-start; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     .nav-menu.active { display: flex; }
     .nav-link { width: 100%; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 16px; }
     .btn-neon.mobile-report-btn { display: block; width: 100%; text-align: center; margin-top: 10px; }
     
-    /* Профиль в мобильном меню */
     .auth-section { margin-left: 0; width: 100%; margin-top: 10px; }
     #auth-btn { width: 100%; text-align: center; }
     .user-profile { width: 100%; justify-content: center; padding: 12px; }
     .profile-dropdown { width: 100%; top: 100%; margin-top: 10px; position: static; box-shadow: none; border-color: rgba(255,255,255,0.1); }
     .user-profile.active .profile-dropdown { display: block; }
     
-    /* Главный экран и Секции */
     .hero-title { font-size: 2.6rem; letter-spacing: -1px; }
     .hero-desc { font-size: 16px; margin-bottom: 30px; }
     .hero-section { padding: 80px 0 60px; }
@@ -291,20 +296,16 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
     .section-title { margin-bottom: 40px; }
     .section-title h2 { font-size: 2rem; }
     
-    /* Превращаем сетки в 1 колонку */
     .tools-panel-grid, .audit-panel, .report-grid, .footer-layout { grid-template-columns: 1fr; gap: 30px; }
     .glossary-grid { grid-template-columns: 1fr; gap: 16px; }
     
-    /* Отступы внутри блоков */
     .tool-box, .audit-panel, .threat-card, .glossary-item, .report-form-container, .report-lock { padding: 20px; }
     .sim-body { padding: 30px 20px; }
     .score-display { font-size: 3.5rem; }
     
-    /* Симулятор */
     .sim-actions { flex-direction: column; width: 100%; }
     .sim-actions .btn-solid, .sim-actions .btn-outline { width: 100%; }
     
-    /* Уведомления */
     .alert-container { bottom: 20px; left: 20px; right: 20px; }
     .alert-msg { font-size: 12px; }
 
