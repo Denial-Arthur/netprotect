@@ -17,16 +17,16 @@
 
     <nav class="top-nav">
         <div class="nav-container">
-            <a href="#" class="brand-logo">NET<span>PROTECT</span></a>
+            <a href="#" class="brand-logo" onclick="goToMain()">NET<span>PROTECT</span></a>
             
             <button id="mobile-toggle" class="mobile-toggle"><i class="fa-solid fa-bars"></i></button>
             
             <div class="nav-menu" id="nav-menu">
-                <a href="#tools" class="nav-link">Инструменты</a>
-                <a href="#audit" class="nav-link">Аудит</a>
-                <a href="#database" class="nav-link">База угроз</a>
-                <a href="#glossary" class="nav-link">Глоссарий</a>
-                <a href="#simulator" class="nav-link">Симулятор</a>
+                <a href="#tools" class="nav-link" onclick="goToMain()">Инструменты</a>
+                <a href="#audit" class="nav-link" onclick="goToMain()">Аудит</a>
+                <a href="#database" class="nav-link" onclick="goToMain()">База угроз</a>
+                <a href="#glossary" class="nav-link" onclick="goToMain()">Глоссарий</a>
+                <a href="#simulator" class="nav-link" onclick="goToMain()">Симулятор</a>
                 
                 <div class="auth-section" style="margin-left: 15px;">
                     <button id="auth-btn" class="btn-neon" onclick="openLogin()">Войти</button>
@@ -47,323 +47,305 @@
                     </div>
                 </div>
                 
-                <a href="#report" class="btn-neon mobile-report-btn">Сообщить об угрозе</a>
+                <a href="#report" class="btn-neon mobile-report-btn" onclick="goToMain()">Сообщить об угрозе</a>
             </div>
         </div>
     </nav>
-<div id="main-view">
-    
-    <header class="hero-section">
-        <div class="hero-container">
-            <h1 class="hero-title">Контроль над цифровой <br>безопасностью</h1>
-            <p class="hero-desc">Аналитическая платформа для выявления уязвимостей, изучения алгоритмов мошенничества и защиты конфиденциальных данных.</p>
-            <div class="hero-actions">
-                <a href="#audit" class="btn-solid">Запустить аудит</a>
-                <button onclick="exportPDF()" class="btn-outline"><i class="fa-solid fa-download"></i> Протокол защиты</button>
-            </div>
-        </div>
-    </header>
 
-    <section id="tools" class="content-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Кибер-инструменты</h2>
-                <p>Практические модули для работы с паролями и шифрованием</p>
-            </div>
-            
-            <div class="tools-panel-grid">
-                <div class="tool-box">
-                    <div class="tool-header">
-                        <div class="tool-icon"><i class="fa-solid fa-key"></i></div>
-                        <h3>Анализатор паролей</h3>
-                    </div>
-                    <p class="tool-desc">Симулятор брутфорса: узнайте, сколько времени потребуется хакеру для взлома.</p>
-                    
-                    <div class="input-with-btn">
-                        <input type="text" id="pass-input" placeholder="Введите пароль...">
-                        <button onclick="generatePass()" class="btn-icon-solid" title="Сгенерировать"><i class="fa-solid fa-rotate-right"></i></button>
-                    </div>
-                    
-                    <div class="pass-strength-bar">
-                        <div id="pass-meter" class="pass-meter-fill"></div>
-                    </div>
-                    <div id="pass-time" class="tool-result font-mono">Время взлома: ---</div>
-                </div>
-
-                <div class="tool-box">
-                    <div class="tool-header">
-                        <div class="tool-icon"><i class="fa-solid fa-fingerprint"></i></div>
-                        <h3>Визуализатор шифрования</h3>
-                    </div>
-                    <p class="tool-desc">Алгоритм SHA-256: посмотрите, как базы данных безопасно скрывают текст.</p>
-                    
-                    <div class="input-solo">
-                        <input type="text" id="hash-input" placeholder="Введите любой текст...">
-                    </div>
-                    
-                    <div class="hash-output-box">
-                        <span id="hash-output" class="font-mono text-muted">Здесь появится криптографический хэш...</span>
-                    </div>
+    <div id="main-view">
+        <header class="hero-section">
+            <div class="hero-container">
+                <h1 class="hero-title">Контроль над цифровой <br>безопасностью</h1>
+                <p class="hero-desc">Аналитическая платформа для выявления уязвимостей, изучения алгоритмов мошенничества и защиты конфиденциальных данных.</p>
+                <div class="hero-actions">
+                    <a href="#audit" class="btn-solid">Запустить аудит</a>
+                    <button onclick="exportPDF()" class="btn-outline"><i class="fa-solid fa-download"></i> Протокол защиты</button>
                 </div>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <section id="audit" class="content-section section-darker">
-        <div class="container">
-            <div class="section-title">
-                <h2>Аудит уязвимости устройства</h2>
-                <p>Проверка базовых параметров безопасности</p>
-            </div>
-            
-            <div class="audit-panel">
-                <div class="audit-questions">
-                    <label class="custom-checkbox">
-                        <input type="checkbox" class="audit-check">
-                        <span class="checkbox-box"></span>
-                        Установлен ПИН-код на SIM-карту
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" class="audit-check">
-                        <span class="checkbox-box"></span>
-                        Активирована двухфакторная аутентификация (2FA)
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" class="audit-check">
-                        <span class="checkbox-box"></span>
-                        Пароли для важных сервисов не повторяются
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" class="audit-check">
-                        <span class="checkbox-box"></span>
-                        Используется лицензионное антивирусное ПО
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" class="audit-check">
-                        <span class="checkbox-box"></span>
-                        Никаких переводов по просьбе "службы безопасности"
-                    </label>
+        <section id="tools" class="content-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Кибер-инструменты</h2>
+                    <p>Практические модули для работы с паролями и шифрованием</p>
                 </div>
                 
-                <div class="audit-result">
-                    <div class="result-header">Индекс защищенности</div>
-                    <div class="score-display" id="audit-score">0%</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar-fill" id="audit-progress"></div>
-                    </div>
-                    <div class="status-badge" id="audit-status">КРИТИЧЕСКАЯ УЯЗВИМОСТЬ</div>
-                    <p class="status-text" id="audit-text">Ваши данные могут быть скомпрометированы при первой атаке.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="database" class="content-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Реестр киберугроз</h2>
-                <div class="search-wrapper">
-                    <input type="text" id="search-input" placeholder="Поиск по реестру (фишинг, вирусы)...">
-                    <i class="fa-solid fa-search"></i>
-                </div>
-            </div>
-            
-            <div class="threat-grid">
-                <div class="threat-card" onclick="openDetails('phishing')">
-                    <div class="card-icon"><i class="fa-solid fa-fish"></i></div>
-                    <div class="threat-info">
-                        <h3>Фишинг-атаки</h3>
-                        <p>Подмена интерфейсов официальных платформ.</p>
-                    </div>
-                </div>
-                <div class="threat-card" onclick="openDetails('phone')">
-                    <div class="card-icon"><i class="fa-solid fa-phone-slash"></i></div>
-                    <div class="threat-info">
-                        <h3>Телефонный скам</h3>
-                        <p>Атаки с использованием социальной инженерии.</p>
-                    </div>
-                </div>
-                <div class="threat-card" onclick="openDetails('viruses')">
-                    <div class="card-icon"><i class="fa-solid fa-bug"></i></div>
-                    <div class="threat-info">
-                        <h3>Вредоносное ПО</h3>
-                        <p>Трояны, вирусы и шпионские программы.</p>
-                    </div>
-                </div>
-                <div class="threat-card" onclick="openDetails('cards')">
-                    <div class="card-icon"><i class="fa-solid fa-credit-card"></i></div>
-                    <div class="threat-info">
-                        <h3>Компрометация карт</h3>
-                        <p>Скимминг и кража платежных реквизитов.</p>
-                    </div>
-                </div>
-                <div class="threat-card" onclick="openDetails('online')">
-                    <div class="card-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                    <div class="threat-info">
-                        <h3>Сетевые аферы</h3>
-                        <p>Фальшивые инвестиции и фейковые магазины.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="glossary" class="content-section section-darker">
-        <div class="container">
-            <div class="section-title">
-                <h2>Словарь терминов</h2>
-                <p>Профессиональная лексика информационной безопасности</p>
-            </div>
-            <div class="glossary-grid">
-                <div class="glossary-item">
-                    <div class="gl-term">Социальная инженерия</div>
-                    <div class="gl-def">Психологическое манипулирование с целью выманивания секретов.</div>
-                </div>
-                <div class="glossary-item">
-                    <div class="gl-term">Брутфорс (Brute-force)</div>
-                    <div class="gl-def">Метод хакерской атаки: автоматический перебор паролей.</div>
-                </div>
-                <div class="glossary-item">
-                    <div class="gl-term">Скам (Scam)</div>
-                    <div class="gl-def">Мошенничество в сети (фейк-лотереи, пирамиды).</div>
-                </div>
-                <div class="glossary-item">
-                    <div class="gl-term">Фишинг (Phishing)</div>
-                    <div class="gl-def">Кража паролей через поддельные копии настоящих сайтов.</div>
-                </div>
-                <div class="glossary-item">
-                    <div class="gl-term">OSINT</div>
-                    <div class="gl-def">Разведка по открытым источникам (сбор данных о жертве).</div>
-                </div>
-                <div class="glossary-item">
-                    <div class="gl-term">Троян (RAT)</div>
-                    <div class="gl-def">Вирус, маскирующийся под легальное ПО для кражи данных.</div>
-                </div>
-                <div class="glossary-item">
-                    <div class="gl-term">Скимминг</div>
-                    <div class="gl-def">Кража данных банковской карты через накладку на банкомате.</div>
-                </div>
-                <div class="glossary-item">
-                    <div class="gl-term">DDoS-атака</div>
-                    <div class="gl-def">Блокировка работы сайта огромным количеством ложных запросов.</div>
-                </div>
-                <div class="glossary-item">
-                    <div class="gl-term">Аутентификация 2FA</div>
-                    <div class="gl-def">Двойная проверка (пароль + код из СМС) для защиты аккаунта.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="simulator" class="content-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Симулятор атак</h2>
-                <p>10 сценариев для тренировки бдительности</p>
-            </div>
-            
-            <div class="simulator-panel">
-                <div class="sim-header">
-                    <span id="sim-counter" class="sim-counter">Сценарий 1 / 10</span>
-                </div>
-                <div class="sim-body">
-                    <h3 id="sim-question" class="sim-question">Загрузка...</h3>
-                    
-                    <div id="sim-options" class="sim-options">
-                        <button class="btn-option" onclick="processAnswer(0)" id="opt-0"></button>
-                        <button class="btn-option" onclick="processAnswer(1)" id="opt-1"></button>
-                    </div>
-                    
-                    <div id="sim-feedback" class="sim-feedback hidden"></div>
-                    
-                    <div id="sim-actions" class="sim-actions hidden">
-                        <button id="btn-next" class="btn-solid" onclick="nextScenario()">Следующий сценарий</button>
-                        <button id="btn-restart" class="btn-outline hidden" onclick="resetSimulator()"><i class="fa-solid fa-rotate-right"></i> Начать заново</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="report" class="content-section section-darker">
-        <div class="container report-grid">
-            <div class="report-info">
-                <h2>Фиксация инцидента</h2>
-                <p>Внесите данные о подозрительном ресурсе или номере телефона. Информация анонимно передается в базу данных Firebase для анализа.</p>
-                <ul class="report-points">
-                    <li><i class="fa-solid fa-lock"></i> Только для резидентов</li>
-                    <li><i class="fa-solid fa-database"></i> Прямая запись в реестр</li>
-                </ul>
-            </div>
-            
-            <div class="report-form-container">
-                <div id="report-lock" class="report-lock">
-                    <i class="fa-solid fa-user-lock"></i>
-                    <p>Функция регистрации угроз доступна только авторизованным пользователям NetProtect.</p>
-                    <button onclick="openLogin()" class="btn-neon">Войти в систему</button>
-                </div>
-
-                <form id="incident-form" class="hidden">
-                    <div class="input-group">
-                        <label>Категория угрозы</label>
-                        <select id="inc-type" required>
-                            <option value="" disabled selected>Выберите категорию...</option>
-                            <option value="call">Телефонный звонок / СМС</option>
-                            <option value="site">Вредоносный сайт</option>
-                            <option value="other">Иное</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group" id="group-phone" style="display: none;">
-                        <label>Номер телефона злоумышленника</label>
-                        <div class="phone-input-wrapper">
-                            <select id="inc-country-code" class="country-select">
-                                <option value="+7">🇷🇺 Россия (+7)</option>
-                                <option value="+375">🇧🇾 Беларусь (+375)</option>
-                                <option value="+77">🇰🇿 Казахстан (+77)</option>
-                                <option value="+371">🇱🇻 Латвия (+371)</option>
-                                <option value="+995">🇬🇪 Грузия (+995)</option>
-                            </select>
-                            <input type="tel" id="inc-phone" placeholder="900 123 45 67">
+                <div class="tools-panel-grid">
+                    <div class="tool-box">
+                        <div class="tool-header">
+                            <div class="tool-icon"><i class="fa-solid fa-key"></i></div>
+                            <h3>Анализатор паролей</h3>
                         </div>
-                        <small class="input-hint">Ввод букв и символов заблокирован системой</small>
+                        <p class="tool-desc">Симулятор брутфорса: узнайте, сколько времени потребуется хакеру для взлома.</p>
+                        
+                        <div class="input-with-btn">
+                            <input type="text" id="pass-input" placeholder="Введите пароль...">
+                            <button onclick="generatePass()" class="btn-icon-solid" title="Сгенерировать"><i class="fa-solid fa-rotate-right"></i></button>
+                        </div>
+                        
+                        <div class="pass-settings">
+                            <div class="range-group">
+                                <label>Длина: <span id="pass-length-val" class="font-mono text-main">16</span></label>
+                                <input type="range" id="pass-length" min="8" max="32" value="16" class="cyber-range">
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="custom-checkbox"><input type="checkbox" id="pass-num" checked><span class="checkbox-box"></span>Цифры</label>
+                                <label class="custom-checkbox"><input type="checkbox" id="pass-sym" checked><span class="checkbox-box"></span>Символы</label>
+                            </div>
+                        </div>
+                        
+                        <div class="pass-strength-bar">
+                            <div id="pass-meter" class="pass-meter-fill"></div>
+                        </div>
+                        <div id="pass-time" class="tool-result font-mono">Время взлома: ---</div>
                     </div>
 
-                    <div class="input-group" id="group-site" style="display: none;">
-                        <label>Ссылка на подозрительный сайт</label>
-                        <input type="url" id="inc-url" placeholder="https://...">
+                    <div class="tool-box">
+                        <div class="tool-header">
+                            <div class="tool-icon"><i class="fa-solid fa-fingerprint"></i></div>
+                            <h3>Визуализатор шифрования</h3>
+                        </div>
+                        <p class="tool-desc">Алгоритм SHA-256: посмотрите, как базы данных безопасно скрывают текст.</p>
+                        
+                        <div class="input-solo">
+                            <input type="text" id="hash-input" placeholder="Введите любой текст...">
+                        </div>
+                        
+                        <div class="hash-output-box">
+                            <span id="hash-output" class="font-mono text-muted">Здесь появится криптографический хэш...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="audit" class="content-section section-darker">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Аудит уязвимости устройства</h2>
+                    <p>Проверка базовых параметров безопасности</p>
+                </div>
+                
+                <div class="audit-panel">
+                    <div class="audit-questions">
+                        <label class="custom-checkbox"><input type="checkbox" class="audit-check"><span class="checkbox-box"></span>Установлен ПИН-код на SIM-карту</label>
+                        <label class="custom-checkbox"><input type="checkbox" class="audit-check"><span class="checkbox-box"></span>Активирована двухфакторная аутентификация (2FA)</label>
+                        <label class="custom-checkbox"><input type="checkbox" class="audit-check"><span class="checkbox-box"></span>Пароли для важных сервисов не повторяются</label>
+                        <label class="custom-checkbox"><input type="checkbox" class="audit-check"><span class="checkbox-box"></span>Используется лицензионное антивирусное ПО</label>
+                        <label class="custom-checkbox"><input type="checkbox" class="audit-check"><span class="checkbox-box"></span>Никаких переводов по просьбе "службы безопасности"</label>
+                    </div>
+                    
+                    <div class="audit-result">
+                        <div class="result-header">Индекс защищенности</div>
+                        <div class="score-display" id="audit-score">0%</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="audit-progress"></div>
+                        </div>
+                        <div class="status-badge" id="audit-status">КРИТИЧЕСКАЯ УЯЗВИМОСТЬ</div>
+                        <p class="status-text" id="audit-text">Ваши данные могут быть скомпрометированы при первой атаке.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="database" class="content-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Реестр киберугроз</h2>
+                    <div class="search-wrapper">
+                        <input type="text" id="search-input" placeholder="Поиск по реестру (фишинг, вирусы)...">
+                        <i class="fa-solid fa-search"></i>
+                    </div>
+                </div>
+                
+                <div class="threat-grid">
+                    <div class="threat-card" onclick="openDetails('phishing')">
+                        <div class="card-icon"><i class="fa-solid fa-fish"></i></div>
+                        <div class="threat-info"><h3>Фишинг-атаки</h3><p>Подмена интерфейсов официальных платформ.</p></div>
+                    </div>
+                    <div class="threat-card" onclick="openDetails('phone')">
+                        <div class="card-icon"><i class="fa-solid fa-phone-slash"></i></div>
+                        <div class="threat-info"><h3>Телефонный скам</h3><p>Атаки с использованием социальной инженерии.</p></div>
+                    </div>
+                    <div class="threat-card" onclick="openDetails('viruses')">
+                        <div class="card-icon"><i class="fa-solid fa-bug"></i></div>
+                        <div class="threat-info"><h3>Вредоносное ПО</h3><p>Трояны, вирусы и шпионские программы.</p></div>
+                    </div>
+                    <div class="threat-card" onclick="openDetails('cards')">
+                        <div class="card-icon"><i class="fa-solid fa-credit-card"></i></div>
+                        <div class="threat-info"><h3>Компрометация карт</h3><p>Скимминг и кража платежных реквизитов.</p></div>
+                    </div>
+                    <div class="threat-card" onclick="openDetails('online')">
+                        <div class="card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                        <div class="threat-info"><h3>Сетевые аферы</h3><p>Фальшивые инвестиции и фейковые магазины.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="glossary" class="content-section section-darker">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Словарь терминов</h2>
+                    <p>Профессиональная лексика информационной безопасности</p>
+                </div>
+                <div class="glossary-grid">
+                    <div class="glossary-item"><div class="gl-term">Социальная инженерия</div><div class="gl-def">Психологическое манипулирование с целью выманивания секретов.</div></div>
+                    <div class="glossary-item"><div class="gl-term">Брутфорс (Brute-force)</div><div class="gl-def">Метод хакерской атаки: автоматический перебор паролей.</div></div>
+                    <div class="glossary-item"><div class="gl-term">Скам (Scam)</div><div class="gl-def">Мошенничество в сети (фейк-лотереи, пирамиды).</div></div>
+                    <div class="glossary-item"><div class="gl-term">Фишинг (Phishing)</div><div class="gl-def">Кража паролей через поддельные копии настоящих сайтов.</div></div>
+                    <div class="glossary-item"><div class="gl-term">OSINT</div><div class="gl-def">Разведка по открытым источникам (сбор данных о жертве).</div></div>
+                    <div class="glossary-item"><div class="gl-term">Троян (RAT)</div><div class="gl-def">Вирус, маскирующийся под легальное ПО для кражи данных.</div></div>
+                    <div class="glossary-item"><div class="gl-term">Скимминг</div><div class="gl-def">Кража данных банковской карты через накладку на банкомате.</div></div>
+                    <div class="glossary-item"><div class="gl-term">DDoS-атака</div><div class="gl-def">Блокировка работы сайта огромным количеством ложных запросов.</div></div>
+                    <div class="glossary-item"><div class="gl-term">Аутентификация 2FA</div><div class="gl-def">Двойная проверка (пароль + код из СМС) для защиты аккаунта.</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulator" class="content-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Симулятор атак</h2>
+                    <p>10 сценариев для тренировки бдительности</p>
+                </div>
+                
+                <div class="simulator-panel">
+                    <div class="sim-header">
+                        <span id="sim-counter" class="sim-counter">Сценарий 1 / 10</span>
+                    </div>
+                    <div class="sim-body">
+                        <h3 id="sim-question" class="sim-question">Загрузка...</h3>
+                        
+                        <div id="sim-options" class="sim-options">
+                            <button class="btn-option" onclick="processAnswer(0)" id="opt-0"></button>
+                            <button class="btn-option" onclick="processAnswer(1)" id="opt-1"></button>
+                        </div>
+                        
+                        <div id="sim-feedback" class="sim-feedback hidden"></div>
+                        
+                        <div id="sim-actions" class="sim-actions hidden">
+                            <button id="btn-next" class="btn-solid" onclick="nextScenario()">Следующий сценарий</button>
+                            <button id="btn-restart" class="btn-outline hidden" onclick="resetSimulator()"><i class="fa-solid fa-rotate-right"></i> Начать заново</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="report" class="content-section section-darker">
+            <div class="container report-grid">
+                <div class="report-info">
+                    <h2>Фиксация инцидента</h2>
+                    <p>Внесите данные о подозрительном ресурсе или номере телефона. Информация анонимно передается в базу данных Firebase для анализа.</p>
+                    <ul class="report-points">
+                        <li><i class="fa-solid fa-lock"></i> Только для резидентов</li>
+                        <li><i class="fa-solid fa-database"></i> Прямая запись в реестр</li>
+                    </ul>
+                </div>
+                
+                <div class="report-form-container">
+                    <div id="report-lock" class="report-lock">
+                        <i class="fa-solid fa-user-lock"></i>
+                        <p>Функция регистрации угроз доступна только авторизованным пользователям NetProtect.</p>
+                        <button onclick="openLogin()" class="btn-neon">Войти в систему</button>
                     </div>
 
-                    <div class="input-group">
-                        <label>Описание инцидента</label>
-                        <textarea id="inc-desc" rows="3" required placeholder="Детали происшествия..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-solid w-100">Зарегистрировать угрозу</button>
-                </form>
+                    <form id="incident-form" class="hidden">
+                        <div class="input-group">
+                            <label>Категория угрозы</label>
+                            <select id="inc-type" required>
+                                <option value="" disabled selected>Выберите категорию...</option>
+                                <option value="call">Телефонный звонок / СМС</option>
+                                <option value="site">Вредоносный сайт</option>
+                                <option value="other">Иное</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group" id="group-phone" style="display: none;">
+                            <label>Номер телефона злоумышленника</label>
+                            <div class="phone-input-wrapper">
+                                <select id="inc-country-code" class="country-select">
+                                    <option value="+7">🇷🇺 Россия (+7)</option>
+                                    <option value="+375">🇧🇾 Беларусь (+375)</option>
+                                    <option value="+77">🇰🇿 Казахстан (+77)</option>
+                                    <option value="+371">🇱🇻 Латвия (+371)</option>
+                                    <option value="+995">🇬🇪 Грузия (+995)</option>
+                                </select>
+                                <input type="tel" id="inc-phone" placeholder="900 123 45 67">
+                            </div>
+                            <small class="input-hint">Ввод букв и символов заблокирован системой</small>
+                        </div>
+
+                        <div class="input-group" id="group-site" style="display: none;">
+                            <label>Ссылка на подозрительный сайт</label>
+                            <input type="url" id="inc-url" placeholder="https://...">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Описание инцидента</label>
+                            <textarea id="inc-desc" rows="3" required placeholder="Детали происшествия..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-solid w-100">Зарегистрировать угрозу</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </section>
-    
-    <div class="input-group">
-                        <label>Описание инцидента</label>
-                        <textarea id="inc-desc" rows="3" required placeholder="Детали происшествия..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-solid w-100">Зарегистрировать угрозу</button>
-                </form>
-            </div>
-        </div>
-    </section> </div> <div id="dashboard-view" class="hidden">
+        </section>
+    </div> <div id="dashboard-view" class="hidden">
         <section class="content-section" style="padding-top: 40px;">
             <div class="container">
                 <button onclick="goToMain()" class="btn-outline" style="margin-bottom: 30px;"><i class="fa-solid fa-arrow-left"></i> Назад к платформе</button>
                 
+                <div class="dashboard-layout">
+                    <div class="dash-card profile-card">
+                        <img id="dash-avatar" src="" alt="Avatar" class="dash-avatar-large">
+                        <h2 id="dash-name">Пользователь</h2>
+                        <p id="dash-email" class="text-muted font-mono" style="margin-bottom: 20px;">email@test.com</p>
+                        <div class="status-badge" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3);">Статус: Резидент NetProtect</div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 30px;">
+                        <div class="dash-card stats-card">
+                            <h3>Ваша статистика</h3>
+                            <div class="stats-grid">
+                                <div class="stat-box">
+                                    <div class="stat-num" id="stat-incidents">0</div>
+                                    <div class="stat-label">Отправлено жалоб</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-num" id="stat-sim">0/10</div>
+                                    <div class="stat-label">Тест на фишинг</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-num" id="stat-audit">0%</div>
+                                    <div class="stat-label">Защита устройства</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dash-card achievements-card">
+                            <h3>Достижения</h3>
+                            <div class="achievements-grid">
+                                <div class="achievement locked" id="ach-1">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                    <span>Первый рубеж</span>
+                                </div>
+                                <div class="achievement locked" id="ach-2">
+                                    <i class="fa-solid fa-user-secret"></i>
+                                    <span>Кибер-детектив</span>
+                                </div>
+                                <div class="achievement locked" id="ach-3">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <span>Эксперт защиты</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
         </section>
     </div> <footer class="site-footer">
-        <div class="container footer-layout">
-            <div class="footer-brand">
-
-    <footer class="site-footer">
         <div class="container footer-layout">
             <div class="footer-brand">
                 <div class="brand-logo">NET<span>PROTECT</span></div>
@@ -389,13 +371,11 @@
 
     <div id="modal-window" class="modal-wrapper" onclick="closeDetails(event)">
         <div class="modal-content">
-            <button class="btn-close" onclick="closeDetails()"><i class="fa-solid fa-xmark"></i></button>
+            <button class="btn-close" onclick="closeDetails(event)"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-header">
                 <h2 id="modal-title-text">Заголовок</h2>
             </div>
-            <div class="modal-body" id="modal-body-text">
-                Текст
-            </div>
+            <div class="modal-body" id="modal-body-text">Текст</div>
         </div>
     </div>
 
@@ -403,28 +383,24 @@
 
     <div id="print-protocol" style="display: none; padding: 40px; font-family: 'Arial', sans-serif; color: #000; line-height: 1.6;">
         <h1 style="color: #000; border-bottom: 2px solid #10b981; padding-bottom: 10px; font-size: 24px;">ПРОТОКОЛ БЕЗОПАСНОСТИ NETPROTECT</h1>
-        
         <h2 style="margin-top: 20px; font-size: 18px;">РАЗДЕЛ 1. ФИНАНСОВАЯ БЕЗОПАСНОСТЬ</h2>
         <ul>
             <li><b>Секретность данных:</b> Никогда и никому не называйте ПИН-код, CVV-код и коды из СМС.</li>
             <li><b>Правило сброса:</b> Если звонят из «службы безопасности банка» и требуют перевести деньги — немедленно прервите разговор.</li>
             <li><b>Защита входа:</b> Обязательно подключите двухфакторную аутентификацию (2FA).</li>
         </ul>
-
         <h2 style="margin-top: 20px; font-size: 18px;">РАЗДЕЛ 2. ИНТЕРНЕТ И УСТРОЙСТВА</h2>
         <ul>
             <li><b>Проверка ссылок:</b> Внимательно изучайте адрес сайта перед вводом пароля.</li>
             <li><b>Вредоносное ПО:</b> Не скачивайте файлы с расширением .exe из неизвестных писем.</li>
             <li><b>SIM-карта:</b> Установите ПИН-код на сим-карту.</li>
         </ul>
-
         <h2 style="margin-top: 20px; font-size: 18px;">РАЗДЕЛ 3. ДЕЙСТВИЯ ПРИ КОМПРОМЕТАЦИИ</h2>
         <ol>
             <li>Немедленно заблокируйте банковскую карту через приложение или по горячей линии.</li>
             <li>Обратитесь в ближайшее отделение полиции.</li>
             <li>Подайте заявление в банк о несогласии с операцией (чарджбэк).</li>
         </ol>
-        
         <p style="margin-top: 40px; font-size: 12px; color: #666; text-align: center;">Сгенерировано системой NetProtect. 2026 год.</p>
     </div>
     
@@ -442,8 +418,8 @@
                     <button type="submit" class="btn-solid w-100 mt-15">Войти</button>
                     <div class="auth-divider"><span>ИЛИ</span></div>
                     <button type="button" id="google-auth-btn" class="btn-outline w-100 google-btn"><i class="fa-brands fa-google"></i> Войти через Google</button>
-                    <p class="auth-toggle-text">Нет аккаунта? <a href="javascript:openRegister()">Регистрация</a></p>
                 </form>
+                <p class="auth-toggle-text">Нет аккаунта? <a href="javascript:openRegister()">Регистрация</a></p>
             </div>
         </div>
     </div>
