@@ -1,6 +1,6 @@
 // 1. Данные твоего приложения (строго из твоего скриншота)
 const firebaseConfig = {
-  apiKey: "AIzaSyD2FuRBxIFxNm9jDUoTolfNFIWLU8nVwAg",
+  apiKey: "AIzaSyD2FUrBxIFxNm9jDUoTolfNfIWLU8nVwAg",
   authDomain: "netprotect-web.firebaseapp.com",
   projectId: "netprotect-web",
   storageBucket: "netprotect-web.firebasestorage.app",
