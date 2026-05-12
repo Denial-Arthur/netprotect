@@ -28,7 +28,23 @@
                 <a href="#glossary" class="nav-link">Глоссарий</a>
                 <a href="#simulator" class="nav-link">Симулятор</a>
                 
-                <button id="auth-btn" class="btn-neon" style="margin-left: 15px;">Войти</button>
+                <div class="auth-section" style="margin-left: 15px;">
+                    <button id="auth-btn" class="btn-neon" onclick="openLogin()">Войти</button>
+                    
+                    <div id="user-profile" class="user-profile hidden">
+                        <img id="user-avatar" src="" alt="Аватар" class="user-avatar">
+                        <span id="user-name" class="user-name">Пользователь</span>
+                        
+                        <div class="profile-dropdown">
+                            <div class="dropdown-header">
+                                <span class="text-muted" style="font-size: 12px;">Вы вошли как:</span>
+                                <strong id="dropdown-email">email@test.com</strong>
+                            </div>
+                            <hr class="dropdown-divider">
+                            <button id="logout-btn" class="dropdown-item text-danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти из системы</button>
+                        </div>
+                    </div>
+                </div>
                 
                 <a href="#report" class="btn-neon mobile-report-btn">Сообщить об угрозе</a>
             </div>
@@ -273,13 +289,19 @@
                 <h2>Фиксация инцидента</h2>
                 <p>Внесите данные о подозрительном ресурсе или номере телефона. Информация анонимно передается в базу данных Firebase для анализа.</p>
                 <ul class="report-points">
-                    <li><i class="fa-solid fa-lock"></i> SSL-шифрование</li>
+                    <li><i class="fa-solid fa-lock"></i> Только для резидентов</li>
                     <li><i class="fa-solid fa-database"></i> Прямая запись в реестр</li>
                 </ul>
             </div>
             
             <div class="report-form-container">
-                <form id="incident-form">
+                <div id="report-lock" class="report-lock">
+                    <i class="fa-solid fa-user-lock"></i>
+                    <p>Функция регистрации угроз доступна только авторизованным пользователям NetProtect.</p>
+                    <button onclick="openLogin()" class="btn-neon">Войти в систему</button>
+                </div>
+
+                <form id="incident-form" class="hidden">
                     <div class="input-group">
                         <label>Категория угрозы</label>
                         <select id="inc-type" required>
@@ -385,31 +407,36 @@
         <p style="margin-top: 40px; font-size: 12px; color: #666; text-align: center;">Сгенерировано системой NetProtect. 2026 год.</p>
     </div>
     
-    <div id="auth-modal" class="modal-wrapper" onclick="closeAuthModal(event)">
+    <div id="login-modal" class="modal-wrapper" onclick="closeAuthModals(event)">
         <div class="modal-content auth-card">
-            <button class="btn-close" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
-            <div class="modal-header">
-                <h2 id="auth-title">Вход в систему</h2>
-            </div>
+            <button class="btn-close" onclick="closeAuthModals()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header"><h2>Вход в систему</h2></div>
             <div class="modal-body">
-                <form id="auth-form">
-                    <div class="input-group">
-                        <label>Электронная почта</label>
-                        <input type="email" id="auth-email" required placeholder="example@mail.com">
-                    </div>
-                    <div class="input-group">
-                        <label>Пароль</label>
-                        <input type="password" id="auth-pass" required placeholder="••••••••">
-                    </div>
-                    <button type="submit" id="auth-submit-btn" class="btn-solid w-100">Войти</button>
+                <form id="login-form">
+                    <input type="email" id="login-email" class="cyber-input" required placeholder="Электронная почта">
+                    <input type="password" id="login-pass" class="cyber-input" required placeholder="Пароль">
                     
+                    <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-theme="dark"></div>
+                    
+                    <button type="submit" class="btn-solid w-100 mt-15">Войти</button>
                     <div class="auth-divider"><span>ИЛИ</span></div>
-                    
-                    <button type="button" id="google-auth-btn" class="btn-outline w-100 google-btn">
-                        <i class="fa-brands fa-google"></i> Войти через Google
-                    </button>
-                    
-                    <p class="auth-toggle-text">Нет аккаунта? <a href="#" id="toggle-auth-mode">Создать</a></p>
+                    <button type="button" id="google-auth-btn" class="btn-outline w-100 google-btn"><i class="fa-brands fa-google"></i> Войти через Google</button>
+                    <p class="auth-toggle-text">Нет аккаунта? <a href="javascript:openRegister()">Регистрация</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="register-modal" class="modal-wrapper" onclick="closeAuthModals(event)">
+        <div class="modal-content auth-card">
+            <button class="btn-close" onclick="closeAuthModals()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header"><h2>Создать аккаунт</h2></div>
+            <div class="modal-body">
+                <form id="register-form">
+                    <input type="email" id="reg-email" class="cyber-input" required placeholder="Ваш Email">
+                    <input type="password" id="reg-pass" class="cyber-input" required placeholder="Придумайте пароль (мин. 6 символов)">
+                    <button type="submit" class="btn-solid w-100">Зарегистрироваться</button>
+                    <p class="auth-toggle-text">Уже есть аккаунт? <a href="javascript:openLogin()">Войти</a></p>
                 </form>
             </div>
         </div>
