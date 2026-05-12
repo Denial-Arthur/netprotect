@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // === УВЕДОМЛЕНИЯ (ТОСТЫ) ===
-    function showAlert(msg) {
+    window.showAlert = (msg) => {
         const container = document.getElementById('alert-container');
         if(!container) return;
         const alertBox = document.createElement('div');
@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownEmail = document.getElementById('dropdown-email');
     const authBtn = document.getElementById('auth-btn');
     const logoutBtn = document.getElementById('logout-btn');
-    
     const reportLock = document.getElementById('report-lock');
     const incidentForm = document.getElementById('incident-form');
 
@@ -110,12 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(reportLock) reportLock.classList.add('hidden');
                 if(incidentForm) incidentForm.classList.remove('hidden');
 
-                // Ставим имя (из Google или генерируем из почты)
+                // Ставим имя 
                 const displayName = user.displayName || user.email.split('@')[0];
                 if(userName) userName.innerText = displayName;
                 if(dropdownEmail) dropdownEmail.innerText = user.email;
 
-                // Ставим аватарку (из Google или генерируем картинку по первой букве)
+                // Ставим аватарку 
                 if(userAvatar) {
                     if (user.photoURL) {
                         userAvatar.src = user.photoURL;
@@ -139,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(incidentForm) incidentForm.classList.add('hidden');
                 
                 document.body.classList.remove('user-logged-in');
-                if(typeof goToMain === 'function') goToMain();
+                if(typeof goToMain === 'function') goToMain(); // Кидаем на главную при выходе
             }
         });
     }
@@ -176,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Проверка Google reCAPTCHA
             if(typeof grecaptcha !== 'undefined') {
                 const response = grecaptcha.getResponse();
                 if(response.length === 0) {
@@ -231,15 +229,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === ИНСТРУМЕНТ 1: АНАЛИЗАТОР ПАРОЛЕЙ ===
+    // === ПРОДВИНУТЫЙ АНАЛИЗАТОР ПАРОЛЕЙ ===
     const passInput = document.getElementById('pass-input');
     const passMeter = document.getElementById('pass-meter');
     const passTime = document.getElementById('pass-time');
+    const passLengthSlider = document.getElementById('pass-length');
+    const passLengthVal = document.getElementById('pass-length-val');
 
     function analyzePassword(pass) {
         const len = pass.length;
         if(len === 0) {
-            passMeter.style.width = '0%'; passMeter.style.background = '#ef4444'; passTime.innerText = 'Время взлома: ---'; return;
+            passMeter.style.width = '0%';
+            passMeter.style.background = '#ef4444'; passTime.innerText = 'Время взлома: ---'; return;
         }
         let timeStr = ''; let color = ''; let width = '';
         if (len < 6) { timeStr = 'Мгновенно'; color = '#ef4444'; width = '10%'; }
@@ -248,15 +249,12 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (len < 12) { timeStr = '14 лет'; color = '#10b981'; width = '85%'; }
         else { timeStr = '400+ лет'; color = '#10b981'; width = '100%'; }
         
-        // Усложняем, если есть спецсимволы
         if (/[!@#$%^&*()]/.test(pass) && len >= 10) { timeStr = '10 000+ лет'; width = '100%'; color = '#10b981'; }
         
         passMeter.style.width = width; passMeter.style.background = color; passTime.innerText = `Время взлома: ${timeStr}`;
     }
-    if(passInput) passInput.addEventListener('input', (e) => analyzePassword(e.target.value));
 
-   const passLengthSlider = document.getElementById('pass-length');
-    const passLengthVal = document.getElementById('pass-length-val');
+    if(passInput) passInput.addEventListener('input', (e) => analyzePassword(e.target.value));
 
     if(passLengthSlider) {
         passLengthSlider.addEventListener('input', (e) => {
@@ -288,14 +286,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // === ИНСТРУМЕНТ 2: SHA-256 ХЭШ ===
     const hashInput = document.getElementById('hash-input');
     const hashOutput = document.getElementById('hash-output');
-    
+
     async function generateHash(text) {
         if(!hashOutput) return;
         if(text === '') { 
-            hashOutput.innerText = 'Здесь появится криптографический хэш...'; 
-            hashOutput.classList.add('text-muted'); 
-            hashOutput.style.color = ''; 
-            return; 
+            hashOutput.innerText = 'Здесь появится криптографический хэш...';
+            hashOutput.classList.add('text-muted'); hashOutput.style.color = ''; return; 
         }
         const encoder = new TextEncoder();
         const data = encoder.encode(text);
@@ -304,8 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         
         hashOutput.innerText = hashHex; 
-        hashOutput.classList.remove('text-muted'); 
-        hashOutput.style.color = 'var(--neon-accent)';
+        hashOutput.classList.remove('text-muted'); hashOutput.style.color = 'var(--neon-accent)';
     }
     if(hashInput) hashInput.addEventListener('input', (e) => generateHash(e.target.value));
 
@@ -321,9 +316,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const checkedCount = Array.from(checks).filter(cb => cb.checked).length;
         const percent = Math.round((checkedCount / checks.length) * 100) || 0;
         
-        scoreDisplay.innerText = percent + '%'; 
-        progressBar.style.width = percent + '%';
-        
+        scoreDisplay.innerText = percent + '%'; progressBar.style.width = percent + '%';
+
         if (percent <= 40) {
             progressBar.style.background = '#ef4444'; statusBadge.innerText = 'КРИТИЧЕСКАЯ УЯЗВИМОСТЬ';
             statusBadge.style.color = '#ef4444'; statusBadge.style.borderColor = 'rgba(239, 68, 68, 0.3)'; statusBadge.style.background = 'rgba(239, 68, 68, 0.1)';
@@ -384,7 +378,8 @@ document.addEventListener('DOMContentLoaded', () => {
         simIndex++;
         if (simIndex < simData.length) { renderScenario(); } 
         else {
-            simCounter.innerText = "Анализ завершен"; simQuestion.innerText = `Эффективность защиты: ${simScore} из 10.`;
+            simCounter.innerText = "Анализ завершен";
+            simQuestion.innerText = `Эффективность защиты: ${simScore} из 10.`;
             simFeedback.classList.add('hidden'); btnNext.classList.add('hidden'); btnRestart.classList.remove('hidden');
         }
     };
@@ -404,12 +399,15 @@ document.addEventListener('DOMContentLoaded', () => {
     window.openDetails = (id) => {
         const t = threatDB[id]; if(!t) return;
         document.getElementById('modal-title-text').innerText = t.title;
-        // Загрузка твоих реальных фото
         document.getElementById('modal-body-text').innerHTML = `<img src="${t.img}" class="modal-img" alt="${t.title}"><br>${t.text}`;
         document.getElementById('modal-window').classList.add('active'); document.body.style.overflow = 'hidden';
     };
 
-    window.closeThreatDetails = () => { document.getElementById('modal-window').classList.remove('active'); document.body.style.overflow = 'auto'; };
+    window.closeDetails = (e) => {
+        if (!e || e.target.id === 'modal-window' || e.target.closest('.btn-close')) { 
+            document.getElementById('modal-window').classList.remove('active'); document.body.style.overflow = 'auto'; 
+        }
+    };
     
     const searchInput = document.getElementById('search-input');
     if(searchInput) {
@@ -439,6 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if(incPhone) incPhone.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
 
+    const incidentForm = document.getElementById('incident-form');
     if(incidentForm) {
         incidentForm.addEventListener('submit', (e) => {
             e.preventDefault();
