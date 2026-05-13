@@ -32,20 +32,12 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
 .top-nav { background: rgba(9, 9, 11, 0.85); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(12px); }
 .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; max-width: 1140px; margin: 0 auto; padding: 0 24px; position: relative; }
 
-/* ИСПРАВЛЕННЫЙ ЛОГОТИП */
 .brand-logo { 
-    font-size: 24px; 
-    font-weight: 900; 
-    color: var(--text-main); 
-    text-decoration: none; 
-    letter-spacing: 0.5px; 
-    cursor: pointer; 
-    margin-right: auto; /* Жестко отталкивает меню вправо */
-    padding-right: 30px; /* Гарантированный зазор */
-    flex-shrink: 0; /* Не дает логотипу сжиматься */
+    font-size: 24px; font-weight: 900; color: var(--text-main); text-decoration: none; 
+    letter-spacing: 0.5px; cursor: pointer; margin-right: auto; padding-right: 30px; flex-shrink: 0; 
 }
-
 .brand-logo span { color: var(--neon-accent); }
+
 .nav-menu { display: flex; align-items: center; gap: 32px; }
 .nav-link { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: var(--transition); cursor: pointer; }
 .nav-link:hover { color: var(--neon-accent); }
@@ -113,10 +105,19 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
 .btn-icon-solid { background: var(--neon-accent); border: none; color: var(--bg-base); border-radius: var(--radius); width: 54px; height: 54px; flex-shrink: 0; cursor: pointer; transition: var(--transition); font-size: 18px; display: flex; align-items: center; justify-content: center; }
 .btn-icon-solid:hover { background: var(--neon-hover); }
 
+.pass-settings { margin-top: 20px; background: var(--bg-base); padding: 15px; border-radius: var(--radius); border: 1px dashed var(--border-color); }
+.range-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.range-group label { font-size: 14px; color: var(--text-muted); }
+.cyber-range { -webkit-appearance: none; width: 60%; height: 6px; background: var(--bg-elevated); border-radius: 3px; outline: none; }
+.cyber-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--neon-accent); cursor: pointer; transition: 0.2s; }
+.cyber-range::-webkit-slider-thumb:hover { box-shadow: 0 0 10px var(--neon-accent); transform: scale(1.2); }
+.checkbox-group { display: flex; gap: 20px; }
+.checkbox-group .custom-checkbox { padding: 0; background: transparent; border: none; font-size: 14px; }
+
 .pass-strength-bar { height: 6px; background: var(--bg-base); border-radius: 3px; margin: 20px 0 10px; overflow: hidden; }
 .pass-meter-fill { height: 100%; width: 0%; background: #ef4444; transition: width 0.3s ease, background 0.3s ease; }
 .tool-result { font-size: 14px; color: var(--text-muted); }
-.hash-output-box { background: var(--bg-base); border: 1px dashed var(--border-color); padding: 16px; border-radius: var(--radius); min-height: 80px; word-break: break-all; }
+.hash-output-box { background: var(--bg-base); border: 1px dashed var(--border-color); padding: 16px; border-radius: var(--radius); min-height: 80px; word-break: break-all; margin-top: 15px; }
 
 /* === АУДИТ УЯЗВИМОСТИ === */
 .audit-panel { display: grid; grid-template-columns: 3fr 2fr; gap: 40px; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 40px; }
@@ -260,16 +261,6 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
 .achievement span { font-weight: 600; font-size: 14px; }
 .achievement.locked { opacity: 0.3; filter: grayscale(100%); border-color: transparent; }
 
-/* === ПРОДВИНУТЫЙ ГЕНЕРАТОР === */
-.pass-settings { margin-top: 20px; background: var(--bg-base); padding: 15px; border-radius: var(--radius); border: 1px dashed var(--border-color); }
-.range-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.range-group label { font-size: 14px; color: var(--text-muted); }
-.cyber-range { -webkit-appearance: none; width: 60%; height: 6px; background: var(--bg-elevated); border-radius: 3px; outline: none; }
-.cyber-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--neon-accent); cursor: pointer; transition: 0.2s; }
-.cyber-range::-webkit-slider-thumb:hover { box-shadow: 0 0 10px var(--neon-accent); transform: scale(1.2); }
-.checkbox-group { display: flex; gap: 20px; }
-.checkbox-group .custom-checkbox { padding: 0; background: transparent; border: none; font-size: 14px; }
-
 /* =========================================
    АДАПТИВНОСТЬ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА 
    ========================================= */
@@ -278,10 +269,11 @@ body { font-family: var(--font-ui); background-color: var(--bg-base); color: var
     .nav-menu { position: absolute; top: 80px; left: 0; right: 0; background: rgba(9, 9, 11, 0.98); flex-direction: column; padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: none; gap: 15px; align-items: flex-start; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     .nav-menu.active { display: flex; }
     .nav-link { width: 100%; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 16px; }
-    .btn-neon.mobile-report-btn { display: block; width: 100%; text-align: center; margin-top: 10px; }
     
-    .auth-section { margin-left: 0; width: 100%; margin-top: 10px; }
-    #auth-btn { width: 100%; text-align: center; }
+    /* ИСПРАВЛЕНЫ КНОПКИ ДЛЯ МОБИЛОК */
+    .auth-section { display: flex; flex-direction: column; width: 100%; margin-left: 0; margin-top: 10px; }
+    .btn-neon.mobile-report-btn, #auth-btn { width: 100%; text-align: center; display: block; margin-top: 10px; box-sizing: border-box; }
+    
     .user-profile { width: 100%; justify-content: center; padding: 12px; }
     .profile-dropdown { width: 100%; top: 100%; margin-top: 10px; position: static; box-shadow: none; border-color: rgba(255,255,255,0.1); }
     .user-profile.active .profile-dropdown { display: block; }
