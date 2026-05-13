@@ -17,19 +17,19 @@
 
     <nav class="top-nav">
         <div class="nav-container">
-            <a href="#" class="brand-logo" onclick="goToMain()">NET<span>PROTECT</span></a>
+            <a href="#" class="brand-logo" id="btn-main-logo">NET<span>PROTECT</span></a>
             
             <button id="mobile-toggle" class="mobile-toggle"><i class="fa-solid fa-bars"></i></button>
             
             <div class="nav-menu" id="nav-menu">
-                <a href="#tools" class="nav-link" onclick="goToMain()">Инструменты</a>
-                <a href="#audit" class="nav-link" onclick="goToMain()">Аудит</a>
-                <a href="#database" class="nav-link" onclick="goToMain()">База угроз</a>
-                <a href="#glossary" class="nav-link" onclick="goToMain()">Глоссарий</a>
-                <a href="#simulator" class="nav-link" onclick="goToMain()">Симулятор</a>
+                <a href="#tools" class="nav-link nav-go-main">Инструменты</a>
+                <a href="#audit" class="nav-link nav-go-main">Аудит</a>
+                <a href="#database" class="nav-link nav-go-main">База угроз</a>
+                <a href="#glossary" class="nav-link nav-go-main">Глоссарий</a>
+                <a href="#simulator" class="nav-link nav-go-main">Симулятор</a>
                 
-                <div class="auth-section" style="margin-left: 15px;">
-                    <button id="auth-btn" class="btn-neon" onclick="openLogin()">Войти</button>
+                <div class="auth-section">
+                    <button id="auth-btn" class="btn-neon">Войти</button>
                     
                     <div id="user-profile" class="user-profile hidden">
                         <img id="user-avatar" src="" alt="Аватар" class="user-avatar">
@@ -41,13 +41,13 @@
                                 <strong id="dropdown-email">email@test.com</strong>
                             </div>
                             <hr class="dropdown-divider">
-                            <button onclick="goToDashboard()" class="dropdown-item"><i class="fa-solid fa-user-shield"></i> Личный кабинет</button>
+                            <button id="btn-dashboard" class="dropdown-item"><i class="fa-solid fa-user-shield"></i> Личный кабинет</button>
                             <button id="logout-btn" class="dropdown-item text-danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выйти из системы</button>
                         </div>
                     </div>
                 </div>
                 
-                <a href="#report" class="btn-neon mobile-report-btn" onclick="goToMain()">Сообщить об угрозе</a>
+                <a href="#report" class="btn-neon mobile-report-btn nav-go-main">Сообщить об угрозе</a>
             </div>
         </div>
     </nav>
@@ -77,17 +77,17 @@
                             <div class="tool-icon"><i class="fa-solid fa-key"></i></div>
                             <h3>Анализатор паролей</h3>
                         </div>
-                        <p class="tool-desc">Симулятор брутфорса: узнайте, сколько времени потребуется хакеру для взлома.</p>
+                        <p class="tool-desc">Симулятор брутфорса: алгоритм вычисляет энтропию на основе длины и вариативности символов.</p>
                         
                         <div class="input-with-btn">
                             <input type="text" id="pass-input" placeholder="Введите пароль...">
-                            <button onclick="generatePass()" class="btn-icon-solid" title="Сгенерировать"><i class="fa-solid fa-rotate-right"></i></button>
+                            <button id="btn-generate-pass" class="btn-icon-solid" title="Сгенерировать"><i class="fa-solid fa-rotate-right"></i></button>
                         </div>
                         
                         <div class="pass-settings">
                             <div class="range-group">
                                 <label>Длина: <span id="pass-length-val" class="font-mono text-main">16</span></label>
-                                <input type="range" id="pass-length" min="8" max="32" value="16" class="cyber-range">
+                                <input type="range" id="pass-length" min="6" max="32" value="16" class="cyber-range">
                             </div>
                             <div class="checkbox-group">
                                 <label class="custom-checkbox"><input type="checkbox" id="pass-num" checked><span class="checkbox-box"></span>Цифры</label>
@@ -208,7 +208,7 @@
             <div class="container">
                 <div class="section-title">
                     <h2>Симулятор атак</h2>
-                    <p>10 сценариев для тренировки бдительности</p>
+                    <p>Случайные 10 сценариев для тренировки бдительности</p>
                 </div>
                 
                 <div class="simulator-panel">
@@ -219,15 +219,15 @@
                         <h3 id="sim-question" class="sim-question">Загрузка...</h3>
                         
                         <div id="sim-options" class="sim-options">
-                            <button class="btn-option" onclick="processAnswer(0)" id="opt-0"></button>
-                            <button class="btn-option" onclick="processAnswer(1)" id="opt-1"></button>
+                            <button class="btn-option" id="opt-0"></button>
+                            <button class="btn-option" id="opt-1"></button>
                         </div>
                         
                         <div id="sim-feedback" class="sim-feedback hidden"></div>
                         
                         <div id="sim-actions" class="sim-actions hidden">
-                            <button id="btn-next" class="btn-solid" onclick="nextScenario()">Следующий сценарий</button>
-                            <button id="btn-restart" class="btn-outline hidden" onclick="resetSimulator()"><i class="fa-solid fa-rotate-right"></i> Начать заново</button>
+                            <button id="btn-next" class="btn-solid">Следующий сценарий</button>
+                            <button id="btn-restart" class="btn-outline hidden"><i class="fa-solid fa-rotate-right"></i> Начать заново</button>
                         </div>
                     </div>
                 </div>
@@ -295,7 +295,7 @@
     </div> <div id="dashboard-view" class="hidden">
         <section class="content-section" style="padding-top: 40px;">
             <div class="container">
-                <button onclick="goToMain()" class="btn-outline" style="margin-bottom: 30px;"><i class="fa-solid fa-arrow-left"></i> Назад к платформе</button>
+                <button id="btn-back-to-main" class="btn-outline" style="margin-bottom: 30px;"><i class="fa-solid fa-arrow-left"></i> Назад к платформе</button>
                 
                 <div class="dashboard-layout">
                     <div class="dash-card profile-card">
