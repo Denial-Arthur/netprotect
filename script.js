@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const authBtn = document.getElementById('auth-btn');
     const logoutBtn = document.getElementById('logout-btn');
     const reportLock = document.getElementById('report-lock');
-    const incidentForm = document.getElementById('incident-form');
+    const incidentForm = document.getElementById('incident-form'); // ОБЪЯВЛЯЕМ ОДИН РАЗ ЗДЕСЬ!
 
     if(typeof window.auth !== 'undefined') {
         window.auth.onAuthStateChanged(user => {
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(passLengthSlider) {
         passLengthSlider.addEventListener('input', (e) => {
             if(passLengthVal) passLengthVal.innerText = e.target.value;
-            generatePass();
+            window.generatePass(); // Вызываем через window, чтобы работало гарантированно
         });
     }
 
@@ -277,9 +277,9 @@ document.addEventListener('DOMContentLoaded', () => {
             pass += chars.charAt(Math.floor(Math.random() * chars.length)); 
         }
         
-        if(typeof passInput !== 'undefined' && passInput) { 
+        if(passInput) { 
             passInput.value = pass; 
-            if(typeof analyzePassword === 'function') analyzePassword(pass); 
+            analyzePassword(pass); 
         }
     };
 
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     checks.forEach(check => check.addEventListener('change', calculateAudit));
-    calculateAudit();
+    calculateAudit(); // Запускаем при загрузке страницы
 
     // === СИМУЛЯТОР АТАК ===
     const simData = [
@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const simActions = document.getElementById('sim-actions'); const btnNext = document.getElementById('btn-next'); const btnRestart = document.getElementById('btn-restart');
 
     function renderScenario() {
-        if(!simQuestion) return;
+        if(!simQuestion || !opt0 || !opt1) return;
         const s = simData[simIndex];
         simCounter.innerText = `Сценарий ${simIndex + 1} / 10`; simQuestion.innerText = s.q;
         opt0.innerText = s.opts[0]; opt1.innerText = s.opts[1];
@@ -385,6 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.resetSimulator = () => { simIndex = 0; simScore = 0; btnRestart.classList.add('hidden'); btnNext.classList.remove('hidden'); renderScenario(); };
+    
+    // Запускаем симулятор при старте
     if(simQuestion) renderScenario();
 
     // === БАЗА УГРОЗ ===
@@ -437,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if(incPhone) incPhone.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
 
-    const incidentForm = document.getElementById('incident-form');
+    // ИСПОЛЬЗУЕМ ПЕРЕМЕННУЮ, КОТОРУЮ ОБЪЯВИЛИ ВНАЧАЛЕ ФАЙЛА
     if(incidentForm) {
         incidentForm.addEventListener('submit', (e) => {
             e.preventDefault();
