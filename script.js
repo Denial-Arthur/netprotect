@@ -45,6 +45,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if(mainView) mainView.classList.remove('hidden');
     };
 
+    // Надежная привязка кнопок перехода
+    const btnDash = document.getElementById('btn-dashboard');
+    if (btnDash) btnDash.addEventListener('click', window.goToDashboard);
+    
+    const btnMainLogo = document.getElementById('btn-main-logo');
+    if (btnMainLogo) btnMainLogo.addEventListener('click', window.goToMain);
+    
+    const btnBackMain = document.getElementById('btn-back-to-main');
+    if (btnBackMain) btnBackMain.addEventListener('click', window.goToMain);
+
+    document.querySelectorAll('.nav-go-main').forEach(link => {
+        link.addEventListener('click', window.goToMain);
+    });
+
     // === МОБИЛЬНОЕ МЕНЮ (БУРГЕР) ===
     const mobileToggle = document.getElementById('mobile-toggle');
     const navMenu = document.getElementById('nav-menu');
@@ -62,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Закрываем меню при клике на любую ссылку
         document.querySelectorAll('.nav-link, .mobile-report-btn').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
@@ -88,6 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const authBtnOpen = document.getElementById('auth-btn');
+    if(authBtnOpen) authBtnOpen.addEventListener('click', window.openLogin);
+
     // === ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ И ЗАМОК ФОРМЫ ===
     const userProfile = document.getElementById('user-profile');
     const userAvatar = document.getElementById('user-avatar');
@@ -96,25 +112,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const authBtn = document.getElementById('auth-btn');
     const logoutBtn = document.getElementById('logout-btn');
     const reportLock = document.getElementById('report-lock');
-    const incidentForm = document.getElementById('incident-form'); // ОБЪЯВЛЯЕМ ОДИН РАЗ ЗДЕСЬ!
+    const incidentForm = document.getElementById('incident-form');
 
     if(typeof window.auth !== 'undefined') {
         window.auth.onAuthStateChanged(user => {
             if (user) {
-                // ПОЛЬЗОВАТЕЛЬ ВОШЕЛ В СИСТЕМУ
                 if(authBtn) authBtn.classList.add('hidden');
                 if(userProfile) userProfile.classList.remove('hidden');
                 
-                // Открываем форму для жалоб
                 if(reportLock) reportLock.classList.add('hidden');
                 if(incidentForm) incidentForm.classList.remove('hidden');
 
-                // Ставим имя 
                 const displayName = user.displayName || user.email.split('@')[0];
                 if(userName) userName.innerText = displayName;
                 if(dropdownEmail) dropdownEmail.innerText = user.email;
 
-                // Ставим аватарку 
                 if(userAvatar) {
                     if (user.photoURL) {
                         userAvatar.src = user.photoURL;
@@ -126,24 +138,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 document.body.classList.add('user-logged-in');
             } else {
-                // ПОЛЬЗОВАТЕЛЬ — ГОСТЬ
                 if(authBtn) authBtn.classList.remove('hidden');
                 if(userProfile) {
                     userProfile.classList.add('hidden');
                     userProfile.classList.remove('active');
                 }
                 
-                // Закрываем форму жалоб замком
                 if(reportLock) reportLock.classList.remove('hidden');
                 if(incidentForm) incidentForm.classList.add('hidden');
                 
                 document.body.classList.remove('user-logged-in');
-                if(typeof goToMain === 'function') goToMain(); // Кидаем на главную при выходе
+                window.goToMain();
             }
         });
     }
 
-    // Логика выпадающего меню профиля (Dropdown)
     if(userProfile) {
         userProfile.addEventListener('click', (e) => {
             if(!e.target.closest('.profile-dropdown')) {
@@ -152,14 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Закрытие меню при клике в пустое место
     document.addEventListener('click', (e) => {
         if(userProfile && !userProfile.contains(e.target)) {
             userProfile.classList.remove('active');
         }
     });
 
-    // Кнопка выхода из системы
     if(logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             window.auth.signOut().then(() => {
@@ -229,29 +236,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === ПРОДВИНУТЫЙ АНАЛИЗАТОР ПАРОЛЕЙ ===
+    // === ПРОДВИНУТЫЙ АНАЛИЗАТОР ПАРОЛЕЙ (МАТЕМАТИКА ЭНТРОПИИ) ===
     const passInput = document.getElementById('pass-input');
     const passMeter = document.getElementById('pass-meter');
     const passTime = document.getElementById('pass-time');
     const passLengthSlider = document.getElementById('pass-length');
     const passLengthVal = document.getElementById('pass-length-val');
+    const btnGeneratePass = document.getElementById('btn-generate-pass');
 
     function analyzePassword(pass) {
-        const len = pass.length;
-        if(len === 0) {
+        if (!pass) {
             passMeter.style.width = '0%';
-            passMeter.style.background = '#ef4444'; passTime.innerText = 'Время взлома: ---'; return;
+            passMeter.style.background = '#ef4444';
+            passTime.innerText = 'Время взлома: ---';
+            return;
         }
-        let timeStr = ''; let color = ''; let width = '';
-        if (len < 6) { timeStr = 'Мгновенно'; color = '#ef4444'; width = '10%'; }
-        else if (len < 8) { timeStr = '3 минуты'; color = '#f59e0b'; width = '40%'; }
-        else if (len < 10) { timeStr = '2 дня'; color = '#f59e0b'; width = '60%'; }
-        else if (len < 12) { timeStr = '14 лет'; color = '#10b981'; width = '85%'; }
-        else { timeStr = '400+ лет'; color = '#10b981'; width = '100%'; }
+
+        // Вычисляем размер алфавита символов
+        let pool = 0;
+        if (/[a-z]/.test(pass)) pool += 26; // строчные
+        if (/[A-Z]/.test(pass)) pool += 26; // заглавные
+        if (/[0-9]/.test(pass)) pool += 10; // цифры
+        if (/[^a-zA-Z0-9]/.test(pass)) pool += 32; // спецсимволы
+
+        if (pool === 0) pool = 1;
         
-        if (/[!@#$%^&*()]/.test(pass) && len >= 10) { timeStr = '10 000+ лет'; width = '100%'; color = '#10b981'; }
+        // Математика энтропии: L * log2(R)
+        const entropy = pass.length * Math.log2(pool);
         
-        passMeter.style.width = width; passMeter.style.background = color; passTime.innerText = `Время взлома: ${timeStr}`;
+        // Допустим, скорость перебора = 10 миллиардов паролей в секунду
+        const guesses = Math.pow(2, entropy);
+        const seconds = guesses / 10000000000;
+
+        let timeStr = '', color = '', width = '';
+
+        if (seconds < 1) { timeStr = 'Мгновенно'; color = '#ef4444'; width = '10%'; }
+        else if (seconds < 60) { timeStr = Math.round(seconds) + ' сек.'; color = '#ef4444'; width = '25%'; }
+        else if (seconds < 3600) { timeStr = Math.round(seconds/60) + ' мин.'; color = '#f59e0b'; width = '40%'; }
+        else if (seconds < 86400) { timeStr = Math.round(seconds/3600) + ' ч.'; color = '#f59e0b'; width = '55%'; }
+        else if (seconds < 2592000) { timeStr = Math.round(seconds/86400) + ' дн.'; color = '#f59e0b'; width = '70%'; }
+        else if (seconds < 31536000) { timeStr = Math.round(seconds/2592000) + ' мес.'; color = '#10b981'; width = '85%'; }
+        else if (seconds < 31536000000) { timeStr = Math.round(seconds/31536000) + ' лет'; color = '#10b981'; width = '95%'; }
+        else { timeStr = 'Века (Надежно)'; color = '#10b981'; width = '100%'; }
+
+        passMeter.style.width = width;
+        passMeter.style.background = color;
+        passTime.innerText = `Время взлома: ${timeStr}`;
     }
 
     if(passInput) passInput.addEventListener('input', (e) => analyzePassword(e.target.value));
@@ -259,9 +289,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if(passLengthSlider) {
         passLengthSlider.addEventListener('input', (e) => {
             if(passLengthVal) passLengthVal.innerText = e.target.value;
-            window.generatePass(); // Вызываем через window, чтобы работало гарантированно
+            window.generatePass();
         });
     }
+
+    if (btnGeneratePass) btnGeneratePass.addEventListener('click', () => window.generatePass());
 
     window.generatePass = () => {
         const length = passLengthSlider ? parseInt(passLengthSlider.value) : 16;
@@ -333,10 +365,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     checks.forEach(check => check.addEventListener('change', calculateAudit));
-    calculateAudit(); // Запускаем при загрузке страницы
+    calculateAudit();
 
-    // === СИМУЛЯТОР АТАК ===
-    const simData = [
+    // === СИМУЛЯТОР АТАК (РАСШИРЕННЫЙ ПУЛ + РАНДОМ) ===
+    const allSimData = [
         { q: "СМС от банка: «Карта заблокирована. Подтвердите данные по ссылке...»", opts: ["Перейти по ссылке", "Позвонить в банк"], correct: 1, exp: "Банки никогда не присылают ссылки для разблокировки." },
         { q: "Звонок от следователя: 'Ваш родственник попал в ДТП, нужны деньги'.", opts: ["Перевести деньги", "Сбросить звонок"], correct: 1, exp: "Схема психологического давления." },
         { q: "Друг просит перевести 5000 рублей до завтра в мессенджере.", opts: ["Перевести", "Позвонить лично"], correct: 1, exp: "Аккаунт скорее всего взломан." },
@@ -346,29 +378,65 @@ document.addEventListener('DOMContentLoaded', () => {
         { q: "Вы нашли флешку на улице.", opts: ["Вставить в ПК", "Оставить"], correct: 1, exp: "Флешки-приманки заражают ПК." },
         { q: "Фонарик просит доступ к СМС.", opts: ["Разрешить", "Запретить"], correct: 1, exp: "Так воруют коды банков." },
         { q: "Звонок из 'банка' через WhatsApp.", opts: ["Ответить", "Положить трубку"], correct: 1, exp: "Банки не звонят в мессенджеры." },
-        { q: "Бонусы в игре за ввод данных карты.", opts: ["Ввести", "Закрыть"], correct: 1, exp: "Кража данных карты." }
+        { q: "Бонусы в игре за ввод данных карты.", opts: ["Ввести", "Закрыть"], correct: 1, exp: "Кража данных карты." },
+        { q: "Открытая сеть Wi-Fi 'Free_Cafe' без пароля.", opts: ["Подключиться", "Использовать 4G"], correct: 1, exp: "Через открытый Wi-Fi легко перехватить трафик." },
+        { q: "Всплывающее окно: 'Ваш ПК заражен вирусом! Скачайте антивирус'.", opts: ["Скачать", "Закрыть вкладку"], correct: 1, exp: "Это и есть вирус. Браузер не может сканировать систему." },
+        { q: "Неизвестный прислал вам ссылку на фото в ВК.", opts: ["Кликнуть", "Уточнить, что это"], correct: 1, exp: "Ссылка может вести на фишинговый сайт." },
+        { q: "Магазин просит фото паспорта для оформления скидки.", opts: ["Отправить", "Отказаться"], correct: 1, exp: "Ваши данные могут продать в Даркнете." },
+        { q: "СМС с кодом 2FA, хотя вы никуда не входили.", opts: ["Игнорировать", "Сменить пароль"], correct: 1, exp: "Кто-то уже знает ваш пароль и пытается войти." },
+        { q: "Сайт банка выглядит так: http://sber-bank-online.ru", opts: ["Войти", "Закрыть"], correct: 1, exp: "Нет сертификата HTTPS и домен поддельный." },
+        { q: "На почту пришел счет за покупку, которую вы не делали (файл .exe).", opts: ["Открыть счет", "Удалить письмо"], correct: 1, exp: "Формат .exe — это исполняемый файл с вирусом." },
+        { q: "Начальник в Telegram срочно просит купить подарочные карты.", opts: ["Купить", "Позвонить ему"], correct: 1, exp: "Классический скам с фейковыми аккаунтами боссов." },
+        { q: "Приложение 'Калькулятор' запрашивает доступ к контактам.", opts: ["Разрешить", "Запретить"], correct: 1, exp: "Калькулятору не нужны ваши контакты." },
+        { q: "Вам предлагают работу тестировщиком, но нужно оплатить 'регистрацию'.", opts: ["Оплатить", "Заблокировать"], correct: 1, exp: "Работодатели платят вам, а не вы им." }
     ];
 
+    let currentSimData = [];
     let simIndex = 0; let simScore = 0;
+    
     const simCounter = document.getElementById('sim-counter');
     const simQuestion = document.getElementById('sim-question');
     const opt0 = document.getElementById('opt-0'); const opt1 = document.getElementById('opt-1');
     const simOptions = document.getElementById('sim-options'); const simFeedback = document.getElementById('sim-feedback');
-    const simActions = document.getElementById('sim-actions'); const btnNext = document.getElementById('btn-next'); const btnRestart = document.getElementById('btn-restart');
+    const simActions = document.getElementById('sim-actions'); 
+    
+    const btnNext = document.getElementById('btn-next'); 
+    if(btnNext) btnNext.addEventListener('click', () => window.nextScenario());
+    
+    const btnRestart = document.getElementById('btn-restart');
+    if(btnRestart) btnRestart.addEventListener('click', () => window.resetSimulator());
+
+    if(opt0) opt0.addEventListener('click', () => window.processAnswer(0));
+    if(opt1) opt1.addEventListener('click', () => window.processAnswer(1));
+
+    function initSimulator() {
+        // Перетасовываем массив и берем 10 случайных
+        currentSimData = allSimData.sort(() => 0.5 - Math.random()).slice(0, 10);
+        simIndex = 0; 
+        simScore = 0;
+        if(btnRestart) btnRestart.classList.add('hidden');
+        if(btnNext) btnNext.classList.remove('hidden');
+        renderScenario();
+    }
 
     function renderScenario() {
         if(!simQuestion || !opt0 || !opt1) return;
-        const s = simData[simIndex];
-        simCounter.innerText = `Сценарий ${simIndex + 1} / 10`; simQuestion.innerText = s.q;
-        opt0.innerText = s.opts[0]; opt1.innerText = s.opts[1];
-        simOptions.classList.remove('hidden'); simFeedback.classList.add('hidden'); simActions.classList.add('hidden');
+        const s = currentSimData[simIndex];
+        simCounter.innerText = `Сценарий ${simIndex + 1} / 10`; 
+        simQuestion.innerText = s.q;
+        opt0.innerText = s.opts[0]; 
+        opt1.innerText = s.opts[1];
+        simOptions.classList.remove('hidden'); 
+        simFeedback.classList.add('hidden'); 
+        simActions.classList.add('hidden');
     }
 
     window.processAnswer = (idx) => {
-        const s = simData[simIndex];
+        const s = currentSimData[simIndex];
         const isCorrect = (idx === s.correct);
         if (isCorrect) simScore++;
-        simOptions.classList.add('hidden'); simFeedback.classList.remove('hidden');
+        simOptions.classList.add('hidden'); 
+        simFeedback.classList.remove('hidden');
         simFeedback.className = `sim-feedback ${isCorrect ? 'feed-correct' : 'feed-wrong'}`;
         simFeedback.innerHTML = `<strong>${isCorrect ? 'Верное решение.' : 'Критическая ошибка.'}</strong><br>${s.exp}`;
         simActions.classList.remove('hidden');
@@ -376,18 +444,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.nextScenario = () => {
         simIndex++;
-        if (simIndex < simData.length) { renderScenario(); } 
-        else {
+        if (simIndex < currentSimData.length) { 
+            renderScenario(); 
+        } else {
             simCounter.innerText = "Анализ завершен";
             simQuestion.innerText = `Эффективность защиты: ${simScore} из 10.`;
-            simFeedback.classList.add('hidden'); btnNext.classList.add('hidden'); btnRestart.classList.remove('hidden');
+            simFeedback.classList.add('hidden'); 
+            btnNext.classList.add('hidden'); 
+            btnRestart.classList.remove('hidden');
         }
     };
 
-    window.resetSimulator = () => { simIndex = 0; simScore = 0; btnRestart.classList.add('hidden'); btnNext.classList.remove('hidden'); renderScenario(); };
+    window.resetSimulator = () => { initSimulator(); };
     
     // Запускаем симулятор при старте
-    if(simQuestion) renderScenario();
+    if(simQuestion) initSimulator();
 
     // === БАЗА УГРОЗ ===
     const threatDB = {
@@ -439,7 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if(incPhone) incPhone.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
 
-    // ИСПОЛЬЗУЕМ ПЕРЕМЕННУЮ, КОТОРУЮ ОБЪЯВИЛИ ВНАЧАЛЕ ФАЙЛА
     if(incidentForm) {
         incidentForm.addEventListener('submit', (e) => {
             e.preventDefault();
