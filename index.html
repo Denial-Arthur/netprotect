@@ -28,7 +28,7 @@
                 <a href="#glossary" class="nav-link nav-go-main">Глоссарий</a>
                 <a href="#simulator" class="nav-link nav-go-main">Симулятор</a>
                 
-                <div class="auth-section">
+                <div class="auth-section" style="margin-left: 15px;">
                     <button id="auth-btn" class="btn-neon">Войти</button>
                     
                     <div id="user-profile" class="user-profile hidden">
@@ -249,7 +249,7 @@
                     <div id="report-lock" class="report-lock">
                         <i class="fa-solid fa-user-lock"></i>
                         <p>Функция регистрации угроз доступна только авторизованным пользователям NetProtect.</p>
-                        <button onclick="openLogin()" class="btn-neon">Войти в систему</button>
+                        <button id="btn-login-from-form" class="btn-neon">Войти в систему</button>
                     </div>
 
                     <form id="incident-form" class="hidden">
@@ -307,37 +307,35 @@
 
                     <div style="display: flex; flex-direction: column; gap: 30px;">
                         <div class="dash-card stats-card">
-                            <h3>Ваша статистика</h3>
-                            <div class="stats-grid">
-                                <div class="stat-box">
-                                    <div class="stat-num" id="stat-incidents">0</div>
-                                    <div class="stat-label">Отправлено жалоб</div>
-                                </div>
-                                <div class="stat-box">
-                                    <div class="stat-num" id="stat-sim">0/10</div>
-                                    <div class="stat-label">Тест на фишинг</div>
-                                </div>
-                                <div class="stat-box">
-                                    <div class="stat-num" id="stat-audit">0%</div>
-                                    <div class="stat-label">Защита устройства</div>
-                                </div>
+                            <h3>Аналитика активности</h3>
+                            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                                <div class="stat-box"><div class="stat-num" id="stat-sim">0/10</div><div class="stat-label">Рекорд в тестах</div></div>
+                                <div class="stat-box"><div class="stat-num" id="stat-audit">0%</div><div class="stat-label">Аудит защиты</div></div>
+                                <div class="stat-box"><div class="stat-num" id="stat-crypto">0</div><div class="stat-label">Хэшей создано</div></div>
+                                <div class="stat-box"><div class="stat-num" id="stat-threats">0/5</div><div class="stat-label">Угроз изучено</div></div>
                             </div>
                         </div>
 
                         <div class="dash-card achievements-card">
-                            <h3>Достижения</h3>
-                            <div class="achievements-grid">
-                                <div class="achievement locked" id="ach-1">
-                                    <i class="fa-solid fa-shield-halved"></i>
-                                    <span>Первый рубеж</span>
+                            <h3>Трофеи безопасности</h3>
+                            <div class="achievements-grid" style="grid-template-columns: repeat(3, 1fr);">
+                                <div class="achievement locked" id="ach-audit">
+                                    <i class="fa-solid fa-shield-halved"></i><span>Базовая защита</span>
                                 </div>
-                                <div class="achievement locked" id="ach-2">
-                                    <i class="fa-solid fa-user-secret"></i>
-                                    <span>Кибер-детектив</span>
+                                <div class="achievement locked" id="ach-pass">
+                                    <i class="fa-solid fa-key"></i><span>Мастер паролей</span>
                                 </div>
-                                <div class="achievement locked" id="ach-3">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                    <span>Эксперт защиты</span>
+                                <div class="achievement locked" id="ach-crypto">
+                                    <i class="fa-solid fa-fingerprint"></i><span>Криптограф</span>
+                                </div>
+                                <div class="achievement locked" id="ach-detective">
+                                    <i class="fa-solid fa-user-secret"></i><span>Следователь</span>
+                                </div>
+                                <div class="achievement locked" id="ach-expert">
+                                    <i class="fa-solid fa-graduation-cap"></i><span>Абсолютный эксперт</span>
+                                </div>
+                                <div class="achievement locked" id="ach-report">
+                                    <i class="fa-solid fa-bullhorn"></i><span>Дозорный</span>
                                 </div>
                             </div>
                         </div>
@@ -419,7 +417,7 @@
                     <div class="auth-divider"><span>ИЛИ</span></div>
                     <button type="button" id="google-auth-btn" class="btn-outline w-100 google-btn"><i class="fa-brands fa-google"></i> Войти через Google</button>
                 </form>
-                <p class="auth-toggle-text">Нет аккаунта? <a href="javascript:openRegister()">Регистрация</a></p>
+                <p class="auth-toggle-text">Нет аккаунта? <button type="button" style="background:none;border:none;color:var(--neon-accent);font-weight:600;cursor:pointer;font-family:inherit;font-size:14px;" id="btn-open-register">Регистрация</button></p>
             </div>
         </div>
     </div>
@@ -433,7 +431,7 @@
                     <input type="email" id="reg-email" class="cyber-input" required placeholder="Ваш Email">
                     <input type="password" id="reg-pass" class="cyber-input" required placeholder="Придумайте пароль (мин. 6 символов)">
                     <button type="submit" class="btn-solid w-100">Зарегистрироваться</button>
-                    <p class="auth-toggle-text">Уже есть аккаунт? <a href="javascript:openLogin()">Войти</a></p>
+                    <p class="auth-toggle-text">Уже есть аккаунт? <button type="button" style="background:none;border:none;color:var(--neon-accent);font-weight:600;cursor:pointer;font-family:inherit;font-size:14px;" id="btn-open-login-from-reg">Войти</button></p>
                 </form>
             </div>
         </div>
